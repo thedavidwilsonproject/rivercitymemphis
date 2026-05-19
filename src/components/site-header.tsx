@@ -96,7 +96,7 @@ export function SiteHeader({ settings }: { settings: SiteSettings | null }) {
   const siteTitle = settings?.siteTitle ?? "River City Church";
 
   return (
-    <header className="sticky top-0 z-40 border-b border-cream-200/60 bg-[#fdfbf6]/95 backdrop-blur">
+    <header className="relative sticky top-0 z-40 border-b border-cream-200/60 bg-[#fdfbf6]/95 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-4">
         <Link
           href="/"
