@@ -1,0 +1,4 @@
+migration-data/
+migrate.log
+.env.local.bak
+*.tsbuildinfo
