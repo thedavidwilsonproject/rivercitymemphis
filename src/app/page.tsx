@@ -1,65 +1,171 @@
-import Image from "next/image";
+import Link from "next/link";
+import { client } from "@/sanity/client";
+import { homePageQuery, sermonSeriesIndexQuery } from "@/sanity/queries";
+import { urlFor } from "@/sanity/image";
+import { KidsAndStudents } from "@/components/kids-and-students";
+import type { HomePageDoc, SermonSeriesSummary } from "@/types/sanity";
 
-export default function Home() {
+async function safeFetch<T>(query: string): Promise<T | null> {
+  try {
+    return await client.fetch<T>(query);
+  } catch {
+    return null;
+  }
+}
+
+const FALLBACK_HERO = {
+  eyebrow: "Bartlett, TN",
+  headline: "Refocus your life, home, and church back to God.",
+  subhead:
+    "A relaxed, friendly community where people accept you for who you are. Join us Sundays at 10:15 AM.",
+  primaryCta: { label: "Plan Your Visit", href: "/visit/what-to-expect" },
+  secondaryCta: { label: "Watch Online", href: "/watch" },
+};
+
+const FALLBACK_SERIES_SECTION = {
+  title: "Current Series",
+  viewAllLabel: "View All →",
+  viewAllHref: "/watch",
+  count: 3,
+};
+
+export default async function Home() {
+  const [home, series] = await Promise.all([
+    safeFetch<HomePageDoc | null>(homePageQuery),
+    safeFetch<SermonSeriesSummary[]>(sermonSeriesIndexQuery),
+  ]);
+
+  const hero = { ...FALLBACK_HERO, ...(home?.hero ?? {}) };
+  const ss = { ...FALLBACK_SERIES_SECTION, ...(home?.currentSeriesSection ?? {}) };
+  const ks = home?.kidsAndStudentsSection ?? {};
+
+  const posterSrc = hero.posterImage?.asset
+    ? urlFor(hero.posterImage).width(1920).url()
+    : "/brand/hero-poster.webp";
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <>
+      <section className="relative isolate overflow-hidden bg-ink-900 text-white">
+        <video
+          className="absolute inset-0 -z-10 h-full w-full object-cover"
+          poster={posterSrc}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          aria-hidden="true"
+        >
+          <source src="/brand/hero.mp4" type="video/mp4" />
+        </video>
+        <div
+          className="absolute inset-0 -z-10 bg-gradient-to-b from-ink-900/70 via-ink-900/55 to-ink-900/80"
+          aria-hidden="true"
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+        <div className="mx-auto flex max-w-6xl flex-col items-start gap-6 px-6 py-32 md:py-48">
+          {hero.eyebrow && (
+            <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-300">
+              {hero.eyebrow}
+            </p>
+          )}
+          <h1 className="max-w-3xl font-display text-5xl uppercase leading-tight tracking-wide md:text-7xl">
+            {hero.headline}
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+          {hero.subhead && (
+            <p className="max-w-2xl text-lg leading-8 text-cream-50/90">
+              {hero.subhead}
+            </p>
+          )}
+          <div className="flex flex-wrap gap-3 pt-2">
+            {hero.primaryCta?.label && hero.primaryCta?.href && (
+              <Link
+                href={hero.primaryCta.href}
+                className="rounded-full bg-brand-500 px-6 py-3 font-display text-sm uppercase tracking-widest text-white transition hover:bg-brand-600"
+              >
+                {hero.primaryCta.label}
+              </Link>
+            )}
+            {hero.secondaryCta?.label && hero.secondaryCta?.href && (
+              <Link
+                href={hero.secondaryCta.href}
+                className="rounded-full border border-white/40 bg-white/5 px-6 py-3 font-display text-sm uppercase tracking-widest text-white backdrop-blur transition hover:bg-white/15"
+              >
+                {hero.secondaryCta.label}
+              </Link>
+            )}
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-6 py-20">
+        <header className="flex items-end justify-between gap-6 pb-8">
+          <h2 className="font-display text-4xl uppercase tracking-wide text-ink-800">
+            {ss.title}
+          </h2>
+          {ss.viewAllHref && (
+            <Link
+              href={ss.viewAllHref}
+              className="font-display text-sm uppercase tracking-widest text-brand-600 hover:text-brand-700"
+            >
+              {ss.viewAllLabel}
+            </Link>
+          )}
+        </header>
+        <div className="grid gap-6 md:grid-cols-3">
+          {(series ?? []).slice(0, ss.count ?? 3).map((s) => (
+            <Link
+              key={s.slug}
+              href={`/watch/${s.slug}`}
+              className="group overflow-hidden rounded-2xl border border-cream-200 bg-white shadow-sm transition hover:shadow-md"
+            >
+              <div className="w-full bg-cream-100">
+                {s.coverImage?.asset && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={urlFor(s.coverImage).width(800).fit("max").url()}
+                    alt={s.coverImage.alt ?? s.title}
+                    className="block w-full h-auto transition group-hover:scale-[1.02]"
+                  />
+                )}
+              </div>
+              <div className="p-5">
+                <h3 className="font-display text-2xl uppercase tracking-wide text-ink-800">
+                  {s.title}
+                </h3>
+                <p className="mt-1 text-sm text-ink-500">
+                  {formatRange(s.startDate, s.endDate)}
+                </p>
+              </div>
+            </Link>
+          ))}
+          {(!series || series.length === 0) && (
+            <p className="col-span-3 rounded-xl border border-dashed border-ink-300 p-8 text-center text-sm text-ink-500">
+              Sermon series will appear here after Sanity is connected and
+              content is migrated.
+            </p>
+          )}
         </div>
-      </main>
-    </div>
+      </section>
+
+      <KidsAndStudents
+        title={ks.title}
+        intro={ks.intro}
+        ministries={ks.ministries}
+      />
+    </>
   );
+}
+
+function formatRange(start?: string, end?: string) {
+  const fmt = (d?: string) =>
+    d
+      ? new Date(d).toLocaleString("en-US", {
+          month: "long",
+          year: "numeric",
+        })
+      : "";
+  const s = fmt(start);
+  const e = fmt(end);
+  if (s && e && s !== e) return `${s} – ${e}`;
+  return s || e;
 }
