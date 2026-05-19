@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import type { NavItem, SiteSettings } from "@/types/sanity";
 import { NavDropdown } from "@/components/nav-dropdown";
+import { MobileNav } from "@/components/mobile-nav";
 
 type FallbackNavItem = NavItem & { external?: boolean };
 
@@ -125,6 +126,7 @@ export function SiteHeader({ settings }: { settings: SiteSettings | null }) {
         >
           New Here?
         </Link>
+        <MobileNav items={nav} />
       </div>
     </header>
   );
