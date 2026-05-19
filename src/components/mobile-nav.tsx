@@ -78,9 +78,12 @@ export function MobileNav({ items, ctaLabel = "New Here?", ctaHref = "/connect/n
       </button>
 
       <div
-        className={`fixed inset-0 z-40 bg-ink-900/40 backdrop-blur-sm transition-opacity duration-200 md:hidden ${
-          open ? "opacity-100" : "pointer-events-none opacity-0"
-        }`}
+        style={{
+          opacity: open ? 1 : 0,
+          pointerEvents: open ? "auto" : "none",
+          transition: "opacity 200ms",
+        }}
+        className="fixed inset-0 z-40 bg-ink-900/40 backdrop-blur-sm md:hidden"
         onClick={() => setOpen(false)}
         aria-hidden="true"
       />
@@ -90,9 +93,13 @@ export function MobileNav({ items, ctaLabel = "New Here?", ctaHref = "/connect/n
         role="dialog"
         aria-modal="true"
         aria-label="Site navigation"
-        className={`fixed inset-y-0 right-0 z-50 flex w-[88%] max-w-sm flex-col overflow-y-auto bg-[#fdfbf6] shadow-2xl transition-transform duration-200 ease-out md:hidden ${
-          open ? "translate-x-0" : "translate-x-full"
-        }`}
+        style={{
+          width: "min(88vw, 24rem)",
+          height: "100dvh",
+          transform: open ? "translateX(0)" : "translateX(100%)",
+          transition: "transform 200ms ease-out",
+        }}
+        className="fixed right-0 top-0 z-50 flex flex-col overflow-y-auto bg-cream-50 shadow-2xl md:hidden"
       >
         <div className="flex items-center justify-between border-b border-cream-200/80 px-5 py-4">
           <span className="font-display text-sm uppercase tracking-widest text-ink-500">
