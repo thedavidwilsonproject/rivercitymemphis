@@ -78,11 +78,9 @@ const F = {
   },
   cta: {
     headline: "Save us a seat.",
-    body: "Already know you're coming? Tell us a little about yourself so we can look for you — or just show up. Either works.",
-    primaryLabel: "Let us know",
-    primaryHref: "/connect/next",
-    secondaryLabel: "Get directions",
-    secondaryHref: "/visit/location",
+    body: "Want to know exactly where to go? Get directions and we'll see you Sunday.",
+    primaryLabel: "Get directions",
+    primaryHref: "/visit/location",
   },
 };
 
@@ -258,12 +256,14 @@ export default async function WhatToExpectPage() {
             >
               {cta?.primaryCta?.label ?? F.cta.primaryLabel}
             </Link>
-            <Link
-              href={cta?.secondaryCta?.href ?? F.cta.secondaryHref}
-              className="rounded-full border border-white/40 bg-white/5 px-6 py-3 font-display text-sm uppercase tracking-widest text-white backdrop-blur transition hover:bg-white/15"
-            >
-              {cta?.secondaryCta?.label ?? F.cta.secondaryLabel}
-            </Link>
+            {cta?.secondaryCta?.label && cta.secondaryCta.href && (
+              <Link
+                href={cta.secondaryCta.href}
+                className="rounded-full border border-white/40 bg-white/5 px-6 py-3 font-display text-sm uppercase tracking-widest text-white backdrop-blur transition hover:bg-white/15"
+              >
+                {cta.secondaryCta.label}
+              </Link>
+            )}
           </div>
         </div>
       </section>

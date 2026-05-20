@@ -79,11 +79,9 @@ const F = {
   cta: {
     headline: "Save us a seat at the next one.",
     body:
-      "Let us know you're planning to come and we'll keep an eye out for you. Not ready yet? Plan a visit first — Next will still be here next month.",
-    primaryLabel: "Tell us you're coming",
-    primaryHref: "/contact",
-    secondaryLabel: "Plan a visit first",
-    secondaryHref: "/visit/what-to-expect",
+      "Not ready yet? Plan a visit first — Next will still be here next month.",
+    primaryLabel: "Plan a visit first",
+    primaryHref: "/visit/what-to-expect",
   },
 };
 
@@ -263,12 +261,14 @@ export default async function NextSessionPage() {
             >
               {cta?.primaryCta?.label ?? F.cta.primaryLabel}
             </Link>
-            <Link
-              href={cta?.secondaryCta?.href ?? F.cta.secondaryHref}
-              className="rounded-full border border-white/40 bg-white/5 px-6 py-3 font-display text-sm uppercase tracking-widest text-white backdrop-blur transition hover:bg-white/15"
-            >
-              {cta?.secondaryCta?.label ?? F.cta.secondaryLabel}
-            </Link>
+            {cta?.secondaryCta?.label && cta.secondaryCta.href && (
+              <Link
+                href={cta.secondaryCta.href}
+                className="rounded-full border border-white/40 bg-white/5 px-6 py-3 font-display text-sm uppercase tracking-widest text-white backdrop-blur transition hover:bg-white/15"
+              >
+                {cta.secondaryCta.label}
+              </Link>
+            )}
           </div>
         </div>
       </section>

@@ -33,7 +33,6 @@ const FALLBACK: LocationPageDoc = {
     headline: "First time visiting?",
     body: "Here's exactly what your first Sunday will look like, from the parking lot to your seat.",
     primaryCta: { label: "What to expect", href: "/visit/what-to-expect" },
-    secondaryCta: { label: "Let us know you're coming", href: "/connect/next" },
   },
 };
 
