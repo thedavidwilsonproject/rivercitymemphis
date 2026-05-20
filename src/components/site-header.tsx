@@ -121,12 +121,12 @@ export function SiteHeader({ settings }: { settings: SiteSettings | null }) {
           ))}
         </nav>
         <Link
-          href="/connect/next"
+          href="/visit/who-we-are"
           className="hidden rounded-full bg-brand-500 px-5 py-2 font-display text-sm uppercase tracking-widest text-white transition hover:bg-brand-600 md:inline-flex"
         >
           New Here?
         </Link>
-        <MobileNav items={nav} />
+        <MobileNav items={nav} ctaHref="/visit/who-we-are" />
       </div>
     </header>
   );
