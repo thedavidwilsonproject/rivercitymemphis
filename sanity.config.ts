@@ -17,9 +17,10 @@ export default defineConfig({
   basePath: "/studio",
   plugins: [structureTool({ structure }), visionTool({ defaultApiVersion: apiVersion })],
   schema: { types: schemaTypes },
-  // Disable Content Releases — it's a paid feature on Sanity's higher tiers
-  // (the Releases tab says "talk to sales") and the new Studio routes the
-  // publish UI through it, hiding the per-document Publish button on free
-  // tier. Disabling restores the classic footer Publish action.
+  // Disable Content Releases AND Scheduled Publishing — both are paid features
+  // on Sanity's higher tiers and the new Studio routes the publish UI through
+  // them, hiding the per-document Publish button on free tier. Disabling both
+  // restores the classic footer Publish action.
   releases: { enabled: false },
+  scheduledPublishing: { enabled: false },
 });
