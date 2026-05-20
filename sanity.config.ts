@@ -18,21 +18,12 @@ export default defineConfig({
   basePath: "/studio",
   plugins: [structureTool({ structure }), visionTool({ defaultApiVersion: apiVersion })],
   schema: { types: schemaTypes },
-  // Disable Content Releases AND Scheduled Publishing — both are paid features
-  // on Sanity's higher tiers and the new Studio routes the publish UI through
-  // them, hiding the per-document Publish button on free tier.
-  releases: { enabled: false },
-  scheduledPublishing: { enabled: false },
-  // Inject a custom Publish action at the front of the action list. Sanity v5
-  // hides its default per-document Publish on free tier (because publishing is
-  // routed through paid Content Releases), so we render our own button that
-  // calls the same underlying publish operation. Always visible, always
-  // clickable when there's a draft to publish.
+  // Prepend a guaranteed-visible custom Publish action without filtering out
+  // any defaults. We don't disable releases or scheduledPublishing — leaving
+  // them at defaults so Sanity renders its normal action UI; our action
+  // becomes one of the listed actions (possibly duplicate of default publish,
+  // which is fine for now).
   document: {
-    actions: (prev) => [
-      customPublishAction,
-      // Keep the default non-publish actions (discard, duplicate, delete, etc.)
-      ...prev.filter((a) => a.action !== "publish"),
-    ],
+    actions: (prev) => [customPublishAction, ...prev],
   },
 });
