@@ -67,6 +67,11 @@ export default async function Home() {
     ? urlFor(hero.posterImage).width(1920).url()
     : "/brand/hero-poster.webp";
 
+  // Hero video: use the Sanity-uploaded video if present, otherwise the
+  // bundled brand video at /public/brand/hero.mp4.
+  const videoSrc = hero.videoUrl || "/brand/hero.mp4";
+  const videoType = hero.videoMimeType || "video/mp4";
+
   const websiteJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
@@ -126,7 +131,7 @@ export default async function Home() {
           preload="metadata"
           aria-hidden="true"
         >
-          <source src="/brand/hero.mp4" type="video/mp4" />
+          <source src={videoSrc} type={videoType} />
         </video>
         <div
           className="absolute inset-0 -z-10 bg-gradient-to-b from-ink-900/70 via-ink-900/55 to-ink-900/80"

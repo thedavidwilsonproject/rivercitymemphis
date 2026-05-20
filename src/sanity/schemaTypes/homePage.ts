@@ -2,15 +2,14 @@ import { defineType, defineField, defineArrayMember } from "sanity";
 
 /**
  * Home page singleton. Every text block, CTA label/link, intro paragraph,
- * and ministry blurb on the homepage edits here.
+ * ministry blurb, and the hero video file on the homepage edit here.
  *
  * What is NOT here (and why):
- *   - Hero video file — kept as a static asset at /public/brand/hero.mp4
- *     because it's a brand asset that rarely changes. If you want to swap
- *     the video, drop a new file at that path.
  *   - Ministry brand colors + logos — those are designed assets (logo PNGs
  *     at /public/brand/ministries/). Per-ministry "photo" is editable
  *     below so you can place a photo behind the colored overlay.
+ *   - The hero video file FALLS BACK to /public/brand/hero.mp4 if nothing
+ *     is uploaded in Sanity. Upload a new video to override.
  */
 export const homePage = defineType({
   name: "homePage",
@@ -41,9 +40,20 @@ export const homePage = defineType({
           rows: 3,
         }),
         defineField({
+          name: "videoFile",
+          title: "Hero video",
+          description:
+            "Background video that loops behind the hero text. Upload an MP4 (H.264). Leave empty to use the default brand video (/brand/hero.mp4). Tip: keep it under 10 MB for fast loading — compress with HandBrake or ffmpeg.",
+          type: "file",
+          options: {
+            accept: "video/mp4,video/webm",
+            storeOriginalFilename: true,
+          },
+        }),
+        defineField({
           name: "posterImage",
           title: "Video poster image",
-          description: "Still image shown while the video loads, and as fallback on devices that block autoplay.",
+          description: "Still image shown while the video loads, and as fallback on devices that block autoplay. Should visually match the first frame of the video.",
           type: "image",
           options: { hotspot: true },
           fields: [{ name: "alt", type: "string", title: "Alt text" }],

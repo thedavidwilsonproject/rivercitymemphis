@@ -21,6 +21,8 @@ export const homePageQuery = groq`
       headline,
       subhead,
       posterImage,
+      "videoUrl": videoFile.asset->url,
+      "videoMimeType": videoFile.asset->mimeType,
       primaryCta{ label, href },
       secondaryCta{ label, href }
     },

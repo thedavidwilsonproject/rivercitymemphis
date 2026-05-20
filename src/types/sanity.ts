@@ -429,6 +429,8 @@ export type HomePageDoc = {
     headline?: string;
     subhead?: string;
     posterImage?: SanityImage;
+    videoUrl?: string;
+    videoMimeType?: string;
     primaryCta?: Cta;
     secondaryCta?: Cta;
   };
