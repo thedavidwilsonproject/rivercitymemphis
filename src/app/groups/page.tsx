@@ -14,7 +14,7 @@ import type { GroupsPageDoc, SanityImage } from "@/types/sanity";
 export const metadata: Metadata = {
   title: "Groups",
   description:
-    "Real growth happens in circles, not rows. Find a Community Group or Focus Group at RCC — meet twice a month, study together, do life with people who are doing life with God.",
+    "Real growth happens in circles, not rows. Join a Community Group or Focus Group at RCC — meet twice a month, study together, do life with people who are doing life with God.",
 };
 
 const F = {
@@ -49,8 +49,6 @@ const F = {
       ],
       image: "/brand/pages/groups/community.jpg",
       alt: "A mixed group of RCC adults standing and talking outside the church entrance",
-      ctaLabel: "Find a Community Group",
-      ctaHref: "/groups",
     },
     {
       eyebrow: "For deeper, shorter-term study",
