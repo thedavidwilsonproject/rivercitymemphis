@@ -1,9 +1,33 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { client } from "@/sanity/client";
 import { homePageQuery, sermonSeriesIndexQuery } from "@/sanity/queries";
 import { urlFor } from "@/sanity/image";
 import { KidsAndStudents } from "@/components/kids-and-students";
+import { JsonLd } from "@/components/json-ld";
 import type { HomePageDoc, SermonSeriesSummary } from "@/types/sanity";
+import { ORG, SITE_URL } from "@/lib/site";
+
+export const metadata: Metadata = {
+  title: "River City Church — Bartlett, TN · Sundays at 10:15 AM",
+  description:
+    "A non-denominational church in Bartlett, TN. Join us Sundays at 10:15 AM at 3871 Kirby Whitten Pkwy. Family Ministry for infants through 8th grade. Lead Pastor Jonathan Dunn.",
+  alternates: { canonical: SITE_URL },
+  openGraph: {
+    type: "website",
+    url: SITE_URL,
+    title: "River City Church — Bartlett, TN",
+    description:
+      "A non-denominational church in Bartlett, TN. Sundays at 10:15 AM. Family Ministry for infants through 8th grade.",
+    siteName: "River City Church",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "River City Church — Bartlett, TN",
+    description:
+      "A non-denominational church in Bartlett, TN. Sundays at 10:15 AM.",
+  },
+};
 
 async function safeFetch<T>(query: string): Promise<T | null> {
   try {
@@ -43,8 +67,19 @@ export default async function Home() {
     ? urlFor(hero.posterImage).width(1920).url()
     : "/brand/hero-poster.webp";
 
+  const websiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${SITE_URL}#website`,
+    url: SITE_URL,
+    name: ORG.name,
+    publisher: { "@id": `${SITE_URL}#church` },
+    inLanguage: "en-US",
+  };
+
   return (
     <>
+      <JsonLd data={websiteJsonLd} />
       <section className="relative isolate overflow-hidden bg-ink-900 text-white">
         <video
           className="absolute inset-0 -z-10 h-full w-full object-cover"

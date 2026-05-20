@@ -2,7 +2,24 @@ import type { Metadata } from "next";
 import { client } from "@/sanity/client";
 import { faqPageQuery, siteSettingsQuery } from "@/sanity/queries";
 import { FaqItem } from "@/components/faq-item";
+import { JsonLd } from "@/components/json-ld";
 import type { SiteSettings } from "@/types/sanity";
+
+type PortableBlock = {
+  _type?: string;
+  children?: { text?: string }[];
+};
+
+function portableTextToPlain(value: unknown): string {
+  if (!Array.isArray(value)) return "";
+  return (value as PortableBlock[])
+    .map((block) =>
+      (block.children ?? []).map((c) => c.text ?? "").join(""),
+    )
+    .filter(Boolean)
+    .join("\n\n")
+    .trim();
+}
 
 type FaqEntry = {
   question: string;
@@ -55,8 +72,27 @@ export default async function FaqsPage() {
   const items = data.items ?? [];
   const email = settings?.email ?? "info@rivercitymemphis.org";
 
+  const faqJsonLd =
+    items.length > 0
+      ? {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: items
+            .filter((it) => it.question)
+            .map((it) => ({
+              "@type": "Question",
+              name: it.question,
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: portableTextToPlain(it.answer) || it.question,
+              },
+            })),
+        }
+      : null;
+
   return (
     <div>
+      {faqJsonLd && <JsonLd data={faqJsonLd} />}
       <section className="bg-cream-100">
         <div className="mx-auto max-w-3xl px-6 py-16 md:py-20">
           {data.eyebrow && (
