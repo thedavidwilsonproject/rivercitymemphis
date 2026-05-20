@@ -3,6 +3,7 @@ import { structureTool } from "sanity/structure";
 import { visionTool } from "@sanity/vision";
 import { schemaTypes } from "@/sanity/schemaTypes";
 import { structure } from "@/sanity/structure";
+import { customPublishAction } from "@/sanity/actions/publishAction";
 
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!;
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || "production";
@@ -22,10 +23,16 @@ export default defineConfig({
   // them, hiding the per-document Publish button on free tier.
   releases: { enabled: false },
   scheduledPublishing: { enabled: false },
-  // Explicitly pass through default document actions to ensure the publish
-  // action is registered. Sanity v5 sometimes filters it out when only paid
-  // publish flows are available.
+  // Inject a custom Publish action at the front of the action list. Sanity v5
+  // hides its default per-document Publish on free tier (because publishing is
+  // routed through paid Content Releases), so we render our own button that
+  // calls the same underlying publish operation. Always visible, always
+  // clickable when there's a draft to publish.
   document: {
-    actions: (prev) => prev,
+    actions: (prev) => [
+      customPublishAction,
+      // Keep the default non-publish actions (discard, duplicate, delete, etc.)
+      ...prev.filter((a) => a.action !== "publish"),
+    ],
   },
 });
