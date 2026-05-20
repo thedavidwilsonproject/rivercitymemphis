@@ -19,8 +19,13 @@ export default defineConfig({
   schema: { types: schemaTypes },
   // Disable Content Releases AND Scheduled Publishing — both are paid features
   // on Sanity's higher tiers and the new Studio routes the publish UI through
-  // them, hiding the per-document Publish button on free tier. Disabling both
-  // restores the classic footer Publish action.
+  // them, hiding the per-document Publish button on free tier.
   releases: { enabled: false },
   scheduledPublishing: { enabled: false },
+  // Explicitly pass through default document actions to ensure the publish
+  // action is registered. Sanity v5 sometimes filters it out when only paid
+  // publish flows are available.
+  document: {
+    actions: (prev) => prev,
+  },
 });

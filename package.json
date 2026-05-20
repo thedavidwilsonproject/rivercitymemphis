@@ -23,6 +23,7 @@
     "seed:give": "tsx --env-file=.env.local scripts/seed-give.ts",
     "sync:events": "tsx --env-file=.env.local scripts/sync-pco-events.ts",
     "publish:event-drafts": "tsx --env-file=.env.local scripts/publish-event-drafts.ts",
+    "publish:draft": "tsx --env-file=.env.local scripts/publish-draft.ts",
     "photo:index": "tsx scripts/build-photo-index.ts",
     "migrate": "tsx --env-file=.env.local scripts/migrate-from-drupal.ts",
     "sanity:init": "sanity init --env=.env.local",
