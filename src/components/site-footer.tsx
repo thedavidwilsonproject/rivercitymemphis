@@ -16,9 +16,21 @@ const FALLBACK_SOCIALS = {
   vimeo: "https://vimeo.com/rivercitychurch",
 };
 
+function httpsOnly(url?: string): string | undefined {
+  if (!url) return undefined;
+  return url.replace(/^http:\/\//i, "https://");
+}
+
 export function SiteFooter({ settings }: { settings: SiteSettings | null }) {
   const address = settings?.address ?? FALLBACK_ADDRESS;
-  const socials = settings?.socials ?? FALLBACK_SOCIALS;
+  const rawSocials = settings?.socials ?? FALLBACK_SOCIALS;
+  const socials = {
+    facebook: httpsOnly(rawSocials.facebook),
+    instagram: httpsOnly(rawSocials.instagram),
+    twitter: httpsOnly(rawSocials.twitter),
+    vimeo: httpsOnly(rawSocials.vimeo),
+    youtube: httpsOnly((rawSocials as { youtube?: string }).youtube),
+  };
   const serviceTime = settings?.serviceTime ?? "Sundays at 10:15 AM";
   const phone = settings?.phone ?? "(901) 386-4171";
   const email = settings?.email ?? "info@rivercitymemphis.org";
