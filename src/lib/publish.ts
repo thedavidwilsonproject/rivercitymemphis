@@ -17,7 +17,16 @@ function writeClient() {
   if (!token) {
     throw new Error("SANITY_API_WRITE_TOKEN is not set");
   }
-  return createClient({ projectId, dataset, apiVersion, token, useCdn: false });
+  // perspective: "raw" is essential — the default "published" perspective
+  // filters out drafts, which is exactly what we need to list and publish.
+  return createClient({
+    projectId,
+    dataset,
+    apiVersion,
+    token,
+    useCdn: false,
+    perspective: "raw",
+  });
 }
 
 export type DraftInfo = {
