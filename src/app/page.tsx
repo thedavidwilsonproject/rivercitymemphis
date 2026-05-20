@@ -77,9 +77,44 @@ export default async function Home() {
     inLanguage: "en-US",
   };
 
+  const sundayServiceJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    "@id": `${SITE_URL}#sunday-service`,
+    name: "Sunday Worship Service",
+    description:
+      "Weekly Sunday worship service at River City Church — about 65–70 minutes of worship, teaching, and community. Coffee starts 15 minutes prior. Family Ministry open for infants through 8th grade.",
+    eventSchedule: {
+      "@type": "Schedule",
+      repeatFrequency: "P1W",
+      byDay: "https://schema.org/Sunday",
+      startTime: "10:15",
+      endTime: "11:30",
+      scheduleTimezone: "America/Chicago",
+    },
+    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+    eventStatus: "https://schema.org/EventScheduled",
+    location: {
+      "@type": "Place",
+      "@id": `${SITE_URL}/visit/location#place`,
+      name: ORG.name,
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: ORG.address.street,
+        addressLocality: ORG.address.locality,
+        addressRegion: ORG.address.region,
+        postalCode: ORG.address.postalCode,
+        addressCountry: ORG.address.country,
+      },
+    },
+    organizer: { "@id": `${SITE_URL}#church` },
+    isAccessibleForFree: true,
+    inLanguage: "en-US",
+  };
+
   return (
     <>
-      <JsonLd data={websiteJsonLd} />
+      <JsonLd data={[websiteJsonLd, sundayServiceJsonLd]} />
       <section className="relative isolate overflow-hidden bg-ink-900 text-white">
         <video
           className="absolute inset-0 -z-10 h-full w-full object-cover"

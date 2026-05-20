@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import {
   ChurchCenterScript,
   ChurchCenterModalLink,
@@ -64,8 +63,6 @@ const F = {
       ],
       image: "/brand/pages/groups/focus.jpg",
       alt: "Five women around a round table together at an RCC Focus Group",
-      ctaLabel: "Learn about Next",
-      ctaHref: "/connect/next",
     },
   ],
   join: {
@@ -271,14 +268,6 @@ export default async function GroupsPage() {
                         </li>
                       ))}
                     </ul>
-                  )}
-                  {k.ctaLabel && k.ctaHref && (
-                    <Link
-                      href={k.ctaHref}
-                      className="mt-7 inline-flex items-center font-display text-sm uppercase tracking-widest text-brand-600 transition hover:text-brand-700"
-                    >
-                      {k.ctaLabel} →
-                    </Link>
                   )}
                 </div>
               </div>

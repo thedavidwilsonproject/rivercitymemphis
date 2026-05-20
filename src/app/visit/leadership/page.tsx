@@ -4,12 +4,25 @@ import { client } from "@/sanity/client";
 import { leadershipQuery } from "@/sanity/queries";
 import { urlFor } from "@/sanity/image";
 import { PageHero } from "@/components/page-hero";
+import { JsonLd } from "@/components/json-ld";
+import { SITE_URL } from "@/lib/site";
 import type { Person } from "@/types/sanity";
 
 export const metadata: Metadata = {
   title: "Leadership",
-  description: "Meet the pastors and elders at RCC.",
+  description:
+    "Meet the pastors and elders of River City Church in Bartlett, TN — Lead Pastor Jonathan Dunn and the team that shepherds, teaches, and serves our church family.",
 };
+
+type PortableBlock = { _type?: string; children?: { text?: string }[] };
+function portableTextToPlain(value: unknown): string {
+  if (!Array.isArray(value)) return "";
+  return (value as PortableBlock[])
+    .map((b) => (b.children ?? []).map((c) => c.text ?? "").join(""))
+    .filter(Boolean)
+    .join(" ")
+    .trim();
+}
 
 /** Display order — Jonathan first, then Eddie, Ken, Barrett. Anyone else falls in after. */
 const DISPLAY_ORDER = [
@@ -37,8 +50,34 @@ export default async function LeadershipPage() {
 
   const sorted = sortPeople(people);
 
+  const peopleJsonLd =
+    sorted.length > 0
+      ? {
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          "@id": `${SITE_URL}/visit/leadership#people`,
+          itemListElement: sorted.map((p, i) => ({
+            "@type": "ListItem",
+            position: i + 1,
+            item: {
+              "@type": "Person",
+              "@id": `${SITE_URL}/visit/leadership#${p.slug ?? p.name.replace(/\s+/g, "-").toLowerCase()}`,
+              name: p.name,
+              jobTitle: p.role,
+              description: portableTextToPlain(p.bio) || undefined,
+              image: p.photo?.asset
+                ? urlFor(p.photo).width(640).height(640).url()
+                : undefined,
+              worksFor: { "@id": `${SITE_URL}#church` },
+              affiliation: { "@id": `${SITE_URL}#church` },
+            },
+          })),
+        }
+      : null;
+
   return (
     <div>
+      {peopleJsonLd && <JsonLd data={peopleJsonLd} />}
       <PageHero
         eyebrow="Visit"
         headline="Leadership"

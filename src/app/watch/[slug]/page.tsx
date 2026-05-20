@@ -8,7 +8,23 @@ import {
   sermonSeriesIndexQuery,
 } from "@/sanity/queries";
 import { urlFor } from "@/sanity/image";
+import { JsonLd } from "@/components/json-ld";
+import { SITE_URL } from "@/lib/site";
 import type { SermonSeries, Sermon, SermonSeriesSummary } from "@/types/sanity";
+
+function sermonEmbedUrl(s: Sermon): string | undefined {
+  if (!s.videoPlatform || !s.videoId) return undefined;
+  return s.videoPlatform === "youtube"
+    ? `https://www.youtube-nocookie.com/embed/${s.videoId}`
+    : `https://player.vimeo.com/video/${s.videoId}`;
+}
+
+function sermonContentUrl(s: Sermon): string | undefined {
+  if (!s.videoPlatform || !s.videoId) return undefined;
+  return s.videoPlatform === "youtube"
+    ? `https://www.youtube.com/watch?v=${s.videoId}`
+    : `https://vimeo.com/${s.videoId}`;
+}
 
 type Params = { slug: string };
 
@@ -106,8 +122,66 @@ export default async function SeriesPage({
 
   const sermons = series.sermons ?? [];
 
+  const seriesUrl = `${SITE_URL}/watch/${slug}`;
+  const thumb = series.coverImage?.asset
+    ? urlFor(series.coverImage).width(1280).height(720).fit("crop").url()
+    : undefined;
+
+  const videoList = sermons
+    .map((s, i) => {
+      const embed = sermonEmbedUrl(s);
+      const content = sermonContentUrl(s);
+      if (!embed) return null;
+      return {
+        "@type": "ListItem",
+        position: (s.order ?? i) + 1,
+        item: {
+          "@type": "VideoObject",
+          name: s.title || `${series.title} — Part ${(s.order ?? i) + 1}`,
+          description:
+            s.summary ||
+            (s.scripture
+              ? `${series.title} — ${s.scripture}`
+              : `Sermon from the ${series.title} series at River City Church.`),
+          uploadDate: s.date,
+          embedUrl: embed,
+          contentUrl: content,
+          thumbnailUrl: thumb,
+          publisher: { "@id": `${SITE_URL}#church` },
+          isPartOf: { "@id": `${seriesUrl}#series` },
+        },
+      };
+    })
+    .filter(Boolean);
+
+  const seriesJsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "CreativeWorkSeries",
+      "@id": `${seriesUrl}#series`,
+      name: series.title,
+      url: seriesUrl,
+      image: thumb,
+      startDate: series.startDate,
+      endDate: series.endDate,
+      publisher: { "@id": `${SITE_URL}#church` },
+      numberOfEpisodes: sermons.length,
+    },
+    ...(videoList.length > 0
+      ? [
+          {
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            "@id": `${seriesUrl}#sermons`,
+            itemListElement: videoList,
+          },
+        ]
+      : []),
+  ];
+
   return (
     <div>
+      <JsonLd data={seriesJsonLd} />
       <section className="relative bg-ink-900 text-white">
         <div className="mx-auto grid max-w-6xl items-center gap-10 px-6 py-16 md:grid-cols-[420px_1fr] md:py-24">
           {series.coverImage?.asset && (

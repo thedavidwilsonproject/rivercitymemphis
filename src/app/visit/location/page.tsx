@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { client } from "@/sanity/client";
 import { locationPageQuery, siteSettingsQuery } from "@/sanity/queries";
+import { JsonLd } from "@/components/json-ld";
+import { ORG, SITE_URL } from "@/lib/site";
 import type { LocationPageDoc, SiteSettings } from "@/types/sanity";
 
 export const metadata: Metadata = {
@@ -95,8 +97,32 @@ export default async function LocationPage() {
   const DIRECTIONS_URL = `https://www.google.com/maps/dir/?api=1&destination=${ADDRESS_QUERY}`;
   const APPLE_MAPS_URL = `http://maps.apple.com/?daddr=${ADDRESS_QUERY}`;
 
+  const placeJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Place",
+    "@id": `${SITE_URL}/visit/location#place`,
+    name: ORG.name,
+    url: `${SITE_URL}/visit/location`,
+    hasMap: `https://www.google.com/maps?q=${ADDRESS_QUERY}`,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: addr.line1,
+      addressLocality: addr.city,
+      addressRegion: addr.state,
+      postalCode: addr.zip,
+      addressCountry: "US",
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: ORG.geo.latitude,
+      longitude: ORG.geo.longitude,
+    },
+    containedInPlace: { "@id": `${SITE_URL}#church` },
+  };
+
   return (
     <div>
+      <JsonLd data={placeJsonLd} />
       <section className="bg-brand-600 text-white">
         <div className="mx-auto max-w-6xl px-6 py-16 md:py-20">
           {data.hero?.eyebrow && (
