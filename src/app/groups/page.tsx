@@ -4,7 +4,6 @@ import Link from "next/link";
 import {
   ChurchCenterScript,
   ChurchCenterModalLink,
-  ChurchCenterEmbed,
 } from "@/components/church-center";
 import { client } from "@/sanity/client";
 import { groupsPageQuery } from "@/sanity/queries";
@@ -15,7 +14,7 @@ import type { GroupsPageDoc, SanityImage } from "@/types/sanity";
 export const metadata: Metadata = {
   title: "Groups",
   description:
-    "Real growth happens in circles, not rows. Find a Community Group or Focus Group at RCC — meet weekly, study together, do life with people who are doing life with God.",
+    "Real growth happens in circles, not rows. Find a Community Group or Focus Group at RCC — meet twice a month, study together, do life with people who are doing life with God.",
 };
 
 const F = {
@@ -39,13 +38,13 @@ const F = {
     {
       eyebrow: "For adults in similar seasons",
       name: "Community Groups",
-      format: "10–12 adults · meets weekly in homes",
-      schedule: "Ongoing · weekly · in homes around Memphis",
+      format: "10–12 adults · meets twice a month in homes",
+      schedule: "Ongoing · twice a month · in homes around Memphis",
       blurb:
-        "Real life change happens in community. Community Groups are 10–12 adults in similar seasons of life who meet weekly in homes — to get to know each other, share what life looks like, and connect Sunday's teaching to Monday's reality.",
+        "Real life change happens in community. Community Groups are 10–12 adults in similar seasons of life who meet twice a month in homes — to get to know each other, share what life looks like, and connect Sunday's teaching to Monday's reality.",
       highlights: [
         "10–12 adults, similar life stage",
-        "Weekly · in homes",
+        "Twice a month · in homes",
         "Discussion + life-on-life",
       ],
       image: "/brand/pages/groups/community.jpg",
@@ -142,8 +141,6 @@ export default async function GroupsPage() {
   }));
   const join = doc?.join;
   const joinSteps = join?.steps?.length ? join.steps : F.join.steps;
-  const embed = doc?.embed;
-  const cta = doc?.cta;
 
   return (
     <div>
@@ -332,60 +329,10 @@ export default async function GroupsPage() {
             ))}
           </ol>
           {(join?.footnote ?? F.join.footnote) && (
-            <p className="mt-10 max-w-3xl text-base leading-7 text-cream-50/75 md:text-lg">
+            <p className="mt-10 text-base leading-7 text-cream-50/75 md:text-base">
               {join?.footnote ?? F.join.footnote}
             </p>
           )}
-        </div>
-      </section>
-
-      {/* CHURCH CENTER EMBED */}
-      <section className="bg-white py-20 md:py-28">
-        <div className="mx-auto max-w-6xl px-6">
-          <header className="mb-10 max-w-2xl">
-            <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-600">
-              {embed?.eyebrow ?? F.embed.eyebrow}
-            </p>
-            <h2 className="mt-3 font-display text-4xl uppercase leading-tight tracking-wide text-ink-800 md:text-5xl">
-              {embed?.headline ?? F.embed.headline}
-            </h2>
-            {(embed?.intro ?? F.embed.intro) && (
-              <p className="mt-5 text-lg leading-8 text-ink-700">
-                {embed?.intro ?? F.embed.intro}
-              </p>
-            )}
-          </header>
-          <ChurchCenterEmbed
-            path="/groups"
-            title="RCC Groups"
-            heightClass="h-[1400px] md:h-[1600px]"
-          />
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="bg-brand-600 py-20 text-white md:py-24">
-        <div className="mx-auto max-w-3xl px-6 text-center">
-          <h2 className="font-display text-4xl uppercase tracking-wide md:text-5xl">
-            {cta?.headline ?? F.cta.headline}
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-lg leading-8 text-brand-50/95">
-            {cta?.body ?? F.cta.body}
-          </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <ChurchCenterModalLink
-              href={cta?.primaryCta?.href ?? F.cta.primaryHref}
-              className="rounded-full bg-white px-6 py-3 font-display text-sm uppercase tracking-widest text-brand-700 transition hover:bg-cream-50"
-            >
-              {cta?.primaryCta?.label ?? F.cta.primaryLabel}
-            </ChurchCenterModalLink>
-            <ChurchCenterModalLink
-              href={cta?.secondaryCta?.href ?? F.cta.secondaryHref}
-              className="rounded-full border border-white/40 bg-white/5 px-6 py-3 font-display text-sm uppercase tracking-widest text-white backdrop-blur transition hover:bg-white/15"
-            >
-              {cta?.secondaryCta?.label ?? F.cta.secondaryLabel}
-            </ChurchCenterModalLink>
-          </div>
         </div>
       </section>
     </div>
