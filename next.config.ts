@@ -20,6 +20,10 @@ const IMG_SRC = [
   "https://*.googleusercontent.com",
   "https://*.gstatic.com",
   "https://*.googleapis.com",
+  // Planning Center / Church Center event logos + avatars
+  "https://registrations-production.s3.amazonaws.com",
+  "https://avatars.planningcenteronline.com",
+  "https://*.churchcenter.com",
 ];
 const FONT_SRC = ["'self'", "data:", "https://fonts.gstatic.com"];
 const FRAME_SRC = [
