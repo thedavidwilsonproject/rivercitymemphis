@@ -8,6 +8,15 @@ import { client } from "@/sanity/client";
 import { groupsPageQuery } from "@/sanity/queries";
 import { urlFor } from "@/sanity/image";
 import { PortableBody } from "@/components/portable-body";
+import {
+  Container,
+  CtaBand,
+  Eyebrow,
+  Headline,
+  PhotoHero,
+  Section,
+  SectionHeader,
+} from "@/components/v2/ui";
 import type { GroupsPageDoc, SanityImage } from "@/types/sanity";
 
 export const metadata: Metadata = {
@@ -136,179 +145,146 @@ export default async function GroupsPage() {
   }));
   const join = doc?.join;
   const joinSteps = join?.steps?.length ? join.steps : F.join.steps;
+  const cta = doc?.cta;
 
   return (
     <div>
       <ChurchCenterScript />
 
-      {/* HERO */}
-      <section className="relative isolate overflow-hidden text-white">
-        <Image
-          src={heroImageSrc}
-          alt={heroImageAlt}
-          fill
-          priority
-          sizes="100vw"
-          className="-z-10 object-cover object-[center_40%]"
-        />
-        <div
-          className="absolute inset-0 -z-10 bg-gradient-to-r from-ink-900/85 via-ink-900/55 to-ink-900/30"
-          aria-hidden="true"
-        />
-        <div className="mx-auto max-w-6xl px-6 py-32 md:py-44">
-          <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-300">
-            {heroEyebrow}
-          </p>
-          <h1 className="mt-3 font-display text-5xl uppercase leading-tight tracking-wide md:text-7xl">
-            {heroHeadline}
-          </h1>
-          {heroIntro && (
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-cream-50/95 md:text-xl md:leading-9">
-              {heroIntro}
-            </p>
-          )}
-          <div className="mt-8 flex flex-wrap gap-3">
-            <ChurchCenterModalLink href="/groups" variant="primary">
-              Browse all groups
-            </ChurchCenterModalLink>
-            <ChurchCenterModalLink
-              href="/forms"
-              className="rounded-full border border-white/50 bg-white/5 px-6 py-3 font-display text-sm uppercase tracking-widest text-white backdrop-blur transition hover:bg-white/15"
-            >
-              Start a new group
-            </ChurchCenterModalLink>
-          </div>
-        </div>
-      </section>
+      <PhotoHero
+        image={heroImageSrc}
+        alt={heroImageAlt}
+        eyebrow={heroEyebrow}
+        headline={heroHeadline}
+        intro={heroIntro}
+      >
+        <ChurchCenterModalLink href="/groups" className={CC_SOLID_DARK}>
+          Browse all groups
+        </ChurchCenterModalLink>
+        <ChurchCenterModalLink href="/forms" className={CC_OUTLINE_DARK}>
+          Start a new group
+        </ChurchCenterModalLink>
+      </PhotoHero>
 
       {/* INTRO */}
-      <section className="bg-white py-20 md:py-28">
-        <div className="mx-auto max-w-3xl px-6 text-center">
-          <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-600">
-            {intro?.eyebrow ?? F.intro.eyebrow}
-          </p>
-          <h2 className="mt-3 font-display text-4xl uppercase leading-tight tracking-wide text-ink-800 md:text-5xl">
-            {intro?.headline ?? F.intro.headline}
-          </h2>
-          <div className="mt-6 space-y-5 text-lg leading-8 text-ink-700">
-            {intro?.body ? (
-              <PortableBody value={intro.body} />
-            ) : (
-              F.intro.paragraphs.map((p, i) => <p key={i}>{p}</p>)
-            )}
+      <Section tone="white">
+        <Container>
+          <div className="grid gap-10 lg:grid-cols-[1fr_1.2fr] lg:gap-24">
+            <div>
+              <Eyebrow>{intro?.eyebrow ?? F.intro.eyebrow}</Eyebrow>
+              <Headline
+                text={intro?.headline ?? F.intro.headline}
+                accent={
+                  (intro?.headline ?? F.intro.headline).endsWith("at RCC.")
+                    ? "at RCC."
+                    : undefined
+                }
+                className="mt-4"
+              />
+            </div>
+            <div className="space-y-5 text-lg leading-8 text-ink-600 md:text-xl md:leading-9">
+              {intro?.body ? (
+                <PortableBody value={intro.body} />
+              ) : (
+                F.intro.paragraphs.map((p, i) => <p key={i}>{p}</p>)
+              )}
+            </div>
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
-      {/* KINDS — alternating side-by-side */}
-      <section className="bg-cream-50">
-        {kinds.map((k, i) => {
-          const flip = i % 2 === 1;
-          const src = imgSrc(k.image as SanityImage, k.fallbackImage ?? "", 1400);
-          return (
-            <div
-              key={`${k.name}-${i}`}
-              className={[
-                "py-20 md:py-28",
-                i % 2 === 0 ? "bg-cream-50" : "bg-white",
-              ].join(" ")}
-            >
-              <div
-                className={[
-                  "mx-auto grid max-w-6xl gap-10 px-6 md:grid-cols-2 md:items-center md:gap-16",
-                  flip ? "md:[&>figure]:order-2" : "",
-                ].join(" ")}
+      {/* KINDS — alternating editorial rows */}
+      <section className="bg-paper py-20 md:py-32">
+        <Container className="space-y-28 md:space-y-40">
+          {kinds.map((k, i) => {
+            const flip = i % 2 === 1;
+            const src = imgSrc(k.image as SanityImage, k.fallbackImage ?? "", 1400);
+            return (
+              <article
+                key={`${k.name}-${i}`}
+                className="grid items-center gap-12 lg:grid-cols-2 lg:gap-24"
               >
-                <figure className="relative">
+                <div
+                  className={`relative aspect-[4/3] overflow-hidden rounded-2xl bg-cream-200 ${
+                    flip ? "lg:order-2" : ""
+                  }`}
+                >
                   {src && (
                     <Image
                       src={src}
                       alt={k.alt ?? k.name ?? ""}
-                      width={1400}
-                      height={1050}
-                      className="aspect-[4/3] w-full rounded-2xl object-cover shadow-md"
+                      fill
+                      sizes="(min-width: 1024px) 50vw, 100vw"
+                      className="object-cover"
                     />
                   )}
-                </figure>
+                </div>
                 <div>
-                  {k.eyebrow && (
-                    <p className="font-display text-xs uppercase tracking-[0.3em] text-brand-600">
-                      {k.eyebrow}
-                    </p>
-                  )}
-                  <h2 className="mt-2 font-display text-4xl uppercase leading-tight tracking-wide text-ink-800 md:text-5xl">
+                  {k.eyebrow && <Eyebrow>{k.eyebrow}</Eyebrow>}
+                  <h2 className="mt-4 text-5xl font-bold leading-[0.95] tracking-tight text-ink-900 md:text-7xl">
                     {k.name}
                   </h2>
-                  {k.format && (
-                    <p className="mt-2 font-display text-base uppercase tracking-widest text-ink-500 md:text-lg">
-                      {k.format}
-                    </p>
-                  )}
-                  {k.schedule && (
-                    <p className="mt-1 text-sm text-ink-500 md:text-base">
-                      {k.schedule}
-                    </p>
+                  {(k.format || k.schedule) && (
+                    <div className="mt-6 border-t border-ink-900/15 pt-5">
+                      {k.format && (
+                        <p className="font-serif text-2xl italic text-ink-900 md:text-3xl">
+                          {k.format}
+                        </p>
+                      )}
+                      {k.schedule && (
+                        <p className="mt-1 text-sm text-ink-500 md:text-base">
+                          {k.schedule}
+                        </p>
+                      )}
+                    </div>
                   )}
                   {k.blurb && (
-                    <p className="mt-5 text-base leading-7 text-ink-700 md:text-lg md:leading-8">
-                      {k.blurb}
-                    </p>
+                    <p className="mt-6 text-lg leading-8 text-ink-600">{k.blurb}</p>
                   )}
                   {k.highlights && k.highlights.length > 0 && (
-                    <ul className="mt-6 space-y-2">
+                    <ul className="mt-8 divide-y divide-ink-900/10 border-y border-ink-900/10">
                       {k.highlights.map((h, hi) => (
-                        <li
-                          key={hi}
-                          className="flex items-start gap-3 rounded-xl border-l-4 border-brand-500 bg-white px-4 py-3 text-base text-ink-800 shadow-sm"
-                        >
-                          <span className="font-display text-xs uppercase tracking-[0.3em] text-brand-600">
+                        <li key={hi} className="flex items-baseline gap-5 py-3.5">
+                          <span className="font-serif text-xl italic text-brand-600">
                             {String(hi + 1).padStart(2, "0")}
                           </span>
-                          <span className="leading-7">{h}</span>
+                          <span className="text-ink-800">{h}</span>
                         </li>
                       ))}
                     </ul>
                   )}
                 </div>
-              </div>
-            </div>
-          );
-        })}
+              </article>
+            );
+          })}
+        </Container>
       </section>
 
       {/* HOW TO JOIN */}
-      <section className="bg-ink-900 py-20 text-white md:py-28">
-        <div className="mx-auto max-w-6xl px-6">
-          <header className="mb-12 max-w-2xl">
-            <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-300">
-              {join?.eyebrow ?? F.join.eyebrow}
-            </p>
-            <h2 className="mt-3 font-display text-4xl uppercase leading-tight tracking-wide md:text-5xl">
-              {join?.headline ?? F.join.headline}
-            </h2>
-            {(join?.intro ?? F.join.intro) && (
-              <p className="mt-5 text-lg leading-8 text-cream-50/90">
-                {join?.intro ?? F.join.intro}
-              </p>
-            )}
-          </header>
-          <ol className="grid gap-5 md:grid-cols-3 md:gap-6">
+      <Section tone="dark">
+        <Container>
+          <SectionHeader
+            tone="dark"
+            eyebrow={join?.eyebrow ?? F.join.eyebrow}
+            headline={join?.headline ?? F.join.headline}
+            accent={
+              (join?.headline ?? F.join.headline).endsWith("on-ramps.")
+                ? "on-ramps."
+                : undefined
+            }
+            intro={join?.intro ?? F.join.intro}
+          />
+          <ol className="grid gap-12 lg:grid-cols-3 lg:gap-10">
             {joinSteps.map((step, i) => (
-              <li
-                key={`${step.title}-${i}`}
-                className="relative overflow-hidden rounded-2xl bg-ink-800/70 p-7 backdrop-blur-sm md:p-8"
-              >
-                <span
-                  aria-hidden="true"
-                  className="font-display text-5xl text-brand-400"
-                >
+              <li key={`${step.title}-${i}`} className="border-t border-white/15 pt-8">
+                <p className="font-serif text-6xl italic leading-none text-brand-300">
                   {String(i + 1).padStart(2, "0")}
-                </span>
-                <h3 className="mt-3 font-display text-2xl uppercase leading-tight tracking-wide">
+                </p>
+                <h3 className="mt-6 text-2xl font-bold tracking-tight md:text-3xl">
                   {step.title}
                 </h3>
                 {step.description && (
-                  <p className="mt-2 text-base leading-7 text-cream-50/85">
+                  <p className="mt-3 text-lg leading-8 text-white/70">
                     {step.description}
                   </p>
                 )}
@@ -316,12 +292,40 @@ export default async function GroupsPage() {
             ))}
           </ol>
           {(join?.footnote ?? F.join.footnote) && (
-            <p className="mt-10 text-base leading-7 text-cream-50/75 md:text-base">
+            <p className="mt-16 max-w-3xl text-white/60">
               {join?.footnote ?? F.join.footnote}
             </p>
           )}
-        </div>
-      </section>
+        </Container>
+      </Section>
+
+      <CtaBand
+        headline={cta?.headline ?? F.cta.headline}
+        accent={
+          (cta?.headline ?? F.cta.headline).endsWith("circles.") ? "circles." : undefined
+        }
+        body={cta?.body ?? F.cta.body}
+        image={imgSrc(kinds[0]?.image as SanityImage, kinds[0]?.fallbackImage ?? F.kinds[0].image, 2000)}
+      >
+        <ChurchCenterModalLink
+          href={cta?.primaryCta?.href ?? F.cta.primaryHref}
+          className={CC_SOLID_DARK}
+        >
+          {cta?.primaryCta?.label ?? F.cta.primaryLabel}
+        </ChurchCenterModalLink>
+        <ChurchCenterModalLink
+          href={cta?.secondaryCta?.href ?? F.cta.secondaryHref}
+          className={CC_OUTLINE_DARK}
+        >
+          {cta?.secondaryCta?.label ?? F.cta.secondaryLabel}
+        </ChurchCenterModalLink>
+      </CtaBand>
     </div>
   );
 }
+
+// v2 button styles for Church Center modal links (on dark backgrounds).
+const CC_SOLID_DARK =
+  "inline-flex items-center justify-center rounded-full bg-white px-7 py-3.5 text-sm font-semibold text-ink-900 transition hover:bg-brand-100";
+const CC_OUTLINE_DARK =
+  "inline-flex items-center justify-center rounded-full border border-white/35 px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10";

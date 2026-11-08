@@ -26,46 +26,46 @@ function cleanBlocks(value: unknown): unknown[] {
 const components = {
   block: {
     normal: ({ children }: { children?: React.ReactNode }) => (
-      <p className="mb-5 text-lg leading-8 text-ink-700 last:mb-0">
+      <p className="mb-5 text-lg leading-8 last:mb-0">
         {children}
       </p>
     ),
     h2: ({ children }: { children?: React.ReactNode }) => (
-      <h2 className="mt-12 mb-4 font-display text-3xl uppercase tracking-wide text-ink-800">
+      <h2 className="mt-14 mb-5 text-3xl font-bold leading-tight tracking-tight md:text-4xl">
         {children}
       </h2>
     ),
     h3: ({ children }: { children?: React.ReactNode }) => (
-      <h3 className="mt-8 mb-3 font-display text-2xl uppercase tracking-wide text-ink-800">
+      <h3 className="mt-10 mb-3 text-2xl font-bold tracking-tight">
         {children}
       </h3>
     ),
     h4: ({ children }: { children?: React.ReactNode }) => (
-      <h4 className="mt-6 mb-2 font-display text-xl uppercase tracking-widest text-brand-600">
+      <h4 className="mt-8 mb-2 text-xs font-semibold uppercase tracking-[0.22em] text-brand-600">
         {children}
       </h4>
     ),
     blockquote: ({ children }: { children?: React.ReactNode }) => (
-      <blockquote className="my-6 border-l-4 border-brand-500 pl-5 italic text-ink-600">
+      <blockquote className="my-10 border-l-2 border-brand-500 pl-6 font-serif text-3xl italic leading-snug">
         {children}
       </blockquote>
     ),
   },
   list: {
     bullet: ({ children }: { children?: React.ReactNode }) => (
-      <ul className="mb-5 list-disc space-y-2 pl-6 text-lg leading-8 text-ink-700">
+      <ul className="mb-5 list-disc space-y-2 pl-6 text-lg leading-8 marker:text-brand-500">
         {children}
       </ul>
     ),
     number: ({ children }: { children?: React.ReactNode }) => (
-      <ol className="mb-5 list-decimal space-y-2 pl-6 text-lg leading-8 text-ink-700">
+      <ol className="mb-5 list-decimal space-y-2 pl-6 text-lg leading-8 marker:text-brand-500">
         {children}
       </ol>
     ),
   },
   marks: {
     strong: ({ children }: { children?: React.ReactNode }) => (
-      <strong className="font-semibold text-ink-800">{children}</strong>
+      <strong className="font-semibold">{children}</strong>
     ),
     em: ({ children }: { children?: React.ReactNode }) => (
       <em className="italic">{children}</em>
@@ -81,7 +81,7 @@ const components = {
         href={value?.href}
         target={value?.blank ? "_blank" : undefined}
         rel={value?.blank ? "noopener noreferrer" : undefined}
-        className="text-brand-600 underline-offset-4 hover:underline"
+        className="underline decoration-brand-500 decoration-2 underline-offset-4 hover:text-brand-600"
       >
         {children}
       </a>
@@ -100,7 +100,7 @@ const components = {
             .width(1200)
             .url()}
           alt={value.alt ?? ""}
-          className="my-8 w-full rounded-xl"
+          className="my-10 w-full rounded-2xl"
         />
       ) : null,
   },

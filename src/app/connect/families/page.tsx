@@ -1,10 +1,19 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { client } from "@/sanity/client";
 import { familiesPageQuery } from "@/sanity/queries";
 import { urlFor } from "@/sanity/image";
 import { PortableBody } from "@/components/portable-body";
+import {
+  Button,
+  Container,
+  CtaBand,
+  Eyebrow,
+  Headline,
+  PhotoHero,
+  Section,
+  SectionHeader,
+} from "@/components/v2/ui";
 import type { FamiliesPageDoc, SanityImage } from "@/types/sanity";
 
 export const metadata: Metadata = {
@@ -151,173 +160,161 @@ export default async function FamiliesPage() {
 
   return (
     <div>
-      {/* HERO */}
-      <section className="relative isolate overflow-hidden text-white">
-        <Image
-          src={heroImageSrc}
-          alt={heroImageAlt}
-          fill
-          priority
-          sizes="100vw"
-          className="-z-10 object-cover object-[center_40%]"
-        />
-        <div
-          className="absolute inset-0 -z-10 bg-gradient-to-r from-ink-900/85 via-ink-900/55 to-ink-900/30"
-          aria-hidden="true"
-        />
-        <div className="mx-auto max-w-6xl px-6 py-32 md:py-44">
-          <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-300">
-            {heroEyebrow}
-          </p>
-          <h1 className="mt-3 font-display text-5xl uppercase leading-tight tracking-wide md:text-7xl">
-            {heroHeadline}
-          </h1>
-          {heroIntro && (
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-cream-50/95 md:text-xl md:leading-9">
-              {heroIntro}
-            </p>
-          )}
-        </div>
-      </section>
+      <PhotoHero
+        image={heroImageSrc}
+        alt={heroImageAlt}
+        eyebrow={heroEyebrow}
+        headline={heroHeadline}
+        intro={heroIntro}
+      >
+        <Button tone="dark" href={cta?.primaryCta?.href ?? F.cta.primaryHref}>
+          {cta?.primaryCta?.label ?? F.cta.primaryLabel}
+        </Button>
+      </PhotoHero>
 
-      {/* INTRO */}
-      <section className="bg-white py-20 md:py-28">
-        <div className="mx-auto max-w-3xl px-6 text-center">
-          <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-600">
-            {intro?.eyebrow ?? F.intro.eyebrow}
-          </p>
-          <h2 className="mt-3 font-display text-4xl uppercase leading-tight tracking-wide text-ink-800 md:text-5xl">
-            {intro?.headline ?? F.intro.headline}
-          </h2>
-          <div className="mt-6 space-y-5 text-lg leading-8 text-ink-700">
-            {intro?.body ? (
-              <PortableBody value={intro.body} />
-            ) : (
-              F.intro.paragraphs.map((p, i) => <p key={i}>{p}</p>)
-            )}
+      {/* INTRO — editorial statement */}
+      <Section tone="white">
+        <Container>
+          <div className="grid gap-10 lg:grid-cols-[1fr_1.2fr] lg:gap-24">
+            <div>
+              <Eyebrow>{intro?.eyebrow ?? F.intro.eyebrow}</Eyebrow>
+              <Headline
+                text={intro?.headline ?? F.intro.headline}
+                accent={
+                  (intro?.headline ?? F.intro.headline).endsWith("with parents.")
+                    ? "with parents."
+                    : undefined
+                }
+                className="mt-4"
+              />
+            </div>
+            <div className="space-y-5 text-lg leading-8 text-ink-600 md:text-xl md:leading-9">
+              {intro?.body ? (
+                <PortableBody value={intro.body} />
+              ) : (
+                F.intro.paragraphs.map((p, i) => <p key={i}>{p}</p>)
+              )}
+            </div>
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
-      {/* ENVIRONMENTS — alternating side-by-side */}
-      <section className="bg-cream-50">
-        {envs.map((env, i) => {
-          const flip = i % 2 === 1;
-          const src = imgSrc(env.image as SanityImage, env.fallbackImage ?? "", 1400);
-          return (
-            <div
-              key={`${env.name}-${i}`}
-              className={[
-                "py-20 md:py-28",
-                i % 2 === 0 ? "bg-cream-50" : "bg-white",
-              ].join(" ")}
-            >
-              <div
-                className={[
-                  "mx-auto grid max-w-6xl gap-10 px-6 md:grid-cols-2 md:items-center md:gap-16",
-                  flip ? "md:[&>figure]:order-2" : "",
-                ].join(" ")}
+      {/* ENVIRONMENTS — alternating editorial rows */}
+      <section className="bg-paper py-20 md:py-32">
+        <Container className="space-y-28 md:space-y-40">
+          {envs.map((env, i) => {
+            const flip = i % 2 === 1;
+            const src = imgSrc(env.image as SanityImage, env.fallbackImage ?? "", 1400);
+            const color = ministryColor(env.name);
+            return (
+              <article
+                key={`${env.name}-${i}`}
+                className="grid items-center gap-12 lg:grid-cols-2 lg:gap-24"
               >
-                <figure className="relative">
+                <div
+                  className={`relative aspect-[4/3] overflow-hidden rounded-2xl bg-cream-200 ${
+                    flip ? "lg:order-2" : ""
+                  }`}
+                >
                   {src && (
                     <Image
                       src={src}
                       alt={env.alt ?? env.name ?? ""}
-                      width={1400}
-                      height={1050}
-                      className="aspect-[4/3] w-full rounded-2xl object-cover shadow-md"
+                      fill
+                      sizes="(min-width: 1024px) 50vw, 100vw"
+                      className="object-cover"
                     />
                   )}
-                </figure>
+                  <span
+                    aria-hidden="true"
+                    className="absolute bottom-0 left-0 h-2 w-full"
+                    style={{ backgroundColor: color }}
+                  />
+                </div>
                 <div>
                   {env.eyebrow && (
-                    <p className="font-display text-xs uppercase tracking-[0.3em] text-brand-600">
+                    <p
+                      className="text-xs font-semibold uppercase tracking-[0.22em]"
+                      style={{ color }}
+                    >
                       {env.eyebrow}
                     </p>
                   )}
-                  <h2 className="mt-2 font-display text-4xl uppercase leading-tight tracking-wide text-ink-800 md:text-5xl">
+                  <h2 className="mt-4 text-5xl font-bold leading-[0.95] tracking-tight text-ink-900 md:text-7xl">
                     {env.name}
                   </h2>
-                  {env.ageRange && (
-                    <p className="mt-2 font-display text-base uppercase tracking-widest text-ink-500 md:text-lg">
-                      {env.ageRange}
-                    </p>
-                  )}
-                  {env.schedule && (
-                    <p className="mt-1 text-sm text-ink-500 md:text-base">
-                      {env.schedule}
-                    </p>
+                  {(env.ageRange || env.schedule) && (
+                    <div className="mt-6 border-t border-ink-900/15 pt-5">
+                      {env.ageRange && (
+                        <p className="font-serif text-2xl italic text-ink-900 md:text-3xl">
+                          {env.ageRange}
+                        </p>
+                      )}
+                      {env.schedule && (
+                        <p className="mt-1 text-sm text-ink-500 md:text-base">
+                          {env.schedule}
+                        </p>
+                      )}
+                    </div>
                   )}
                   {env.blurb && (
-                    <p className="mt-5 text-base leading-7 text-ink-700 md:text-lg md:leading-8">
-                      {env.blurb}
-                    </p>
+                    <p className="mt-6 text-lg leading-8 text-ink-600">{env.blurb}</p>
                   )}
                   {env.coreTruths && env.coreTruths.length > 0 && (
-                    <ul className="mt-6 space-y-2">
+                    <ul className="mt-8 divide-y divide-ink-900/10 border-y border-ink-900/10">
                       {env.coreTruths.map((truth, ti) => (
-                        <li
-                          key={ti}
-                          className="flex items-start gap-3 rounded-xl border-l-4 border-brand-500 bg-white px-4 py-3 text-base text-ink-800 shadow-sm"
-                        >
-                          <span className="font-display text-xs uppercase tracking-[0.3em] text-brand-600">
+                        <li key={ti} className="flex items-baseline gap-5 py-3.5">
+                          <span
+                            className="font-serif text-xl italic"
+                            style={{ color }}
+                          >
                             {String(ti + 1).padStart(2, "0")}
                           </span>
-                          <span className="leading-7">{truth}</span>
+                          <span className="text-ink-800">{truth}</span>
                         </li>
                       ))}
                     </ul>
                   )}
                   {env.facebookUrl && (
-                    <a
-                      href={env.facebookUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mt-7 inline-flex items-center font-display text-sm uppercase tracking-widest text-brand-600 transition hover:text-brand-700"
-                    >
+                    <Button variant="link" href={env.facebookUrl} className="mt-8">
                       Follow on Facebook →
-                    </a>
+                    </Button>
                   )}
                 </div>
-              </div>
-            </div>
-          );
-        })}
+              </article>
+            );
+          })}
+        </Container>
       </section>
 
       {/* CHECK-IN */}
-      <section className="bg-ink-900 py-20 text-white md:py-28">
-        <div className="mx-auto max-w-6xl px-6">
-          <header className="mb-12 max-w-2xl">
-            <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-300">
-              {checkin?.eyebrow ?? F.checkin.eyebrow}
-            </p>
-            <h2 className="mt-3 font-display text-4xl uppercase leading-tight tracking-wide md:text-5xl">
-              {checkin?.headline ?? F.checkin.headline}
-            </h2>
-            {(checkin?.intro ?? F.checkin.intro) && (
-              <p className="mt-5 text-lg leading-8 text-cream-50/90">
-                {checkin?.intro ?? F.checkin.intro}
-              </p>
-            )}
-          </header>
-          <ol className="grid gap-5 md:grid-cols-3 md:gap-6">
+      <Section tone="dark">
+        <Container>
+          <SectionHeader
+            tone="dark"
+            eyebrow={checkin?.eyebrow ?? F.checkin.eyebrow}
+            headline={checkin?.headline ?? F.checkin.headline}
+            accent={
+              (checkin?.headline ?? F.checkin.headline).endsWith("made simple.")
+                ? "made simple."
+                : undefined
+            }
+            intro={checkin?.intro ?? F.checkin.intro}
+          />
+          <ol className="grid gap-12 lg:grid-cols-3 lg:gap-10">
             {checkinSteps.map((step, i) => (
               <li
                 key={`${step.title}-${i}`}
-                className="relative overflow-hidden rounded-2xl bg-ink-800/70 p-7 backdrop-blur-sm md:p-8"
+                className="border-t border-white/15 pt-8"
               >
-                <span
-                  aria-hidden="true"
-                  className="font-display text-5xl text-brand-400"
-                >
+                <p className="font-serif text-6xl italic leading-none text-brand-300">
                   {String(i + 1).padStart(2, "0")}
-                </span>
-                <h3 className="mt-3 font-display text-2xl uppercase leading-tight tracking-wide">
+                </p>
+                <h3 className="mt-6 text-2xl font-bold tracking-tight md:text-3xl">
                   {step.title}
                 </h3>
                 {step.description && (
-                  <p className="mt-2 text-base leading-7 text-cream-50/85">
+                  <p className="mt-3 text-lg leading-8 text-white/70">
                     {step.description}
                   </p>
                 )}
@@ -325,38 +322,44 @@ export default async function FamiliesPage() {
             ))}
           </ol>
           {(checkin?.footnote ?? F.checkin.footnote) && (
-            <p className="mt-10 max-w-3xl text-base leading-7 text-cream-50/75 md:text-lg">
+            <p className="mt-16 max-w-3xl font-serif text-2xl italic leading-snug text-white/80 md:text-3xl">
               {checkin?.footnote ?? F.checkin.footnote}
             </p>
           )}
-        </div>
-      </section>
+        </Container>
+      </Section>
 
-      {/* CTA */}
-      <section className="bg-brand-600 py-20 text-white md:py-24">
-        <div className="mx-auto max-w-3xl px-6 text-center">
-          <h2 className="font-display text-4xl uppercase tracking-wide md:text-5xl">
-            {cta?.headline ?? F.cta.headline}
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-lg leading-8 text-brand-50/95">
-            {cta?.body ?? F.cta.body}
-          </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Link
-              href={cta?.primaryCta?.href ?? F.cta.primaryHref}
-              className="rounded-full bg-white px-6 py-3 font-display text-sm uppercase tracking-widest text-brand-700 transition hover:bg-cream-50"
-            >
-              {cta?.primaryCta?.label ?? F.cta.primaryLabel}
-            </Link>
-            <Link
-              href={cta?.secondaryCta?.href ?? F.cta.secondaryHref}
-              className="rounded-full border border-white/40 bg-white/5 px-6 py-3 font-display text-sm uppercase tracking-widest text-white backdrop-blur transition hover:bg-white/15"
-            >
-              {cta?.secondaryCta?.label ?? F.cta.secondaryLabel}
-            </Link>
-          </div>
-        </div>
-      </section>
+      <CtaBand
+        headline={cta?.headline ?? F.cta.headline}
+        accent={
+          (cta?.headline ?? F.cta.headline).endsWith("this Sunday.")
+            ? "this Sunday."
+            : undefined
+        }
+        body={cta?.body ?? F.cta.body}
+        image={heroImageSrc}
+      >
+        <Button tone="dark" href={cta?.primaryCta?.href ?? F.cta.primaryHref}>
+          {cta?.primaryCta?.label ?? F.cta.primaryLabel}
+        </Button>
+        <Button
+          tone="dark"
+          variant="outline"
+          href={cta?.secondaryCta?.href ?? F.cta.secondaryHref}
+        >
+          {cta?.secondaryCta?.label ?? F.cta.secondaryLabel}
+        </Button>
+      </CtaBand>
     </div>
   );
+}
+
+/** Brand colors of each Family Ministry environment (same as the homepage). */
+function ministryColor(name?: string): string {
+  const n = (name ?? "").toLowerCase();
+  if (n.includes("waumba")) return "#DC5237";
+  if (n.includes("upstreet")) return "#7BAA53";
+  if (n.includes("transit") || n.includes("student")) return "#4AB5D7";
+  if (n.includes("all access")) return "#D8A33A";
+  return "#2aa5ca";
 }

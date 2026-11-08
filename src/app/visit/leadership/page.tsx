@@ -7,6 +7,26 @@ import { PageHero } from "@/components/page-hero";
 import { JsonLd } from "@/components/json-ld";
 import { SITE_URL } from "@/lib/site";
 import type { Person } from "@/types/sanity";
+import {
+  Button,
+  Container,
+  CtaBand,
+  Eyebrow,
+  Section,
+} from "@/components/v2/ui";
+
+function Bio({ value, tone = "light" }: { value: unknown; tone?: "light" | "dark" }) {
+  if (!Array.isArray(value) || value.length === 0) return null;
+  return (
+    <div
+      className={`mt-6 space-y-4 text-lg leading-8 ${
+        tone === "dark" ? "text-white/75" : "text-ink-600"
+      }`}
+    >
+      <PortableText value={value as Parameters<typeof PortableText>[0]["value"]} />
+    </div>
+  );
+}
 
 export const metadata: Metadata = {
   title: "Leadership",
@@ -75,6 +95,8 @@ export default async function LeadershipPage() {
         }
       : null;
 
+  const [lead, ...rest] = sorted;
+
   return (
     <div>
       {peopleJsonLd && <JsonLd data={peopleJsonLd} />}
@@ -82,55 +104,91 @@ export default async function LeadershipPage() {
         eyebrow="Visit"
         headline="Leadership"
         intro="The people God has called to shepherd, teach, and serve our church family."
-        variant="brand"
+        variant="cream"
       />
 
-      <div className="mx-auto max-w-6xl px-6 py-16">
-        {sorted.length === 0 ? (
-          <p className="rounded-xl border border-dashed border-ink-300 p-10 text-center text-ink-500">
-            No leadership profiles in Sanity yet.
-          </p>
-        ) : (
-          <div className="grid gap-8 md:grid-cols-2">
-            {sorted.map((p) => (
-              <article
-                key={p.slug ?? p.name}
-                className="rounded-2xl border border-cream-200 bg-white p-7 md:p-8"
-              >
-                <div className="flex flex-col items-center gap-5 sm:flex-row sm:items-center">
-                  {p.photo?.asset && (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={urlFor(p.photo).width(320).height(320).url()}
-                      alt={p.photo.alt ?? p.name}
-                      className="h-36 w-36 flex-none rounded-full object-cover md:h-40 md:w-40"
-                    />
-                  )}
-                  <div className="text-center sm:text-left">
-                    <h3 className="font-display text-2xl uppercase tracking-wide text-ink-800">
-                      {p.name}
-                    </h3>
-                    {p.role && (
-                      <p className="mt-1 text-sm font-semibold text-brand-600">
-                        {p.role}
-                      </p>
-                    )}
-                  </div>
-                </div>
-                {Array.isArray(p.bio) && p.bio.length > 0 && (
-                  <div className="prose prose-sm mt-6 max-w-none text-ink-700">
-                    <PortableText
-                      value={
-                        p.bio as Parameters<typeof PortableText>[0]["value"]
-                      }
-                    />
-                  </div>
+      {sorted.length === 0 ? (
+        <Section>
+          <Container>
+            <p className="rounded-2xl border border-dashed border-ink-900/20 p-10 text-center text-ink-500">
+              No leadership profiles in Sanity yet.
+            </p>
+          </Container>
+        </Section>
+      ) : (
+        <>
+          {/* LEAD — featured */}
+          <Section tone="dark">
+            <Container>
+              <article className="grid items-center gap-12 lg:grid-cols-[1fr_1.2fr] lg:gap-24">
+                {lead.photo?.asset && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={urlFor(lead.photo).width(1000).height(1200).url()}
+                    alt={lead.photo.alt ?? lead.name}
+                    className="aspect-[5/6] w-full rounded-2xl object-cover"
+                  />
                 )}
+                <div>
+                  {lead.role && <Eyebrow tone="dark">{lead.role}</Eyebrow>}
+                  <h2 className="mt-4 text-6xl font-bold leading-[0.95] tracking-tight md:text-8xl">
+                    {lead.name.split(" ").slice(0, -1).join(" ")}{" "}
+                    <em className="text-brand-300">
+                      {lead.name.split(" ").slice(-1)[0]}
+                    </em>
+                  </h2>
+                  <Bio value={lead.bio} tone="dark" />
+                </div>
               </article>
-            ))}
-          </div>
-        )}
-      </div>
+            </Container>
+          </Section>
+
+          {/* TEAM */}
+          {rest.length > 0 && (
+            <Section tone="light">
+              <Container>
+                <div className="grid gap-x-10 gap-y-20 md:grid-cols-2">
+                  {rest.map((p) => (
+                    <article key={p.slug ?? p.name}>
+                      {p.photo?.asset && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={urlFor(p.photo).width(900).height(900).url()}
+                          alt={p.photo.alt ?? p.name}
+                          className="aspect-square w-full max-w-md rounded-2xl object-cover"
+                        />
+                      )}
+                      {p.role && (
+                        <p className="mt-8 text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-600">
+                          {p.role}
+                        </p>
+                      )}
+                      <h3 className="mt-2 text-4xl font-bold tracking-tight text-ink-900">
+                        {p.name}
+                      </h3>
+                      <Bio value={p.bio} />
+                    </article>
+                  ))}
+                </div>
+              </Container>
+            </Section>
+          )}
+        </>
+      )}
+
+      {/* Closing CTA — copy reused from the Who We Are page fallback. */}
+      <CtaBand
+        headline="We'd love to meet you."
+        accent="meet you."
+        body="Visit us this Sunday at 10:15 AM — coffee starts 15 minutes earlier and a friend you haven't met yet is probably already saving you a seat."
+      >
+        <Button tone="dark" href="/visit/what-to-expect">
+          Plan your visit
+        </Button>
+        <Button tone="dark" variant="outline" href="/visit/location">
+          Get directions
+        </Button>
+      </CtaBand>
     </div>
   );
 }

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { PortableText } from "@portabletext/react";
 import { client } from "@/sanity/client";
 import {
   ministriesQuery,
@@ -10,6 +9,15 @@ import {
 import { urlFor } from "@/sanity/image";
 import { PageHero } from "@/components/page-hero";
 import { PortableBody } from "@/components/portable-body";
+import {
+  Button,
+  ButtonRow,
+  Container,
+  Eyebrow,
+  FactCard,
+  PhotoHero,
+  Section,
+} from "@/components/v2/ui";
 import type { Ministry, PageDoc } from "@/types/sanity";
 
 type Params = { slug: string };
@@ -68,118 +76,102 @@ export default async function ConnectPage({
     if (!page) notFound();
     return (
       <div>
-        <PageHero
-          eyebrow="Connect"
-          headline={page.title}
-          intro={page.summary}
-          variant="brand"
-        />
-        {page.heroImage?.asset && (
-          <div className="mx-auto -mt-12 max-w-5xl px-6 md:-mt-16">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={urlFor(page.heroImage).width(1600).height(800).url()}
-              alt={page.heroImage.alt ?? page.title}
-              className="aspect-[2/1] w-full rounded-2xl object-cover shadow-xl"
-            />
-          </div>
+        {page.heroImage?.asset ? (
+          <PhotoHero
+            short
+            image={urlFor(page.heroImage).width(2200).url()}
+            alt={page.heroImage.alt ?? page.title}
+            eyebrow="Connect"
+            headline={page.title}
+            intro={page.summary}
+            backlink={{ label: "Connect", href: "/connect" }}
+          />
+        ) : (
+          <PageHero
+            eyebrow="Connect"
+            headline={page.title}
+            intro={page.summary}
+            variant="cream"
+            backlink={{ label: "Connect", href: "/connect" }}
+          />
         )}
-        <article className="mx-auto max-w-3xl px-6 py-12 md:py-16">
-          <PortableBody value={page.body} />
-        </article>
+        <Section tone="light">
+          <Container narrow>
+            <article className="text-ink-700">
+              <PortableBody value={page.body} />
+            </article>
+          </Container>
+        </Section>
       </div>
     );
   }
 
   return (
     <div>
-      <section className="bg-brand-600 text-white">
-        <div className="mx-auto grid max-w-6xl items-center gap-10 px-6 py-16 md:grid-cols-[1fr_360px] md:py-24">
-          <div>
-            <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-100">
-              Connect
-            </p>
-            <h1 className="mt-2 font-display text-5xl uppercase leading-tight tracking-wide md:text-6xl">
-              {m.title}
-            </h1>
-            {m.ageRange && (
-              <p className="mt-3 font-display text-lg uppercase tracking-widest text-brand-100">
-                {m.ageRange}
-              </p>
-            )}
-            {m.tagline && (
-              <p className="mt-4 max-w-xl text-lg leading-7 text-brand-50/95">
-                {m.tagline}
-              </p>
-            )}
-          </div>
-          {m.image?.asset && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={urlFor(m.image).width(720).height(720).url()}
-              alt={m.image.alt ?? m.title}
-              className="rounded-2xl shadow-2xl md:justify-self-end"
-            />
-          )}
-        </div>
-      </section>
+      {m.image?.asset ? (
+        <PhotoHero
+          short
+          image={urlFor(m.image).width(2200).url()}
+          alt={m.image.alt ?? m.title}
+          eyebrow={m.ageRange ? `Connect · ${m.ageRange}` : "Connect"}
+          headline={m.title}
+          intro={m.tagline}
+          backlink={{ label: "Connect", href: "/connect" }}
+        />
+      ) : (
+        <PageHero
+          eyebrow={m.ageRange ? `Connect · ${m.ageRange}` : "Connect"}
+          headline={m.title}
+          intro={m.tagline}
+          variant="dark"
+          backlink={{ label: "Connect", href: "/connect" }}
+        />
+      )}
 
-      <div className="mx-auto max-w-3xl px-6 py-16">
-        {(m.schedule || m.location) && (
-          <dl className="mb-10 grid gap-4 rounded-xl border border-cream-200 bg-cream-50 p-6 md:grid-cols-2">
-            {m.schedule && (
+      {(m.schedule || m.location) && (
+        <section className="border-b border-ink-900/10 bg-white/60">
+          <Container className="grid gap-4 py-12 md:grid-cols-2">
+            {m.schedule && <FactCard label="When" value={m.schedule} />}
+            {m.location && <FactCard label="Where" value={m.location} />}
+          </Container>
+        </section>
+      )}
+
+      <Section tone="light">
+        <Container>
+          <div className="grid gap-14 lg:grid-cols-[1fr_1.6fr] lg:gap-24">
+            {Array.isArray(m.coreValues) && m.coreValues.length > 0 ? (
               <div>
-                <dt className="font-display text-xs uppercase tracking-widest text-brand-600">
-                  When
-                </dt>
-                <dd className="mt-1 text-ink-700">{m.schedule}</dd>
+                <Eyebrow>Core values</Eyebrow>
+                <ul className="mt-6 divide-y divide-ink-900/10 border-y border-ink-900/10">
+                  {m.coreValues.map((v, i) => (
+                    <li key={i} className="flex items-baseline gap-5 py-4">
+                      <span className="font-serif text-xl italic text-brand-600">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <span className="text-lg font-semibold text-ink-900">{v}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
+            ) : (
+              <span className="hidden lg:block" />
             )}
-            {m.location && (
-              <div>
-                <dt className="font-display text-xs uppercase tracking-widest text-brand-600">
-                  Where
-                </dt>
-                <dd className="mt-1 text-ink-700">{m.location}</dd>
-              </div>
-            )}
-          </dl>
-        )}
-
-        {Array.isArray(m.coreValues) && m.coreValues.length > 0 && (
-          <ul className="mb-10 grid gap-3 md:grid-cols-3">
-            {m.coreValues.map((v, i) => (
-              <li
-                key={i}
-                className="rounded-xl border border-cream-200 bg-white p-4 text-center font-display text-sm uppercase tracking-widest text-ink-700"
-              >
-                {v}
-              </li>
-            ))}
-          </ul>
-        )}
-
-        {Array.isArray(m.description) && m.description.length > 0 && (
-          <div className="prose prose-slab max-w-none text-ink-700">
-            <PortableText
-              value={
-                m.description as Parameters<typeof PortableText>[0]["value"]
-              }
-            />
+            <div>
+              {Array.isArray(m.description) && m.description.length > 0 && (
+                <div className="text-ink-700">
+                  <PortableBody value={m.description} />
+                </div>
+              )}
+              {m.facebookUrl && (
+                <ButtonRow className="mt-10">
+                  <Button href={m.facebookUrl}>Find us on Facebook</Button>
+                </ButtonRow>
+              )}
+            </div>
           </div>
-        )}
-
-        {m.facebookUrl && (
-          <a
-            href={m.facebookUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-8 inline-flex items-center rounded-full bg-brand-600 px-6 py-3 font-display text-sm uppercase tracking-widest text-white hover:bg-brand-700"
-          >
-            Find us on Facebook
-          </a>
-        )}
-      </div>
+        </Container>
+      </Section>
     </div>
   );
 }

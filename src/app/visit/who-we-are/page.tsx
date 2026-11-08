@@ -1,11 +1,21 @@
 import type { Metadata } from "next";
-import Image from "next/image";
-import Link from "next/link";
 import { client } from "@/sanity/client";
 import { whoWeArePageQuery } from "@/sanity/queries";
 import { urlFor } from "@/sanity/image";
 import { PortableBody } from "@/components/portable-body";
 import type { WhoWeArePageDoc } from "@/types/sanity";
+import {
+  Button,
+  Container,
+  CtaBand,
+  Eyebrow,
+  Headline,
+  ImageBanner,
+  PhotoHero,
+  Section,
+  SectionHeader,
+  SplitSection,
+} from "@/components/v2/ui";
 
 export const metadata: Metadata = {
   title: "Who We Are",
@@ -88,123 +98,75 @@ export default async function WhoWeArePage() {
   const baptism = doc?.baptismBanner;
   const cta = doc?.cta;
 
+  const heroAlt =
+    (typeof hero.image === "object" &&
+      (hero.image as { alt?: string })?.alt) ||
+    F.hero.alt;
+
   return (
     <div>
       {/* HERO */}
-      <section className="relative isolate overflow-hidden text-white">
-        <Image
-          src={img(hero.image as { asset?: unknown }, F.hero.image)}
-          alt={
-            (typeof hero.image === "object" && (hero.image as { alt?: string })?.alt) ||
-            F.hero.alt
-          }
-          fill
-          priority
-          sizes="100vw"
-          className="-z-10 object-cover"
-        />
-        <div
-          className="absolute inset-0 -z-10 bg-gradient-to-r from-ink-900/80 via-ink-900/45 to-ink-900/30"
-          aria-hidden="true"
-        />
-        <div className="mx-auto max-w-6xl px-6 py-32 md:py-44">
-          {hero.eyebrow && (
-            <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-300">
-              {hero.eyebrow}
-            </p>
-          )}
-          <h1 className="mt-3 font-display text-5xl uppercase leading-tight tracking-wide md:text-7xl">
-            {hero.headline}
-          </h1>
-          {hero.intro && (
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-cream-50/95 md:text-xl md:leading-9">
-              {hero.intro}
-            </p>
-          )}
-        </div>
-      </section>
+      <PhotoHero
+        image={img(hero.image as { asset?: unknown }, F.hero.image)}
+        alt={heroAlt}
+        eyebrow={hero.eyebrow}
+        headline={hero.headline ?? F.hero.headline}
+        intro={hero.intro}
+      />
 
       {/* MISSION / VISION / STRATEGY */}
       {mvs && (
-        <section className="bg-white py-24 md:py-32">
-          <div className="mx-auto max-w-6xl px-6">
-            {(mvs.eyebrow || mvs.headline) && (
-              <header className="mb-14 text-center md:mb-20">
-                {mvs.eyebrow && (
-                  <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-600">
-                    {mvs.eyebrow}
-                  </p>
-                )}
-                {mvs.headline && (
-                  <h2 className="mt-3 font-display text-5xl uppercase leading-tight tracking-wide text-ink-800 md:text-6xl">
-                    {mvs.headline}
-                  </h2>
-                )}
-                {mvs.intro && (
-                  <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-ink-700 md:text-xl md:leading-9">
-                    {mvs.intro}
-                  </p>
-                )}
-              </header>
+        <Section tone="white">
+          <Container>
+            {mvs.headline && (
+              <SectionHeader
+                eyebrow={mvs.eyebrow}
+                headline={mvs.headline}
+                intro={mvs.intro}
+                align="split"
+              />
             )}
 
-            {/* Mission + Vision side by side */}
-            <div className="grid gap-6 md:grid-cols-2">
-              {mvs.mission && (
-                <article className="rounded-2xl border-l-4 border-brand-500 bg-cream-50 p-8 md:p-10">
-                  <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-600">
-                    {mvs.mission.label ?? "Mission"}
-                  </p>
-                  <p className="mt-4 font-display text-2xl uppercase leading-tight tracking-wide text-ink-800 md:text-3xl">
-                    {mvs.mission.statement}
-                  </p>
-                  {mvs.mission.description && (
-                    <p className="mt-5 text-base leading-7 text-ink-700 md:text-lg md:leading-8">
-                      {mvs.mission.description}
-                    </p>
-                  )}
-                </article>
-              )}
-              {mvs.vision && (
-                <article className="rounded-2xl border-l-4 border-brand-500 bg-cream-50 p-8 md:p-10">
-                  <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-600">
-                    {mvs.vision.label ?? "Vision"}
-                  </p>
-                  <p className="mt-4 font-display text-2xl uppercase leading-tight tracking-wide text-ink-800 md:text-3xl">
-                    {mvs.vision.statement}
-                  </p>
-                  {mvs.vision.description && (
-                    <p className="mt-5 text-base leading-7 text-ink-700 md:text-lg md:leading-8">
-                      {mvs.vision.description}
-                    </p>
-                  )}
-                </article>
+            <div className="grid gap-px overflow-hidden rounded-2xl border border-ink-900/15 bg-ink-900/15 md:grid-cols-2">
+              {[mvs.mission, mvs.vision].map((m, i) =>
+                m ? (
+                  <article key={i} className="bg-paper p-8 md:p-12">
+                    <Eyebrow>{m.label ?? (i === 0 ? "Mission" : "Vision")}</Eyebrow>
+                    {m.statement && (
+                      <p className="mt-5 text-3xl font-bold leading-tight tracking-tight text-ink-900 md:text-4xl">
+                        {m.statement}
+                      </p>
+                    )}
+                    {m.description && (
+                      <p className="mt-6 text-lg leading-8 text-ink-600">
+                        {m.description}
+                      </p>
+                    )}
+                  </article>
+                ) : null,
               )}
             </div>
 
-            {/* Strategy — full width with pillars sub-grid */}
             {mvs.strategy && (
-              <article className="mt-6 rounded-2xl bg-brand-600 p-8 text-white md:p-10">
-                <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-100">
-                  {mvs.strategy.label ?? "Strategy"}
-                </p>
+              <article className="mt-6 rounded-2xl bg-river-950 p-8 text-white md:p-12">
+                <Eyebrow tone="dark">{mvs.strategy.label ?? "Strategy"}</Eyebrow>
                 {mvs.strategy.statement && (
-                  <p className="mt-4 font-display text-2xl uppercase leading-tight tracking-wide md:text-3xl">
+                  <p className="mt-5 max-w-4xl text-3xl font-bold leading-tight tracking-tight md:text-4xl">
                     {mvs.strategy.statement}
                   </p>
                 )}
                 {mvs.strategy.pillars && mvs.strategy.pillars.length > 0 && (
-                  <div className="mt-8 grid gap-6 md:grid-cols-3">
+                  <div className="mt-10 grid gap-8 md:grid-cols-3">
                     {mvs.strategy.pillars.map((p, i) => (
                       <div
                         key={`${p.name}-${i}`}
-                        className="rounded-xl bg-brand-700/40 p-6 backdrop-blur-sm"
+                        className="border-t border-white/20 pt-6"
                       >
-                        <p className="font-display text-xl uppercase tracking-wide text-white md:text-2xl">
+                        <p className="font-serif text-4xl italic text-brand-300">
                           {p.name}
                         </p>
                         {p.description && (
-                          <p className="mt-2 text-base leading-7 text-brand-50/90">
+                          <p className="mt-3 leading-7 text-white/70">
                             {p.description}
                           </p>
                         )}
@@ -213,205 +175,158 @@ export default async function WhoWeArePage() {
                   </div>
                 )}
                 {mvs.strategy.description && (
-                  <p className="mt-8 max-w-3xl text-base leading-7 text-brand-50/95 md:text-lg md:leading-8">
+                  <p className="mt-10 max-w-3xl text-lg leading-8 text-white/75">
                     {mvs.strategy.description}
                   </p>
                 )}
               </article>
             )}
-          </div>
-        </section>
+          </Container>
+        </Section>
       )}
 
-      {/* CULTURE — two-column */}
-      <section className="bg-cream-50 py-20 md:py-28">
-        <div className="mx-auto grid max-w-6xl gap-12 px-6 md:grid-cols-2 md:items-center md:gap-16">
-          <div className="order-2 md:order-1">
-            <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-600">
-              {culture?.eyebrow ?? F.culture.eyebrow}
+      {/* CULTURE */}
+      <SplitSection
+        image={img(culture?.image, F.culture.image)}
+        alt={culture?.image?.alt ?? F.culture.alt}
+        eyebrow={culture?.eyebrow ?? F.culture.eyebrow}
+        headline={culture?.headline ?? F.culture.headline}
+        accent="as you are."
+        reverse
+        actions={
+          (culture?.cta?.label ?? F.culture.ctaLabel) &&
+          (culture?.cta?.href ?? F.culture.ctaHref) ? (
+            <Button href={culture?.cta?.href ?? F.culture.ctaHref}>
+              {culture?.cta?.label ?? F.culture.ctaLabel}
+            </Button>
+          ) : undefined
+        }
+      >
+        {culture?.body ? (
+          <PortableBody value={culture.body} />
+        ) : (
+          <>
+            <p>
+              The culture at RCC can best be defined as{" "}
+              <strong className="font-semibold text-ink-900">real</strong> —
+              and it can be attributed to our desire to create a safe place for
+              anyone to take that next step in their journey with God.
             </p>
-            <h2 className="mt-2 font-display text-4xl uppercase leading-tight tracking-wide text-ink-800 md:text-5xl">
-              {culture?.headline ?? F.culture.headline}
-            </h2>
-            <div className="mt-6 text-lg leading-8 text-ink-700">
-              {culture?.body ? (
-                <PortableBody value={culture.body} />
-              ) : (
-                <>
-                  <p className="mb-5">
-                    The culture at RCC can best be defined as{" "}
-                    <strong className="text-ink-800">real</strong> — and it can
-                    be attributed to our desire to create a safe place for
-                    anyone to take that next step in their journey with God.
-                  </p>
-                  <p>
-                    Our hope is that each person leaves each week knowing that
-                    they have encountered God in a freeing and worshipful way.
-                  </p>
-                </>
-              )}
-            </div>
-            {(culture?.cta?.label ?? F.culture.ctaLabel) &&
-              (culture?.cta?.href ?? F.culture.ctaHref) && (
-                <Link
-                  href={culture?.cta?.href ?? F.culture.ctaHref}
-                  className="mt-8 inline-flex rounded-full bg-brand-500 px-6 py-3 font-display text-sm uppercase tracking-widest text-white transition hover:bg-brand-600"
-                >
-                  {culture?.cta?.label ?? F.culture.ctaLabel}
-                </Link>
-              )}
-          </div>
-          <div className="order-1 md:order-2">
-            <Image
-              src={img(culture?.image, F.culture.image)}
-              alt={culture?.image?.alt ?? F.culture.alt}
-              width={1400}
-              height={1600}
-              className="aspect-[7/8] w-full rounded-2xl object-cover shadow-md"
-            />
-          </div>
-        </div>
-      </section>
+            <p>
+              Our hope is that each person leaves each week knowing that they
+              have encountered God in a freeing and worshipful way.
+            </p>
+          </>
+        )}
+      </SplitSection>
 
       {/* WORSHIP BANNER */}
-      <section>
-        <Image
-          src={img(doc?.worshipBanner, F.worshipImage)}
-          alt={doc?.worshipBanner?.alt ?? "RCC worship band on a Sunday morning"}
-          width={1600}
-          height={1067}
-          className="aspect-[16/9] w-full object-cover md:aspect-[21/9]"
-        />
-      </section>
+      <ImageBanner
+        image={img(doc?.worshipBanner, F.worshipImage)}
+        alt={doc?.worshipBanner?.alt ?? "RCC worship band on a Sunday morning"}
+      />
 
       {/* STORY */}
-      <section className="bg-white py-20 md:py-28">
-        <div className="mx-auto max-w-3xl px-6">
-          <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-600">
-            {story?.eyebrow ?? F.story.eyebrow}
-          </p>
-          <h2 className="mt-2 font-display text-4xl uppercase leading-tight tracking-wide text-ink-800 md:text-5xl">
-            {story?.headline ?? F.story.headline}
-          </h2>
-          <div className="mt-6 text-lg leading-8 text-ink-700">
-            {story?.body ? (
-              <PortableBody value={story.body} />
-            ) : (
-              <>
-                <p className="mb-5">
-                  Our journey began in 2007, when Jonathan Dunn began to sense
-                  God calling him to lead a church that would reach the people
-                  who were currently put off by church.
-                </p>
-                <p>
-                  He felt that God was calling him to plant a new church in the
-                  Memphis area with a clear vision:{" "}
-                  <em className="text-ink-800">refocus our city back to God.</em>{" "}
-                  That vision meant RCC would passionately pursue helping each
-                  person refocus their life back to God, each family refocus
-                  back to God, and even help the church refocus back to God.
-                </p>
-              </>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* BELIEFS */}
-      <section className="bg-cream-100 py-20 md:py-28">
-        <div className="mx-auto grid max-w-6xl gap-12 px-6 md:grid-cols-2 md:items-center md:gap-16">
-          <div>
-            <Image
-              src={img(beliefs?.image, F.beliefs.image)}
-              alt={beliefs?.image?.alt ?? F.beliefs.alt}
-              width={1600}
-              height={900}
-              className="aspect-[4/3] w-full rounded-2xl object-cover shadow-md"
-            />
-          </div>
-          <div>
-            <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-600">
-              {beliefs?.eyebrow ?? F.beliefs.eyebrow}
-            </p>
-            <h2 className="mt-2 font-display text-4xl uppercase leading-tight tracking-wide text-ink-800 md:text-5xl">
-              {beliefs?.headline ?? F.beliefs.headline}
-            </h2>
-            <div className="mt-6 text-lg leading-8 text-ink-700">
-              {beliefs?.body ? (
-                <PortableBody value={beliefs.body} />
+      <Section tone="dark">
+        <Container>
+          <div className="grid gap-12 lg:grid-cols-[1fr_1.4fr] lg:gap-24">
+            <div>
+              <Eyebrow tone="dark">{story?.eyebrow ?? F.story.eyebrow}</Eyebrow>
+              <Headline
+                text={story?.headline ?? F.story.headline}
+                tone="dark"
+                size="xl"
+                className="mt-4"
+              />
+            </div>
+            <div className="space-y-5 text-lg leading-8 text-white/75 lg:pt-6">
+              {story?.body ? (
+                <PortableBody value={story.body} />
               ) : (
                 <>
-                  <p className="mb-5">
-                    RCC is non-denominational. We teach the Bible plainly each
-                    week with a focus on practical application — what does it
-                    actually look like to follow Jesus on Monday morning?
+                  <p>
+                    Our journey began in 2007, when Jonathan Dunn began to
+                    sense God calling him to lead a church that would reach the
+                    people who were currently put off by church.
                   </p>
                   <p>
-                    Our preaching is honest about life's complexity, hopeful
-                    about God's grace, and rooted in Scripture from start to
-                    finish.
+                    He felt that God was calling him to plant a new church in
+                    the Memphis area with a clear vision:{" "}
+                    <em className="font-serif text-2xl text-brand-300">
+                      refocus our city back to God.
+                    </em>{" "}
+                    That vision meant RCC would passionately pursue helping
+                    each person refocus their life back to God, each family
+                    refocus back to God, and even help the church refocus back
+                    to God.
                   </p>
                 </>
               )}
             </div>
-            {(beliefs?.cta?.label ?? F.beliefs.ctaLabel) &&
-              (beliefs?.cta?.href ?? F.beliefs.ctaHref) && (
-                <Link
-                  href={beliefs?.cta?.href ?? F.beliefs.ctaHref}
-                  className="mt-8 inline-flex rounded-full border border-brand-500 px-6 py-3 font-display text-sm uppercase tracking-widest text-brand-600 transition hover:bg-brand-50"
-                >
-                  {beliefs?.cta?.label ?? F.beliefs.ctaLabel}
-                </Link>
-              )}
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
+
+      {/* BELIEFS */}
+      <SplitSection
+        image={img(beliefs?.image, F.beliefs.image)}
+        alt={beliefs?.image?.alt ?? F.beliefs.alt}
+        eyebrow={beliefs?.eyebrow ?? F.beliefs.eyebrow}
+        headline={beliefs?.headline ?? F.beliefs.headline}
+        accent="at the center."
+        aspect="aspect-[4/3]"
+        actions={
+          (beliefs?.cta?.label ?? F.beliefs.ctaLabel) &&
+          (beliefs?.cta?.href ?? F.beliefs.ctaHref) ? (
+            <Button href={beliefs?.cta?.href ?? F.beliefs.ctaHref} variant="outline">
+              {beliefs?.cta?.label ?? F.beliefs.ctaLabel}
+            </Button>
+          ) : undefined
+        }
+      >
+        {beliefs?.body ? (
+          <PortableBody value={beliefs.body} />
+        ) : (
+          <>
+            <p>
+              RCC is non-denominational. We teach the Bible plainly each week
+              with a focus on practical application — what does it actually
+              look like to follow Jesus on Monday morning?
+            </p>
+            <p>
+              Our preaching is honest about life&apos;s complexity, hopeful
+              about God&apos;s grace, and rooted in Scripture from start to
+              finish.
+            </p>
+          </>
+        )}
+      </SplitSection>
 
       {/* BAPTISM BANNER */}
-      <section className="relative">
-        <Image
-          src={img(baptism?.image, F.baptism.image)}
-          alt={baptism?.image?.alt ?? F.baptism.alt}
-          width={1600}
-          height={1067}
-          className="aspect-[16/9] w-full object-cover md:aspect-[21/9]"
-        />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink-900/60 via-transparent" />
-        <div className="absolute inset-x-0 bottom-0 mx-auto max-w-6xl px-6 pb-10 text-white md:pb-16">
-          <p className="font-display text-2xl uppercase tracking-[0.2em] md:text-3xl">
-            {baptism?.overlayTitle ?? F.baptism.overlayTitle}
-          </p>
-          <p className="mt-2 max-w-xl text-base leading-7 text-cream-50/95 md:text-lg">
-            {baptism?.overlayBody ?? F.baptism.overlayBody}
-          </p>
-        </div>
-      </section>
+      <ImageBanner
+        image={img(baptism?.image, F.baptism.image)}
+        alt={baptism?.image?.alt ?? F.baptism.alt}
+        title={baptism?.overlayTitle ?? F.baptism.overlayTitle}
+        body={baptism?.overlayBody ?? F.baptism.overlayBody}
+      />
 
       {/* CTA */}
-      <section className="bg-brand-600 py-20 text-white md:py-24">
-        <div className="mx-auto max-w-3xl px-6 text-center">
-          <h2 className="font-display text-4xl uppercase tracking-wide md:text-5xl">
-            {cta?.headline ?? F.cta.headline}
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-lg leading-8 text-brand-50/95">
-            {cta?.body ?? F.cta.body}
-          </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Link
-              href={cta?.primaryCta?.href ?? F.cta.primaryHref}
-              className="rounded-full bg-white px-6 py-3 font-display text-sm uppercase tracking-widest text-brand-700 transition hover:bg-cream-50"
-            >
-              {cta?.primaryCta?.label ?? F.cta.primaryLabel}
-            </Link>
-            <Link
-              href={cta?.secondaryCta?.href ?? F.cta.secondaryHref}
-              className="rounded-full border border-white/40 bg-white/5 px-6 py-3 font-display text-sm uppercase tracking-widest text-white backdrop-blur transition hover:bg-white/15"
-            >
-              {cta?.secondaryCta?.label ?? F.cta.secondaryLabel}
-            </Link>
-          </div>
-        </div>
-      </section>
+      <CtaBand
+        headline={cta?.headline ?? F.cta.headline}
+        accent="meet you."
+        body={cta?.body ?? F.cta.body}
+      >
+        <Button tone="dark" href={cta?.primaryCta?.href ?? F.cta.primaryHref}>
+          {cta?.primaryCta?.label ?? F.cta.primaryLabel}
+        </Button>
+        <Button
+          tone="dark"
+          variant="outline"
+          href={cta?.secondaryCta?.href ?? F.cta.secondaryHref}
+        >
+          {cta?.secondaryCta?.label ?? F.cta.secondaryLabel}
+        </Button>
+      </CtaBand>
     </div>
   );
 }

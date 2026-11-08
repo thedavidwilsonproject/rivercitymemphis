@@ -1,10 +1,21 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { client } from "@/sanity/client";
 import { nextPageQuery } from "@/sanity/queries";
 import { urlFor } from "@/sanity/image";
 import { PortableBody } from "@/components/portable-body";
+import {
+  Button,
+  Container,
+  CtaBand,
+  Eyebrow,
+  FactCard,
+  Headline,
+  NumberedItem,
+  PhotoHero,
+  Section,
+  SectionHeader,
+} from "@/components/v2/ui";
 import type { NextPageDoc, SanityImage } from "@/types/sanity";
 
 export const metadata: Metadata = {
@@ -119,159 +130,117 @@ export default async function NextSessionPage() {
 
   return (
     <div>
-      {/* HERO */}
-      <section className="relative isolate overflow-hidden text-white">
-        <Image
-          src={heroImageSrc}
-          alt={heroImageAlt}
-          fill
-          priority
-          sizes="100vw"
-          className="-z-10 object-cover object-[center_30%]"
-        />
-        <div
-          className="absolute inset-0 -z-10 bg-gradient-to-r from-ink-900/85 via-ink-900/55 to-ink-900/30"
-          aria-hidden="true"
-        />
-        <div className="mx-auto max-w-6xl px-6 py-32 md:py-44">
-          <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-300">
-            {heroEyebrow}
-          </p>
-          <h1 className="mt-3 font-display text-6xl uppercase leading-[0.95] tracking-wide md:text-8xl">
-            {heroHeadline}
-          </h1>
-          {heroIntro && (
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-cream-50/95 md:text-xl md:leading-9">
-              {heroIntro}
-            </p>
-          )}
-        </div>
-      </section>
+      <PhotoHero
+        image={heroImageSrc}
+        alt={heroImageAlt}
+        eyebrow={heroEyebrow}
+        headline={heroHeadline}
+        intro={heroIntro}
+      />
 
-      {/* INTRO — two-column with image on the right */}
-      <section className="bg-white py-20 md:py-28">
-        <div className="mx-auto grid max-w-6xl gap-12 px-6 md:grid-cols-2 md:items-center md:gap-16">
-          <div>
-            <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-600">
-              {intro?.eyebrow ?? F.intro.eyebrow}
-            </p>
-            <h2 className="mt-2 font-display text-4xl uppercase leading-tight tracking-wide text-ink-800 md:text-5xl">
-              {intro?.headline ?? F.intro.headline}
-            </h2>
-            <div className="mt-6 space-y-5 text-lg leading-8 text-ink-700">
-              {intro?.body ? (
-                <PortableBody value={intro.body} />
-              ) : (
-                F.intro.paragraphs.map((p, i) => <p key={i}>{p}</p>)
-              )}
-            </div>
-          </div>
-          <figure className="relative">
-            <Image
-              src={introImageSrc}
-              alt={introImageAlt}
-              width={1400}
-              height={2100}
-              className="aspect-[4/5] w-full rounded-2xl object-cover shadow-md"
-            />
-            <figcaption className="mt-3 text-sm italic text-ink-500">
-              {intro?.imageCaption ?? F.intro.imageCaption}
-            </figcaption>
-          </figure>
-        </div>
-      </section>
-
-      {/* WHAT TO EXPECT — 4 tiles */}
-      <section className="bg-cream-100 py-20 md:py-28">
-        <div className="mx-auto max-w-6xl px-6">
-          <header className="mb-12 text-center md:mb-16">
-            <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-600">
-              {expect?.eyebrow ?? F.expect.eyebrow}
-            </p>
-            <h2 className="mt-3 font-display text-4xl uppercase leading-tight tracking-wide text-ink-800 md:text-5xl">
-              {expect?.headline ?? F.expect.headline}
-            </h2>
-          </header>
-          <ol className="grid gap-5 md:grid-cols-2 md:gap-6">
-            {expectItems.map((item, i) => (
-              <li
-                key={`${item.title}-${i}`}
-                className="relative overflow-hidden rounded-2xl border border-cream-200 bg-white p-7 shadow-sm md:p-8"
-              >
-                <span
-                  aria-hidden="true"
-                  className="absolute -right-3 -top-4 font-display text-[7rem] leading-none text-brand-100 md:text-[8rem]"
-                >
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <h3 className="relative font-display text-2xl uppercase leading-tight tracking-wide text-ink-800 md:text-3xl">
-                  {item.title}
-                </h3>
-                {item.description && (
-                  <p className="relative mt-3 text-base leading-7 text-ink-700">
-                    {item.description}
-                  </p>
+      {/* INTRO — text left, captioned portrait right */}
+      <Section tone="light">
+        <Container>
+          <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-24">
+            <div>
+              <Eyebrow>{intro?.eyebrow ?? F.intro.eyebrow}</Eyebrow>
+              <Headline
+                text={intro?.headline ?? F.intro.headline}
+                accent={
+                  (intro?.headline ?? F.intro.headline).endsWith("intro to RCC.")
+                    ? "intro to RCC."
+                    : undefined
+                }
+                className="mt-4"
+              />
+              <div className="mt-8 space-y-5 text-lg leading-8 text-ink-600">
+                {intro?.body ? (
+                  <PortableBody value={intro.body} />
+                ) : (
+                  F.intro.paragraphs.map((p, i) => <p key={i}>{p}</p>)
                 )}
+              </div>
+            </div>
+            <figure>
+              <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-cream-200">
+                <Image
+                  src={introImageSrc}
+                  alt={introImageAlt}
+                  fill
+                  sizes="(min-width: 1024px) 50vw, 100vw"
+                  className="object-cover"
+                />
+              </div>
+              <figcaption className="mt-4 font-serif text-xl italic text-ink-500">
+                {intro?.imageCaption ?? F.intro.imageCaption}
+              </figcaption>
+            </figure>
+          </div>
+        </Container>
+      </Section>
+
+      {/* WHAT TO EXPECT — numbered list on dark */}
+      <Section tone="dark">
+        <Container>
+          <SectionHeader
+            tone="dark"
+            align="left"
+            eyebrow={expect?.eyebrow ?? F.expect.eyebrow}
+            headline={expect?.headline ?? F.expect.headline}
+          />
+          <ol className="grid gap-12 lg:grid-cols-2 lg:gap-x-16">
+            {expectItems.map((item, i) => (
+              <li key={`${item.title}-${i}`}>
+                <NumberedItem
+                  tone="dark"
+                  number={String(i + 1).padStart(2, "0")}
+                  title={item.title ?? ""}
+                >
+                  {item.description}
+                </NumberedItem>
               </li>
             ))}
           </ol>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
       {/* QUICK FACTS */}
-      <section className="bg-white py-16 md:py-20">
-        <div className="mx-auto max-w-6xl px-6">
-          <dl className="grid gap-5 rounded-2xl border border-cream-200 bg-cream-50 p-6 md:grid-cols-3 md:gap-0 md:divide-x md:divide-cream-200 md:p-0">
+      <Section tone="light">
+        <Container>
+          <div className="grid gap-4 md:grid-cols-3">
             {([
               ["when", F.quickFacts.when, qf?.when],
               ["where", F.quickFacts.where, qf?.where],
               ["duration", F.quickFacts.duration, qf?.duration],
             ] as const).map(([k, fallback, fact]) => (
-              <div key={k} className="md:p-8 md:text-center">
-                <dt className="font-display text-xs uppercase tracking-[0.3em] text-brand-600">
-                  {fact?.label ?? fallback.label}
-                </dt>
-                <dd className="mt-2 font-display text-xl uppercase leading-tight tracking-wide text-ink-800 md:text-2xl">
-                  {fact?.value ?? fallback.value}
-                </dd>
-                {(fact?.note ?? fallback.note) && (
-                  <p className="mt-1 text-sm text-ink-500">
-                    {fact?.note ?? fallback.note}
-                  </p>
-                )}
-              </div>
+              <FactCard
+                key={k}
+                label={fact?.label ?? fallback.label}
+                value={fact?.value ?? fallback.value}
+                note={fact?.note ?? fallback.note}
+              />
             ))}
-          </dl>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="bg-brand-600 py-20 text-white md:py-24">
-        <div className="mx-auto max-w-3xl px-6 text-center">
-          <h2 className="font-display text-4xl uppercase tracking-wide md:text-5xl">
-            {cta?.headline ?? F.cta.headline}
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-lg leading-8 text-brand-50/95">
-            {cta?.body ?? F.cta.body}
-          </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Link
-              href={cta?.primaryCta?.href ?? F.cta.primaryHref}
-              className="rounded-full bg-white px-6 py-3 font-display text-sm uppercase tracking-widest text-brand-700 transition hover:bg-cream-50"
-            >
-              {cta?.primaryCta?.label ?? F.cta.primaryLabel}
-            </Link>
-            {cta?.secondaryCta?.label && cta.secondaryCta.href && (
-              <Link
-                href={cta.secondaryCta.href}
-                className="rounded-full border border-white/40 bg-white/5 px-6 py-3 font-display text-sm uppercase tracking-widest text-white backdrop-blur transition hover:bg-white/15"
-              >
-                {cta.secondaryCta.label}
-              </Link>
-            )}
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
+
+      <CtaBand
+        headline={cta?.headline ?? F.cta.headline}
+        accent={
+          (cta?.headline ?? F.cta.headline).endsWith("next one.") ? "next one." : undefined
+        }
+        body={cta?.body ?? F.cta.body}
+        image={heroImageSrc}
+      >
+        <Button tone="dark" href={cta?.primaryCta?.href ?? F.cta.primaryHref}>
+          {cta?.primaryCta?.label ?? F.cta.primaryLabel}
+        </Button>
+        {cta?.secondaryCta?.label && cta.secondaryCta.href && (
+          <Button tone="dark" variant="outline" href={cta.secondaryCta.href}>
+            {cta.secondaryCta.label}
+          </Button>
+        )}
+      </CtaBand>
     </div>
   );
 }

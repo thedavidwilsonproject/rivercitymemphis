@@ -4,6 +4,8 @@ import { faqPageQuery, siteSettingsQuery } from "@/sanity/queries";
 import { FaqItem } from "@/components/faq-item";
 import { JsonLd } from "@/components/json-ld";
 import type { SiteSettings } from "@/types/sanity";
+import { PageHero } from "@/components/page-hero";
+import { Button, Container, CtaBand, Eyebrow, Section } from "@/components/v2/ui";
 
 type PortableBlock = {
   _type?: string;
@@ -93,52 +95,55 @@ export default async function FaqsPage() {
   return (
     <div>
       {faqJsonLd && <JsonLd data={faqJsonLd} />}
-      <section className="bg-cream-100">
-        <div className="mx-auto max-w-3xl px-6 py-16 md:py-20">
-          {data.eyebrow && (
-            <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-600">
-              {data.eyebrow}
-            </p>
-          )}
-          <h1 className="mt-2 font-display text-5xl uppercase tracking-wide text-ink-800 md:text-6xl">
-            {data.headline}
-          </h1>
-          {data.intro && (
-            <p className="mt-4 text-lg leading-7 text-ink-600">{data.intro}</p>
-          )}
-        </div>
-      </section>
+      <PageHero
+        eyebrow={data.eyebrow}
+        headline={data.headline ?? "FAQs"}
+        intro={data.intro}
+        variant="cream"
+      />
 
-      <div className="mx-auto max-w-3xl px-6 py-12 md:py-16">
-        {items.length === 0 ? (
-          <p className="rounded-xl border border-dashed border-ink-300 p-10 text-center text-ink-500">
-            No questions added yet. Add them in Sanity Studio → FAQ Page.
-          </p>
-        ) : (
-          <ul className="divide-y divide-cream-200 border-y border-cream-200">
-            {items.map((item, i) => (
-              <li key={i}>
-                <FaqItem question={item.question} answer={item.answer} />
-              </li>
-            ))}
-          </ul>
-        )}
+      <Section tone="white">
+        <Container>
+          <div className="grid gap-12 lg:grid-cols-[1fr_2fr] lg:gap-24">
+            <div className="lg:sticky lg:top-32 lg:self-start">
+              <Eyebrow>Good questions</Eyebrow>
+              <p className="mt-4 font-serif text-5xl italic leading-tight text-ink-900">
+                {items.length > 0 ? `${items.length} answers` : "Answers"}
+              </p>
+              <Button
+                href={`mailto:${email}?subject=Question%20for%20RCC`}
+                variant="link"
+                className="mt-8"
+              >
+                Ask a question →
+              </Button>
+            </div>
+            {items.length === 0 ? (
+              <p className="rounded-2xl border border-dashed border-ink-900/20 p-10 text-center text-ink-500">
+                No questions added yet. Add them in Sanity Studio → FAQ Page.
+              </p>
+            ) : (
+              <ul className="divide-y divide-ink-900/15 border-y border-ink-900/15">
+                {items.map((item, i) => (
+                  <li key={i}>
+                    <FaqItem question={item.question} answer={item.answer} />
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </Container>
+      </Section>
 
-        <div className="mt-12 rounded-2xl border border-cream-200 bg-cream-50 p-8 text-center md:p-10">
-          <h2 className="font-display text-2xl uppercase tracking-wide text-ink-800 md:text-3xl">
-            Still have a question?
-          </h2>
-          {data.footer && (
-            <p className="mx-auto mt-3 max-w-xl text-ink-600">{data.footer}</p>
-          )}
-          <a
-            href={`mailto:${email}?subject=Question%20for%20RCC`}
-            className="mt-6 inline-flex rounded-full bg-brand-500 px-6 py-3 font-display text-sm uppercase tracking-widest text-white transition hover:bg-brand-600"
-          >
-            Ask a question
-          </a>
-        </div>
-      </div>
+      <CtaBand
+        headline="Still have a question?"
+        accent="a question?"
+        body={data.footer}
+      >
+        <Button tone="dark" href={`mailto:${email}?subject=Question%20for%20RCC`}>
+          Ask a question
+        </Button>
+      </CtaBand>
     </div>
   );
 }

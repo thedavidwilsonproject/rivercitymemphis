@@ -8,6 +8,7 @@ import {
 } from "@/sanity/queries";
 import { urlFor } from "@/sanity/image";
 import type { SermonSeriesSummary } from "@/types/sanity";
+import { Button, Container, CtaBand, Section } from "@/components/v2/ui";
 
 type Params = { year: string };
 
@@ -73,60 +74,65 @@ export default async function ArchiveYearPage({
 
   return (
     <div>
-      <section className="bg-ink-900 text-white">
-        <div className="mx-auto max-w-5xl px-6 py-14 md:py-20">
+      <section className="bg-river-950 text-white">
+        <Container className="pb-12 pt-20 md:pb-16 md:pt-28">
           <Link
             href="/watch/archive"
-            className="font-display text-sm uppercase tracking-widest text-brand-300 hover:text-brand-200"
+            className="text-sm font-semibold text-brand-300 transition hover:text-brand-200"
           >
             ← All years
           </Link>
-          <h1 className="mt-3 font-display text-6xl uppercase tracking-wide md:text-7xl">
+          <h1 className="rise mt-6 font-serif text-[7rem] italic leading-[0.85] text-white md:text-[12rem]">
             {year}
           </h1>
-          <p className="mt-2 text-cream-50/80">
+          <p className="rise rise-2 mt-8 border-t border-white/15 pt-6 text-lg text-white/70">
             {series.length} series · {totalSermons} sermon{totalSermons === 1 ? "" : "s"}
           </p>
-        </div>
+        </Container>
       </section>
 
-      <div className="mx-auto max-w-6xl px-6 py-12 md:py-16">
-        <div className="grid gap-6 md:grid-cols-3 lg:grid-cols-4">
-          {series.map((s) => (
-            <Link
-              key={s.slug}
-              href={`/watch/${s.slug}`}
-              className="group overflow-hidden rounded-2xl border border-cream-200 bg-white shadow-sm transition hover:shadow-md hover:border-brand-300"
-            >
-              <div className="w-full bg-cream-100">
-                {s.coverImage?.asset ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={urlFor(s.coverImage).width(800).fit("max").url()}
-                    alt={s.coverImage.alt ?? s.title}
-                    className="block w-full h-auto transition group-hover:scale-[1.03]"
-                  />
-                ) : (
-                  <div className="flex aspect-video items-center justify-center font-display text-3xl uppercase tracking-wide text-cream-200">
-                    {s.title?.[0] ?? "?"}
-                  </div>
-                )}
-              </div>
-              <div className="p-4">
-                <h3 className="font-display text-xl uppercase tracking-wide text-ink-800 group-hover:text-brand-600">
+      <Section tone="dark" className="pt-4! md:pt-8!">
+        <Container>
+          <div className="grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+            {series.map((s) => (
+              <Link key={s.slug} href={`/watch/${s.slug}`} className="group block">
+                <div className="overflow-hidden rounded-2xl bg-river-800">
+                  {s.coverImage?.asset ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={urlFor(s.coverImage).width(800).fit("max").url()}
+                      alt={s.coverImage.alt ?? s.title}
+                      className="block h-auto w-full transition duration-700 group-hover:scale-[1.03]"
+                    />
+                  ) : (
+                    <div className="flex aspect-video items-center justify-center font-serif text-6xl italic text-white/20">
+                      {s.title?.[0] ?? "?"}
+                    </div>
+                  )}
+                </div>
+                <h3 className="mt-5 text-2xl font-bold tracking-tight transition group-hover:text-brand-300">
                   {s.title}
                 </h3>
-                <p className="mt-1 text-xs text-ink-500">
+                <p className="mt-1 text-sm text-white/50">
                   {formatRange(s.startDate, s.endDate)}
                   {s.sermonCount
                     ? ` · ${s.sermonCount} part${s.sermonCount === 1 ? "" : "s"}`
                     : ""}
                 </p>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
+              </Link>
+            ))}
+          </div>
+        </Container>
+      </Section>
+
+      <CtaBand headline="Sermon Archive" accent="Archive">
+        <Button href="/watch/archive" tone="dark">
+          ← All years
+        </Button>
+        <Button href="/watch" tone="dark" variant="outline">
+          ← Recent series
+        </Button>
+      </CtaBand>
     </div>
   );
 }

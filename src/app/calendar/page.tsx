@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import {
   listOpenSignups,
@@ -7,6 +6,16 @@ import {
   type PcoSignup,
 } from "@/lib/pco";
 import { getPublishedIdSet } from "@/lib/published-events";
+import {
+  Button,
+  Container,
+  CtaBand,
+  Eyebrow,
+  Headline,
+  Lede,
+  PhotoHero,
+  Section,
+} from "@/components/v2/ui";
 
 export const metadata: Metadata = {
   title: "Calendar",
@@ -46,14 +55,14 @@ function CalendarRow({ s }: { s: PcoSignup }) {
   // Defensive — only rendered for dated signups, but TS doesn't know that.
   if (!s.startsAt) return null;
   return (
-    <li className="group">
+    <li className="group border-b border-ink-900/15">
       <Link
         href={`/events/${s.id}`}
-        className="flex flex-col gap-4 rounded-2xl border border-cream-200 bg-white p-6 shadow-sm transition hover:border-brand-500 hover:shadow-md md:flex-row md:items-center md:gap-7 md:p-7"
+        className="flex flex-col gap-5 py-7 transition md:flex-row md:items-center md:gap-10"
       >
         {/* Date block */}
-        <div className="flex shrink-0 items-center gap-4 md:flex-col md:items-start md:gap-1 md:border-r md:border-cream-200 md:pr-7">
-          <p className="font-display text-xs uppercase tracking-[0.3em] text-brand-600">
+        <div className="flex shrink-0 items-baseline gap-3 md:w-44 md:flex-col md:gap-1">
+          <p className="font-serif text-3xl italic leading-none text-brand-600">
             {dayLabel(s.startsAt)}
           </p>
           <p className="text-sm text-ink-500">
@@ -66,12 +75,12 @@ function CalendarRow({ s }: { s: PcoSignup }) {
 
         {/* Image thumb */}
         {s.logoUrl && (
-          <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-cream-100 md:h-20 md:w-20">
+          <div className="relative h-24 w-36 shrink-0 overflow-hidden rounded-xl bg-cream-200">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={s.logoUrl}
               alt=""
-              className="absolute inset-0 h-full w-full object-cover"
+              className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-[1.05]"
               loading="lazy"
             />
           </div>
@@ -79,7 +88,7 @@ function CalendarRow({ s }: { s: PcoSignup }) {
 
         {/* Info */}
         <div className="flex-1">
-          <h3 className="font-display text-xl uppercase leading-tight tracking-wide text-ink-800 transition group-hover:text-brand-700 md:text-2xl">
+          <h3 className="text-2xl font-bold leading-tight tracking-tight text-ink-900 transition group-hover:text-brand-600 md:text-3xl">
             {s.name}
           </h3>
           <p className="mt-1 text-sm text-ink-500">{formatSignupSchedule(s)}</p>
@@ -90,7 +99,7 @@ function CalendarRow({ s }: { s: PcoSignup }) {
 
         <span
           aria-hidden="true"
-          className="hidden font-display text-2xl text-brand-500 transition group-hover:translate-x-1 md:block"
+          className="hidden text-2xl text-ink-900 transition group-hover:translate-x-1 group-hover:text-brand-600 md:block"
         >
           →
         </span>
@@ -130,43 +139,29 @@ export default async function CalendarPage() {
   return (
     <div>
       {/* HERO */}
-      <section className="relative isolate overflow-hidden text-white">
-        <Image
-          src={HERO.image}
-          alt={HERO.alt}
-          fill
-          priority
-          sizes="100vw"
-          className="-z-10 object-cover object-[center_40%]"
-        />
-        <div
-          className="absolute inset-0 -z-10 bg-gradient-to-r from-ink-900/85 via-ink-900/55 to-ink-900/30"
-          aria-hidden="true"
-        />
-        <div className="mx-auto max-w-6xl px-6 py-32 md:py-44">
-          <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-300">
-            {HERO.eyebrow}
-          </p>
-          <h1 className="mt-3 font-display text-5xl uppercase leading-tight tracking-wide md:text-7xl">
-            {HERO.headline}
-          </h1>
-          <p className="mt-5 max-w-2xl text-lg leading-8 text-cream-50/95 md:text-xl md:leading-9">
-            {HERO.intro}
-          </p>
-        </div>
-      </section>
+      <PhotoHero
+        image={HERO.image}
+        alt={HERO.alt}
+        eyebrow={HERO.eyebrow}
+        headline={HERO.headline}
+        intro={HERO.intro}
+        short
+      />
 
       {/* EVENTS BY MONTH */}
-      <section className="bg-white py-20 md:py-28">
-        <div className="mx-auto max-w-5xl px-6">
+      <Section>
+        <Container>
           {groups.size > 0 ? (
-            <div className="space-y-16 md:space-y-20">
+            <div className="space-y-20 md:space-y-28">
               {[...groups.entries()].map(([month, items]) => (
-                <div key={month}>
-                  <h2 className="mb-8 font-display text-3xl uppercase tracking-wide text-ink-800 md:text-4xl">
-                    {month}
+                <div
+                  key={month}
+                  className="grid gap-6 lg:grid-cols-[18rem_1fr] lg:gap-16"
+                >
+                  <h2 className="text-4xl font-bold leading-[0.95] tracking-tight md:text-5xl lg:sticky lg:top-28 lg:self-start">
+                    <MonthTitle month={month} />
                   </h2>
-                  <ul className="space-y-4">
+                  <ul className="border-t border-ink-900/15">
                     {items.map((s) => (
                       <CalendarRow key={s.id} s={s} />
                     ))}
@@ -175,53 +170,55 @@ export default async function CalendarPage() {
               ))}
             </div>
           ) : (
-            <div className="mx-auto max-w-2xl text-center">
-              <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-600">
-                Quiet on the calendar
-              </p>
-              <h2 className="mt-3 font-display text-4xl uppercase leading-tight tracking-wide text-ink-800 md:text-5xl">
-                {loadError
-                  ? "Couldn't load the calendar right now."
-                  : "Nothing dated coming up."}
-              </h2>
-              <p className="mt-5 text-lg leading-8 text-ink-700">
+            <div className="max-w-3xl">
+              <Eyebrow>Quiet on the calendar</Eyebrow>
+              <Headline
+                className="mt-4"
+                text={
+                  loadError
+                    ? "Couldn't load the calendar right now."
+                    : "Nothing dated coming up."
+                }
+              />
+              <Lede className="mt-6 max-w-2xl">
                 {loadError
                   ? "We hit a snag pulling events. Check back in a few minutes."
                   : "There aren't any scheduled events open for registration right now. Browse all events for ongoing sign-ups."}
-              </p>
-              <div className="mt-8">
-                <Link
-                  href="/events"
-                  className="rounded-full bg-brand-500 px-6 py-3 font-display text-sm uppercase tracking-widest text-white transition hover:bg-brand-600"
-                >
-                  All events
-                </Link>
+              </Lede>
+              <div className="mt-10">
+                <Button href="/events">All events</Button>
               </div>
             </div>
           )}
-        </div>
-      </section>
+        </Container>
+      </Section>
 
       {/* CTA */}
-      <section className="bg-cream-50 py-16 md:py-20">
-        <div className="mx-auto max-w-3xl px-6 text-center">
-          <h2 className="font-display text-3xl uppercase tracking-wide text-ink-800 md:text-4xl">
-            Looking for something specific?
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-base leading-7 text-ink-700 md:text-lg md:leading-8">
-            Browse every event open for sign-up, including ongoing ones like
-            Baptism and Baby Dedication.
-          </p>
-          <div className="mt-7">
-            <Link
-              href="/events"
-              className="rounded-full bg-brand-500 px-6 py-3 font-display text-sm uppercase tracking-widest text-white transition hover:bg-brand-600"
-            >
-              See all events
-            </Link>
-          </div>
-        </div>
-      </section>
+      <CtaBand
+        headline="Looking for something specific?"
+        accent="specific?"
+        body="Browse every event open for sign-up, including ongoing ones like Baptism and Baby Dedication."
+      >
+        <Button tone="dark" href="/events">
+          See all events
+        </Button>
+      </CtaBand>
     </div>
+  );
+}
+
+/** "November 2026" → bold month + italic serif year. */
+function MonthTitle({ month }: { month: string }) {
+  const [name, year] = month.split(" ");
+  return (
+    <>
+      {name}
+      {year && (
+        <>
+          {" "}
+          <em className="text-brand-600">{year}</em>
+        </>
+      )}
+    </>
   );
 }

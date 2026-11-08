@@ -11,6 +11,7 @@ import { urlFor } from "@/sanity/image";
 import { JsonLd } from "@/components/json-ld";
 import { SITE_URL } from "@/lib/site";
 import type { SermonSeries, Sermon, SermonSeriesSummary } from "@/types/sanity";
+import { Button, Container, CtaBand, Eyebrow, Headline, Section } from "@/components/v2/ui";
 
 function sermonEmbedUrl(s: Sermon): string | undefined {
   if (!s.videoPlatform || !s.videoId) return undefined;
@@ -62,7 +63,7 @@ function VideoEmbed({ sermon }: { sermon: Sermon }) {
   const { videoPlatform, videoId } = sermon;
   if (!videoPlatform || !videoId) {
     return (
-      <div className="aspect-video w-full rounded-lg bg-cream-100 flex items-center justify-center text-sm text-ink-500">
+      <div className="flex aspect-video w-full items-center justify-center rounded-2xl border border-dashed border-white/20 text-sm text-white/50">
         No video available
       </div>
     );
@@ -72,7 +73,7 @@ function VideoEmbed({ sermon }: { sermon: Sermon }) {
       ? `https://www.youtube-nocookie.com/embed/${videoId}`
       : `https://player.vimeo.com/video/${videoId}`;
   return (
-    <div className="aspect-video w-full overflow-hidden rounded-lg bg-black">
+    <div className="aspect-video w-full overflow-hidden rounded-2xl bg-black shadow-2xl shadow-black/40">
       <iframe
         src={src}
         title={sermon.title ?? "Sermon video"}
@@ -182,99 +183,130 @@ export default async function SeriesPage({
   return (
     <div>
       <JsonLd data={seriesJsonLd} />
-      <section className="relative bg-ink-900 text-white">
-        <div className="mx-auto grid max-w-6xl items-center gap-10 px-6 py-16 md:grid-cols-[420px_1fr] md:py-24">
-          {series.coverImage?.asset && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={urlFor(series.coverImage).width(840).fit("max").url()}
-              alt={series.coverImage.alt ?? series.title}
-              className="block w-full h-auto rounded-xl shadow-2xl"
-            />
-          )}
-          <div>
-            <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-300">
-              {formatRange(series.startDate, series.endDate)}
-            </p>
-            <h1 className="mt-2 font-display text-5xl uppercase leading-tight tracking-wide md:text-6xl">
-              {series.title}
-            </h1>
-            {series.description !== undefined &&
-              series.description !== null &&
-              Array.isArray(series.description) &&
-              series.description.length > 0 && (
-                <div className="mt-4 max-w-2xl text-lg leading-7 text-cream-50/90">
-                  <PortableText
-                    value={
-                      series.description as Parameters<
-                        typeof PortableText
-                      >[0]["value"]
-                    }
-                  />
-                </div>
-              )}
-            <Link
-              href="/watch"
-              className="mt-6 inline-block font-display text-sm uppercase tracking-widest text-brand-300 hover:text-brand-200"
-            >
-              ← Back to archive
-            </Link>
+      <section className="bg-river-950 text-white">
+        <Container className="pb-16 pt-16 md:pb-24 md:pt-24">
+          <Link
+            href="/watch"
+            className="text-sm font-semibold text-brand-300 transition hover:text-brand-200"
+          >
+            ← Back to archive
+          </Link>
+          <div className="mt-10 grid items-center gap-12 lg:grid-cols-[minmax(0,1.1fr)_1fr] lg:gap-20">
+            {series.coverImage?.asset && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={urlFor(series.coverImage).width(1200).fit("max").url()}
+                alt={series.coverImage.alt ?? series.title}
+                className="rise block h-auto w-full rounded-2xl shadow-2xl shadow-black/50"
+              />
+            )}
+            <div className="rise rise-2">
+              <Eyebrow tone="dark">
+                {formatRange(series.startDate, series.endDate)}
+              </Eyebrow>
+              <Headline
+                as="h1"
+                tone="dark"
+                size="lg"
+                text={series.title}
+                className="mt-5"
+              />
+              {series.description !== undefined &&
+                series.description !== null &&
+                Array.isArray(series.description) &&
+                series.description.length > 0 && (
+                  <div className="mt-8 max-w-xl space-y-4 border-t border-white/15 pt-8 text-lg leading-8 text-white/75">
+                    <PortableText
+                      value={
+                        series.description as Parameters<
+                          typeof PortableText
+                        >[0]["value"]
+                      }
+                    />
+                  </div>
+                )}
+            </div>
           </div>
-        </div>
+        </Container>
       </section>
 
-      <div className="mx-auto max-w-4xl px-6 py-16">
-        <h2 className="font-display text-3xl uppercase tracking-wide text-ink-800">
-          {sermons.length} sermon{sermons.length === 1 ? "" : "s"}
-        </h2>
+      <Section tone="dark" className="border-t border-white/10 bg-river-900!">
+        <Container narrow>
+          <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
+            {sermons.length}{" "}
+            <em className="text-brand-300">
+              sermon{sermons.length === 1 ? "" : "s"}
+            </em>
+          </h2>
 
-        <div className="mt-8 space-y-12">
-          {sermons.map((sermon, i) => (
-            <article
-              key={`${sermon.order ?? i}-${sermon.title}`}
-              className="border-b border-cream-200 pb-12 last:border-b-0"
-            >
-              <header className="mb-4">
-                <p className="font-display text-xs uppercase tracking-widest text-brand-600">
-                  Part {sermon.order ?? i + 1}
-                  {sermon.date ? ` · ${formatSermonDate(sermon.date)}` : ""}
+          <div className="mt-14 space-y-20">
+            {sermons.map((sermon, i) => (
+              <article
+                key={`${sermon.order ?? i}-${sermon.title}`}
+                className="grid gap-6 border-t border-white/15 pt-10 md:grid-cols-[7rem_1fr] md:gap-10"
+              >
+                <p className="font-serif text-6xl italic leading-none text-brand-300 md:text-7xl">
+                  {String(sermon.order ?? i + 1).padStart(2, "0")}
                 </p>
-                <h3 className="mt-1 font-display text-3xl uppercase tracking-wide text-ink-800">
-                  {sermon.title}
-                </h3>
-                {(sermon.speaker?.name || sermon.speakerName) && (
-                  <p className="mt-1 text-sm text-ink-500">
-                    {sermon.speaker?.name ?? sermon.speakerName}
-                    {sermon.speaker?.role && (
-                      <span className="text-ink-300"> · {sermon.speaker.role}</span>
+                <div>
+                  <header className="mb-6">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/50">
+                      Part {sermon.order ?? i + 1}
+                      {sermon.date ? ` · ${formatSermonDate(sermon.date)}` : ""}
+                    </p>
+                    <h3 className="mt-3 text-3xl font-bold tracking-tight md:text-4xl">
+                      {sermon.title}
+                    </h3>
+                    {(sermon.speaker?.name || sermon.speakerName) && (
+                      <p className="mt-2 text-white/70">
+                        {sermon.speaker?.name ?? sermon.speakerName}
+                        {sermon.speaker?.role && (
+                          <span className="text-white/40"> · {sermon.speaker.role}</span>
+                        )}
+                      </p>
                     )}
-                  </p>
-                )}
-                {sermon.scripture && (
-                  <p className="mt-1 font-display text-sm uppercase tracking-widest text-ink-500">
-                    {sermon.scripture}
-                  </p>
-                )}
-              </header>
+                    {sermon.scripture && (
+                      <p className="mt-1 font-serif text-xl italic text-brand-300">
+                        {sermon.scripture}
+                      </p>
+                    )}
+                  </header>
 
-              <VideoEmbed sermon={sermon} />
+                  <VideoEmbed sermon={sermon} />
 
-              {sermon.summary && (
-                <p className="mt-4 text-ink-700 leading-7">{sermon.summary}</p>
-              )}
+                  {sermon.summary && (
+                    <p className="mt-6 max-w-2xl text-lg leading-8 text-white/70">
+                      {sermon.summary}
+                    </p>
+                  )}
 
-              {sermon.audioUrl && (
-                <a
-                  href={sermon.audioUrl}
-                  className="mt-3 inline-block font-display text-xs uppercase tracking-widest text-brand-600 hover:text-brand-700"
-                >
-                  Download audio →
-                </a>
-              )}
-            </article>
-          ))}
-        </div>
-      </div>
+                  {sermon.audioUrl && (
+                    <a
+                      href={sermon.audioUrl}
+                      className="mt-5 inline-block text-sm font-semibold text-white underline decoration-brand-300 decoration-2 underline-offset-[6px] hover:text-brand-200"
+                    >
+                      Download audio →
+                    </a>
+                  )}
+                </div>
+              </article>
+            ))}
+          </div>
+        </Container>
+      </Section>
+
+      <CtaBand
+        headline="Looking for something older?"
+        accent="older?"
+        body="Browse 15+ years of teaching, organized by year."
+      >
+        <Button href="/watch/archive" tone="dark">
+          Open full archive →
+        </Button>
+        <Button href="/watch" tone="dark" variant="outline">
+          ← Back to archive
+        </Button>
+      </CtaBand>
     </div>
   );
 }

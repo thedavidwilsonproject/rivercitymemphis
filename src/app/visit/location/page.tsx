@@ -1,10 +1,24 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { client } from "@/sanity/client";
 import { locationPageQuery, siteSettingsQuery } from "@/sanity/queries";
 import { JsonLd } from "@/components/json-ld";
 import { ORG, SITE_URL } from "@/lib/site";
 import type { LocationPageDoc, SiteSettings } from "@/types/sanity";
+import {
+  Button,
+  Container,
+  CtaBand,
+  Eyebrow,
+  Headline,
+  PhotoHero,
+  Section,
+} from "@/components/v2/ui";
+
+/** Existing building photo, reused as the hero image for this page. */
+const HERO_IMAGE = {
+  src: "/brand/pages/who-we-are/exterior.jpg",
+  alt: "Family walking up to the RCC building",
+};
 
 export const metadata: Metadata = {
   title: "Location & Time",
@@ -123,157 +137,126 @@ export default async function LocationPage() {
   return (
     <div>
       <JsonLd data={placeJsonLd} />
-      <section className="bg-brand-600 text-white">
-        <div className="mx-auto max-w-6xl px-6 py-16 md:py-20">
-          {data.hero?.eyebrow && (
-            <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-100">
-              {data.hero.eyebrow}
-            </p>
-          )}
-          <h1 className="mt-3 font-display text-5xl uppercase leading-tight tracking-wide md:text-6xl">
-            {data.hero?.headline}
-          </h1>
-          {data.hero?.intro && (
-            <p className="mt-4 max-w-2xl text-lg leading-7 text-brand-50/95">
-              {data.hero.intro}
-            </p>
-          )}
-        </div>
-      </section>
+      <PhotoHero
+        image={HERO_IMAGE.src}
+        alt={HERO_IMAGE.alt}
+        eyebrow={data.hero?.eyebrow}
+        headline={data.hero?.headline ?? "Location & Time"}
+        accent="Time"
+        intro={data.hero?.intro}
+        short
+      >
+        <Button tone="dark" href={DIRECTIONS_URL}>
+          {data.directionsLabel}
+        </Button>
+      </PhotoHero>
 
-      <section className="bg-cream-50 py-16 md:py-20">
-        <div className="mx-auto max-w-5xl px-6">
-          <div className="grid gap-10 md:grid-cols-2 md:items-center">
-            <div>
-              <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-600">
-                Service time
-              </p>
-              <p className="mt-3 font-display text-6xl uppercase leading-none tracking-wide text-ink-800 md:text-7xl">
+      {/* SERVICE TIME + ADDRESS */}
+      <Section tone="white">
+        <Container>
+          <div className="grid gap-px overflow-hidden rounded-2xl border border-ink-900/15 bg-ink-900/15 lg:grid-cols-2">
+            <div className="bg-paper p-8 md:p-14">
+              <Eyebrow>Service time</Eyebrow>
+              <p className="mt-6 text-6xl font-bold leading-[0.95] tracking-tight text-ink-900 md:text-8xl">
                 {serviceDay}
               </p>
-              <p className="mt-2 font-display text-5xl uppercase leading-none tracking-wide text-brand-500 md:text-6xl">
+              <p className="font-serif text-6xl italic leading-none text-brand-600 md:text-8xl">
                 {serviceClock}
               </p>
-              {data.serviceNote && (
-                <p className="mt-4 text-base text-ink-600">{data.serviceNote}</p>
-              )}
-              {data.familyMinistryNote && (
-                <p className="mt-2 text-base text-ink-600">
-                  {data.familyMinistryNote}
-                </p>
-              )}
+              <div className="mt-8 space-y-2 text-lg text-ink-600">
+                {data.serviceNote && <p>{data.serviceNote}</p>}
+                {data.familyMinistryNote && <p>{data.familyMinistryNote}</p>}
+              </div>
             </div>
 
-            <div>
-              <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-600">
-                Address
-              </p>
-              <address className="mt-3 not-italic">
-                {addressLines.map((line) => (
-                  <p
-                    key={line}
-                    className="font-display text-3xl uppercase leading-tight tracking-wide text-ink-800 md:text-4xl"
-                  >
-                    {line}
-                  </p>
-                ))}
-              </address>
-              <div className="mt-6 flex flex-wrap gap-3">
-                <a
-                  href={DIRECTIONS_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="rounded-full bg-brand-500 px-6 py-3 font-display text-sm uppercase tracking-widest text-white transition hover:bg-brand-600"
-                >
-                  {data.directionsLabel}
-                </a>
-                <a
-                  href={APPLE_MAPS_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="rounded-full border border-brand-500 px-6 py-3 font-display text-sm uppercase tracking-widest text-brand-600 transition hover:bg-brand-50"
-                >
+            <div className="flex flex-col justify-between gap-10 bg-paper p-8 md:p-14">
+              <div>
+                <Eyebrow>Address</Eyebrow>
+                <address className="mt-6 not-italic">
+                  {addressLines.map((line) => (
+                    <p
+                      key={line}
+                      className="text-4xl font-bold leading-tight tracking-tight text-ink-900 md:text-5xl"
+                    >
+                      {line}
+                    </p>
+                  ))}
+                </address>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                <Button href={DIRECTIONS_URL}>{data.directionsLabel}</Button>
+                <Button href={APPLE_MAPS_URL} variant="outline">
                   {data.appleMapsLabel}
-                </a>
+                </Button>
               </div>
             </div>
           </div>
-        </div>
-      </section>
 
-      <section>
-        <iframe
-          src={MAP_EMBED}
-          title={`Map to ${fullAddress}`}
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-          className="block h-[420px] w-full border-0 md:h-[520px]"
-          allowFullScreen
-        />
-      </section>
-
-      {data.communities?.list && data.communities.list.length > 0 && (
-        <section className="bg-white py-16 md:py-20">
-          <div className="mx-auto max-w-5xl px-6 text-center">
-            {data.communities.eyebrow && (
-              <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-600">
-                {data.communities.eyebrow}
-              </p>
-            )}
-            <h2 className="mt-2 font-display text-3xl uppercase tracking-wide text-ink-800 md:text-4xl">
-              {data.communities.headline}
-            </h2>
-            <ul className="mx-auto mt-8 flex max-w-3xl flex-wrap justify-center gap-3">
-              {data.communities.list.map((c) => (
-                <li
-                  key={c}
-                  className="rounded-full border border-cream-200 bg-cream-50 px-5 py-2 font-display text-sm uppercase tracking-widest text-ink-700"
-                >
-                  {c}
-                </li>
-              ))}
-            </ul>
-            {data.communities.footer && (
-              <p className="mx-auto mt-6 max-w-xl text-ink-600">
-                {data.communities.footer}
-              </p>
-            )}
+          <div className="mt-6 overflow-hidden rounded-2xl border border-ink-900/15">
+            <iframe
+              src={MAP_EMBED}
+              title={`Map to ${fullAddress}`}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="block h-[420px] w-full border-0 md:h-[560px]"
+              allowFullScreen
+            />
           </div>
-        </section>
+        </Container>
+      </Section>
+
+      {/* COMMUNITIES */}
+      {data.communities?.list && data.communities.list.length > 0 && (
+        <Section tone="dark">
+          <Container>
+            <div className="grid gap-12 lg:grid-cols-[1fr_1.2fr] lg:gap-24">
+              <div>
+                {data.communities.eyebrow && (
+                  <Eyebrow tone="dark">{data.communities.eyebrow}</Eyebrow>
+                )}
+                {data.communities.headline && (
+                  <Headline
+                    text={data.communities.headline}
+                    accent="call home."
+                    tone="dark"
+                    className="mt-4"
+                  />
+                )}
+                {data.communities.footer && (
+                  <p className="mt-8 max-w-md text-lg leading-8 text-white/70">
+                    {data.communities.footer}
+                  </p>
+                )}
+              </div>
+              <ul className="divide-y divide-white/15 border-y border-white/15">
+                {data.communities.list.map((c) => (
+                  <li
+                    key={c}
+                    className="py-4 font-serif text-5xl italic leading-tight text-white md:text-6xl"
+                  >
+                    {c}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Container>
+        </Section>
       )}
 
-      <section className="bg-cream-100 py-16 md:py-20">
-        <div className="mx-auto max-w-3xl px-6 text-center">
-          {data.cta?.headline && (
-            <h2 className="font-display text-4xl uppercase tracking-wide text-ink-800 md:text-5xl">
-              {data.cta.headline}
-            </h2>
+      {data.cta?.headline && (
+        <CtaBand headline={data.cta.headline} body={data.cta.body}>
+          {data.cta?.primaryCta?.label && data.cta.primaryCta.href && (
+            <Button tone="dark" href={data.cta.primaryCta.href}>
+              {data.cta.primaryCta.label}
+            </Button>
           )}
-          {data.cta?.body && (
-            <p className="mx-auto mt-4 max-w-xl text-lg leading-8 text-ink-600">
-              {data.cta.body}
-            </p>
+          {data.cta?.secondaryCta?.label && data.cta.secondaryCta.href && (
+            <Button tone="dark" variant="outline" href={data.cta.secondaryCta.href}>
+              {data.cta.secondaryCta.label}
+            </Button>
           )}
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            {data.cta?.primaryCta?.label && data.cta.primaryCta.href && (
-              <Link
-                href={data.cta.primaryCta.href}
-                className="rounded-full bg-brand-500 px-6 py-3 font-display text-sm uppercase tracking-widest text-white transition hover:bg-brand-600"
-              >
-                {data.cta.primaryCta.label}
-              </Link>
-            )}
-            {data.cta?.secondaryCta?.label && data.cta.secondaryCta.href && (
-              <Link
-                href={data.cta.secondaryCta.href}
-                className="rounded-full border border-brand-500 px-6 py-3 font-display text-sm uppercase tracking-widest text-brand-600 transition hover:bg-brand-50"
-              >
-                {data.cta.secondaryCta.label}
-              </Link>
-            )}
-          </div>
-        </div>
-      </section>
+        </CtaBand>
+      )}
     </div>
   );
 }

@@ -38,11 +38,11 @@ type CCModalLinkProps = {
 
 const VARIANTS: Record<NonNullable<CCModalLinkProps["variant"]>, string> = {
   primary:
-    "rounded-full bg-brand-500 px-6 py-3 font-display text-sm uppercase tracking-widest text-white transition hover:bg-brand-600",
+    "inline-flex items-center justify-center rounded-full bg-ink-900 px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-brand-600",
   secondary:
-    "rounded-full border border-brand-500 px-6 py-3 font-display text-sm uppercase tracking-widest text-brand-600 transition hover:bg-brand-50",
+    "inline-flex items-center justify-center rounded-full border border-ink-900/25 px-7 py-3.5 text-sm font-semibold text-ink-900 transition hover:border-ink-900 hover:bg-ink-900/5",
   subtle:
-    "font-display text-sm uppercase tracking-widest text-brand-600 hover:text-brand-700",
+    "text-sm font-semibold text-ink-900 underline decoration-brand-500 decoration-2 underline-offset-[6px] hover:text-brand-600",
 };
 
 /** Link that opens a Church Center page in PCO's modal overlay. */

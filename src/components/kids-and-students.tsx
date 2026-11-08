@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { urlFor } from "@/sanity/image";
 import type { HomeMinistryCard } from "@/types/sanity";
+import { Container, Section, SectionHeader } from "@/components/v2/ui";
 
 type Props = {
   title?: string;
@@ -71,30 +72,16 @@ export function KidsAndStudents({
     ministries && ministries.length > 0 ? ministries : FALLBACK_MINISTRIES;
 
   return (
-    <section className="bg-cream-50 py-20 md:py-28">
-      <div className="mx-auto max-w-6xl px-6">
-        <header className="mb-14 text-center">
-          <div className="mx-auto mb-5 flex items-center justify-center gap-5">
-            <span
-              className="h-px w-16 bg-ink-300/50 md:w-24"
-              aria-hidden="true"
-            />
-            <h2 className="font-display text-2xl uppercase tracking-[0.3em] text-ink-700 md:text-3xl">
-              {title}
-            </h2>
-            <span
-              className="h-px w-16 bg-ink-300/50 md:w-24"
-              aria-hidden="true"
-            />
-          </div>
-          {intro && (
-            <p className="mx-auto max-w-3xl text-base leading-7 text-ink-700 md:text-lg md:leading-8">
-              {intro}
-            </p>
-          )}
-        </header>
+    <Section tone="light">
+      <Container>
+        <SectionHeader
+          eyebrow="Family Ministry"
+          headline={title}
+          intro={intro}
+          align="split"
+        />
 
-        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-x-6 gap-y-14 md:grid-cols-2 lg:grid-cols-4">
           {cards.map((m, idx) => {
             const photoUrl = m.photo?.asset
               ? urlFor(m.photo).width(900).height(900).url()
@@ -111,13 +98,13 @@ export function KidsAndStudents({
               >
                 {/* PHOTO CARD with badge overlapping the bottom-left corner */}
                 <div className="relative">
-                  <div className="aspect-square w-full overflow-hidden rounded-2xl bg-cream-100 shadow-sm transition-shadow duration-300 group-hover:shadow-lg">
+                  <div className="aspect-[4/5] w-full overflow-hidden rounded-2xl bg-cream-200">
                     {photoUrl ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
                         src={photoUrl}
                         alt={`${m.name} ministry`}
-                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                       />
                     ) : (
                       <div
@@ -129,7 +116,7 @@ export function KidsAndStudents({
 
                   {/* Badge — small color circle with white logo, overlapping bottom-left edge */}
                   <div
-                    className="absolute -bottom-3 -left-3 flex h-20 w-20 items-center justify-center rounded-full shadow-md ring-4 ring-cream-50 transition-transform duration-500 group-hover:scale-110 md:-bottom-4 md:-left-4 md:h-24 md:w-24"
+                    className="absolute -bottom-5 left-5 flex h-16 w-16 items-center justify-center rounded-full shadow-md ring-4 ring-paper transition-transform duration-500 group-hover:scale-110 md:h-20 md:w-20"
                     style={{ backgroundColor: ringColor }}
                   >
                     {markPng && (
@@ -145,22 +132,22 @@ export function KidsAndStudents({
                 </div>
 
                 {/* Text block */}
-                <div className="mt-8">
-                  {m.age && (
-                    <h3 className="font-body text-2xl font-medium leading-tight text-ink-800 transition-colors group-hover:text-brand-600">
-                      {m.age}
-                    </h3>
-                  )}
+                <div className="mt-10">
                   {m.name && (
                     <p
-                      className="mt-1 font-display text-sm uppercase tracking-[0.2em]"
+                      className="text-[11px] font-semibold uppercase tracking-[0.2em]"
                       style={{ color: ringColor }}
                     >
                       {m.name}
                     </p>
                   )}
+                  {m.age && (
+                    <h3 className="mt-2 text-3xl font-bold tracking-tight text-ink-900 transition-colors group-hover:text-brand-600">
+                      {m.age}
+                    </h3>
+                  )}
                   {m.description && (
-                    <p className="mt-3 text-sm leading-6 text-ink-600">
+                    <p className="mt-3 leading-7 text-ink-600">
                       {m.description}
                     </p>
                   )}
@@ -169,7 +156,7 @@ export function KidsAndStudents({
             );
           })}
         </div>
-      </div>
-    </section>
+      </Container>
+    </Section>
   );
 }

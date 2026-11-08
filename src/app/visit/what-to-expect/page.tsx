@@ -1,10 +1,17 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { client } from "@/sanity/client";
 import { whatToExpectPageQuery } from "@/sanity/queries";
 import { urlFor } from "@/sanity/image";
 import type { WhatToExpectPageDoc, WhatToExpectStep } from "@/types/sanity";
+import {
+  Button,
+  Container,
+  CtaBand,
+  FactCard,
+  PhotoHero,
+  Section,
+} from "@/components/v2/ui";
 
 export const metadata: Metadata = {
   title: "What to Expect",
@@ -105,7 +112,7 @@ function renderLede(text: string) {
   const parts = text.split(/(\*[^*]+\*)/g);
   return parts.map((p, i) =>
     p.startsWith("*") && p.endsWith("*") ? (
-      <strong key={i} className="font-semibold text-ink-800">
+      <strong key={i} className="font-semibold text-brand-600">
         {p.slice(1, -1)}
       </strong>
     ) : (
@@ -131,142 +138,101 @@ export default async function WhatToExpectPage() {
   };
   const cta = doc?.cta;
 
+  const heroAlt =
+    (typeof hero.image === "object" && (hero.image as { alt?: string })?.alt) ||
+    F.hero.alt;
+
   return (
     <div>
-      <section className="relative isolate overflow-hidden text-white">
-        <Image
-          src={img(hero.image as { asset?: unknown }, F.hero.image)}
-          alt={
-            (typeof hero.image === "object" && (hero.image as { alt?: string })?.alt) ||
-            F.hero.alt
-          }
-          fill
-          priority
-          sizes="100vw"
-          className="-z-10 object-cover"
-        />
-        <div
-          className="absolute inset-0 -z-10 bg-gradient-to-r from-ink-900/85 via-ink-900/55 to-ink-900/30"
-          aria-hidden="true"
-        />
-        <div className="mx-auto max-w-6xl px-6 py-32 md:py-44">
-          {hero.eyebrow && (
-            <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-300">
-              {hero.eyebrow}
-            </p>
-          )}
-          <h1 className="mt-3 font-display text-5xl uppercase leading-tight tracking-wide md:text-7xl">
-            {hero.headline}
-          </h1>
-          {hero.intro && (
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-cream-50/95 md:text-xl md:leading-9">
-              {hero.intro}
-            </p>
-          )}
-        </div>
-      </section>
+      <PhotoHero
+        image={img(hero.image as { asset?: unknown }, F.hero.image)}
+        alt={heroAlt}
+        eyebrow={hero.eyebrow}
+        headline={hero.headline ?? F.hero.headline}
+        accent="Expect"
+        intro={hero.intro}
+      />
 
-      <section className="bg-cream-50 py-16 md:py-20">
-        <div className="mx-auto max-w-3xl px-6 text-center">
-          <p className="text-xl leading-9 text-ink-700 md:text-2xl md:leading-relaxed">
+      {/* LEDE + QUICK FACTS */}
+      <Section tone="white">
+        <Container>
+          <p className="max-w-5xl text-3xl font-semibold leading-[1.2] tracking-tight text-ink-900 md:text-5xl">
             {renderLede(lede)}
           </p>
-        </div>
-      </section>
-
-      <section className="bg-white">
-        {steps.map((s, i) => {
-          const sanityImg = (s.image as { asset?: unknown }) || undefined;
-          const sanityAlt = (s.image as { alt?: string })?.alt;
-          const fallback = F.steps[i];
-          return (
-            <div
-              key={`${s.number}-${s.title}`}
-              className={
-                i % 2 === 0
-                  ? "border-t border-cream-200 first:border-t-0"
-                  : "border-t border-cream-200 bg-cream-50"
-              }
-            >
-              <div className="mx-auto grid max-w-6xl gap-10 px-6 py-16 md:grid-cols-2 md:items-center md:gap-16 md:py-24">
-                <div className={i % 2 === 1 ? "md:order-2" : ""}>
-                  <p className="font-display text-5xl tracking-wide text-brand-500 md:text-6xl">
-                    {s.number}
-                  </p>
-                  <h2 className="mt-3 font-display text-4xl uppercase leading-tight tracking-wide text-ink-800 md:text-5xl">
-                    {s.title}
-                  </h2>
-                  {s.body && (
-                    <p className="mt-5 text-lg leading-8 text-ink-700 md:text-xl md:leading-9">
-                      {s.body}
-                    </p>
-                  )}
-                </div>
-                <div className={i % 2 === 1 ? "md:order-1" : ""}>
-                  <Image
-                    src={img(sanityImg, fallback?.image ?? "")}
-                    alt={sanityAlt ?? fallback?.alt ?? s.title ?? ""}
-                    width={1200}
-                    height={1200}
-                    className="aspect-square w-full rounded-2xl object-cover shadow-md"
-                  />
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </section>
-
-      <section className="bg-cream-100 py-16 md:py-20">
-        <div className="mx-auto max-w-4xl px-6">
-          <div className="grid gap-8 md:grid-cols-3">
+          <div className="mt-16 grid gap-4 md:grid-cols-3">
             {[qf.serviceTime, qf.address, qf.duration].map((f, i) => (
-              <div key={i} className="text-center">
-                <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-600">
-                  {f.label}
-                </p>
-                <p
-                  className={`mt-2 font-display uppercase tracking-wide text-ink-800 ${
-                    i === 1 ? "text-2xl" : "text-3xl"
-                  }`}
-                >
-                  {f.value}
-                </p>
-                {f.note && (
-                  <p className="mt-1 text-sm text-ink-600">{f.note}</p>
-                )}
-              </div>
+              <FactCard
+                key={i}
+                label={f.label ?? ""}
+                value={f.value}
+                note={f.note}
+              />
             ))}
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
-      <section className="bg-brand-600 py-20 text-white md:py-24">
-        <div className="mx-auto max-w-3xl px-6 text-center">
-          <h2 className="font-display text-4xl uppercase tracking-wide md:text-5xl">
-            {cta?.headline ?? F.cta.headline}
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-lg leading-8 text-brand-50/95">
-            {cta?.body ?? F.cta.body}
-          </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Link
-              href={cta?.primaryCta?.href ?? F.cta.primaryHref}
-              className="rounded-full bg-white px-6 py-3 font-display text-sm uppercase tracking-widest text-brand-700 transition hover:bg-cream-50"
-            >
-              {cta?.primaryCta?.label ?? F.cta.primaryLabel}
-            </Link>
-            {cta?.secondaryCta?.label && cta.secondaryCta.href && (
-              <Link
-                href={cta.secondaryCta.href}
-                className="rounded-full border border-white/40 bg-white/5 px-6 py-3 font-display text-sm uppercase tracking-widest text-white backdrop-blur transition hover:bg-white/15"
-              >
-                {cta.secondaryCta.label}
-              </Link>
-            )}
+      {/* STEPS */}
+      <Section tone="light">
+        <Container>
+          <div className="space-y-20 md:space-y-32">
+            {steps.map((s, i) => {
+              const sanityImg = (s.image as { asset?: unknown }) || undefined;
+              const sanityAlt = (s.image as { alt?: string })?.alt;
+              const fallback = F.steps[i];
+              const flip = i % 2 === 1;
+              return (
+                <article
+                  key={`${s.number}-${s.title}`}
+                  className="grid items-center gap-10 lg:grid-cols-2 lg:gap-24"
+                >
+                  <div className={flip ? "lg:order-2" : ""}>
+                    <p className="font-serif text-7xl italic leading-none text-brand-600 md:text-8xl">
+                      {s.number}
+                    </p>
+                    <h2 className="mt-6 text-5xl font-bold leading-[0.95] tracking-tight text-ink-900 md:text-6xl">
+                      {s.title}
+                    </h2>
+                    {s.body && (
+                      <p className="mt-6 max-w-xl text-lg leading-8 text-ink-600 md:text-xl md:leading-9">
+                        {s.body}
+                      </p>
+                    )}
+                  </div>
+                  <div
+                    className={`relative aspect-[4/3] overflow-hidden rounded-2xl bg-cream-200 ${
+                      flip ? "lg:order-1" : ""
+                    }`}
+                  >
+                    <Image
+                      src={img(sanityImg, fallback?.image ?? "")}
+                      alt={sanityAlt ?? fallback?.alt ?? s.title ?? ""}
+                      fill
+                      sizes="(min-width: 1024px) 50vw, 100vw"
+                      className="object-cover"
+                    />
+                  </div>
+                </article>
+              );
+            })}
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
+
+      <CtaBand
+        headline={cta?.headline ?? F.cta.headline}
+        accent="a seat."
+        body={cta?.body ?? F.cta.body}
+      >
+        <Button tone="dark" href={cta?.primaryCta?.href ?? F.cta.primaryHref}>
+          {cta?.primaryCta?.label ?? F.cta.primaryLabel}
+        </Button>
+        {cta?.secondaryCta?.label && cta.secondaryCta.href && (
+          <Button tone="dark" variant="outline" href={cta.secondaryCta.href}>
+            {cta.secondaryCta.label}
+          </Button>
+        )}
+      </CtaBand>
     </div>
   );
 }

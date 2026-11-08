@@ -2,6 +2,8 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { client } from "@/sanity/client";
 import { sermonArchiveYearsQuery } from "@/sanity/queries";
+import { PageHero } from "@/components/page-hero";
+import { Button, Container, CtaBand, Section } from "@/components/v2/ui";
 
 export const metadata: Metadata = {
   title: "Sermon Archive",
@@ -32,52 +34,57 @@ export default async function ArchiveIndexPage() {
 
   return (
     <div>
-      <section className="bg-ink-900 text-white">
-        <div className="mx-auto max-w-5xl px-6 py-16 md:py-24">
-          <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-300">
-            Watch
-          </p>
-          <h1 className="mt-2 font-display text-5xl uppercase tracking-wide md:text-6xl">
-            Sermon Archive
-          </h1>
-          <p className="mt-4 max-w-2xl text-lg leading-7 text-cream-50/90">
-            {totalSeries > 0
-              ? `${totalSeries} series across ${sorted.length} years (${range}).`
-              : "Browse the full sermon archive."}
-          </p>
-          <Link
-            href="/watch"
-            className="mt-6 inline-block font-display text-sm uppercase tracking-widest text-brand-300 hover:text-brand-200"
-          >
-            ← Recent series
-          </Link>
-        </div>
-      </section>
+      <PageHero
+        variant="dark"
+        eyebrow="Watch"
+        headline="Sermon Archive"
+        backlink={{ label: "Recent series", href: "/watch" }}
+        intro={
+          totalSeries > 0
+            ? `${totalSeries} series across ${sorted.length} years (${range}).`
+            : "Browse the full sermon archive."
+        }
+      />
 
-      <div className="mx-auto max-w-5xl px-6 py-16">
-        {sorted.length === 0 && (
-          <p className="rounded-xl border border-dashed border-ink-300 p-10 text-center text-ink-500">
-            Archive is empty. Run the full migration to populate.
-          </p>
-        )}
+      <Section tone="dark" className="pt-8! md:pt-12!">
+        <Container>
+          {sorted.length === 0 && (
+            <p className="rounded-2xl border border-dashed border-white/20 p-10 text-center text-white/60">
+              Archive is empty. Run the full migration to populate.
+            </p>
+          )}
 
-        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {sorted.map(([year, count]) => (
-            <Link
-              key={year}
-              href={`/watch/archive/${year}`}
-              className="group rounded-2xl border border-cream-200 bg-white p-6 transition hover:border-brand-300 hover:shadow-sm"
-            >
-              <div className="font-display text-5xl tracking-wide text-ink-800 group-hover:text-brand-600">
-                {year}
-              </div>
-              <div className="mt-2 font-display text-sm uppercase tracking-widest text-ink-500">
-                {count} series
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
+          <ul className="border-t border-white/15">
+            {sorted.map(([year, count]) => (
+              <li key={year} className="border-b border-white/15">
+                <Link
+                  href={`/watch/archive/${year}`}
+                  className="group flex items-baseline justify-between gap-6 py-6 md:py-8"
+                >
+                  <span className="text-6xl font-bold tracking-tight transition group-hover:translate-x-2 group-hover:text-brand-300 md:text-8xl">
+                    {year}
+                  </span>
+                  <span className="flex items-baseline gap-4 text-white/55 transition group-hover:text-white">
+                    <span className="font-serif text-2xl italic md:text-3xl">
+                      {count} series
+                    </span>
+                    <span aria-hidden="true">→</span>
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </Container>
+      </Section>
+
+      <CtaBand
+        headline="Recent series"
+        body="Recent sermon series — pick one to watch on YouTube, share with a friend, or revisit a past message."
+      >
+        <Button href="/watch" tone="dark">
+          Watch
+        </Button>
+      </CtaBand>
     </div>
   );
 }

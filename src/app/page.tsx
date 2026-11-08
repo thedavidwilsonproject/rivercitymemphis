@@ -358,13 +358,13 @@ export default async function Home() {
                       />
                     )}
                   </div>
-                  <div className="mt-5 flex items-baseline justify-between gap-4">
+                  <div className="mt-5 flex flex-col gap-1.5">
                     <h3
                       className={`font-bold tracking-tight ${i === 0 ? "text-3xl md:text-4xl" : "text-2xl"}`}
                     >
                       {s.title}
                     </h3>
-                    <p className="shrink-0 text-sm text-white/50">
+                    <p className="text-sm text-white/50">
                       {formatRange(s.startDate, s.endDate)}
                     </p>
                   </div>

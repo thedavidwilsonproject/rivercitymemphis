@@ -4,6 +4,8 @@ import { client } from "@/sanity/client";
 import { recentSermonSeriesQuery } from "@/sanity/queries";
 import { urlFor } from "@/sanity/image";
 import type { SermonSeriesSummary } from "@/types/sanity";
+import { PageHero } from "@/components/page-hero";
+import { Button, Container, CtaBand, Section } from "@/components/v2/ui";
 
 export const metadata: Metadata = {
   title: "Watch",
@@ -28,6 +30,49 @@ function twelveMonthsAgoIso(): string {
   return d.toISOString().slice(0, 10);
 }
 
+/** Series card — cover keeps its natural aspect (series art has text). */
+function SeriesCard({
+  s,
+  featured = false,
+}: {
+  s: SermonSeriesSummary;
+  featured?: boolean;
+}) {
+  return (
+    <Link href={`/watch/${s.slug}`} className="group block">
+      <div className="overflow-hidden rounded-2xl bg-river-800">
+        {s.coverImage?.asset ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={urlFor(s.coverImage).width(featured ? 1400 : 800).fit("max").url()}
+            alt={s.coverImage.alt ?? s.title}
+            className="block h-auto w-full transition duration-700 group-hover:scale-[1.03]"
+          />
+        ) : (
+          <div className="flex aspect-video items-center justify-center font-serif text-6xl italic text-white/20">
+            {s.title?.[0] ?? "?"}
+          </div>
+        )}
+      </div>
+      <div className="mt-5 flex flex-col gap-1.5">
+        <h3
+          className={`font-bold tracking-tight transition group-hover:text-brand-300 ${
+            featured ? "text-3xl md:text-4xl" : "text-2xl"
+          }`}
+        >
+          {s.title}
+        </h3>
+        <p className="text-sm text-white/50">
+          {formatRange(s.startDate, s.endDate)}
+          {s.sermonCount
+            ? ` · ${s.sermonCount} part${s.sermonCount === 1 ? "" : "s"}`
+            : ""}
+        </p>
+      </div>
+    </Link>
+  );
+}
+
 export default async function WatchPage() {
   const cutoff = twelveMonthsAgoIso();
   let series: SermonSeriesSummary[] = [];
@@ -40,90 +85,60 @@ export default async function WatchPage() {
     /* empty state */
   }
 
+  const [latest, ...rest] = series;
+
   return (
     <div>
-      <section className="bg-brand-600 text-white">
-        <div className="mx-auto max-w-6xl px-6 py-20">
-          <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-100">
-            Teaching
-          </p>
-          <h1 className="mt-3 font-display text-5xl uppercase leading-tight tracking-wide md:text-7xl">
-            Watch
-          </h1>
-          <p className="mt-4 max-w-2xl text-lg text-brand-50/95">
-            Recent sermon series — pick one to watch on YouTube, share with a
-            friend, or revisit a past message.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        variant="dark"
+        eyebrow="Teaching"
+        headline="Watch"
+        intro="Recent sermon series — pick one to watch on YouTube, share with a friend, or revisit a past message."
+      />
 
-      <div className="mx-auto max-w-6xl px-6 py-16">
-        <header className="mb-8 flex items-baseline justify-between border-b border-cream-200 pb-4">
-          <h2 className="font-display text-3xl uppercase tracking-wide text-ink-800">
-            Recent
-          </h2>
-          <span className="font-display text-sm uppercase tracking-widest text-ink-500">
-            Last 12 months
-          </span>
-        </header>
+      <Section tone="dark" className="pt-8! md:pt-12!">
+        <Container>
+          <header className="mb-12 flex items-baseline justify-between border-b border-white/15 pb-5">
+            <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
+              <em className="text-brand-300">Recent</em>
+            </h2>
+            <span className="text-xs font-semibold uppercase tracking-[0.22em] text-white/50">
+              Last 12 months
+            </span>
+          </header>
 
-        {series.length === 0 ? (
-          <p className="rounded-xl border border-dashed border-ink-300 p-10 text-center text-ink-500">
-            No recent series in Sanity yet.
-          </p>
-        ) : (
-          <div className="grid gap-6 md:grid-cols-3 lg:grid-cols-4">
-            {series.map((s) => (
-              <Link
-                key={s.slug}
-                href={`/watch/${s.slug}`}
-                className="group overflow-hidden rounded-2xl border border-cream-200 bg-white shadow-sm transition hover:shadow-md hover:border-brand-300"
-              >
-                <div className="w-full bg-cream-100">
-                  {s.coverImage?.asset ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={urlFor(s.coverImage).width(800).fit("max").url()}
-                      alt={s.coverImage.alt ?? s.title}
-                      className="block w-full h-auto transition group-hover:scale-[1.03]"
-                    />
-                  ) : (
-                    <div className="flex aspect-video items-center justify-center font-display text-3xl uppercase tracking-wide text-cream-200">
-                      {s.title?.[0] ?? "?"}
-                    </div>
-                  )}
+          {series.length === 0 ? (
+            <p className="rounded-2xl border border-dashed border-white/20 p-10 text-center text-white/60">
+              No recent series in Sanity yet.
+            </p>
+          ) : (
+            <>
+              {latest && (
+                <div className="mb-16 max-w-5xl">
+                  <SeriesCard s={latest} featured />
                 </div>
-                <div className="p-4">
-                  <h3 className="font-display text-xl uppercase tracking-wide text-ink-800 group-hover:text-brand-600">
-                    {s.title}
-                  </h3>
-                  <p className="mt-1 text-xs text-ink-500">
-                    {formatRange(s.startDate, s.endDate)}
-                    {s.sermonCount
-                      ? ` · ${s.sermonCount} part${s.sermonCount === 1 ? "" : "s"}`
-                      : ""}
-                  </p>
+              )}
+              {rest.length > 0 && (
+                <div className="grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+                  {rest.map((s) => (
+                    <SeriesCard key={s.slug} s={s} />
+                  ))}
                 </div>
-              </Link>
-            ))}
-          </div>
-        )}
+              )}
+            </>
+          )}
+        </Container>
+      </Section>
 
-        <div className="mt-16 rounded-2xl border border-cream-200 bg-cream-100 p-8 md:p-10 text-center">
-          <h3 className="font-display text-3xl uppercase tracking-wide text-ink-800">
-            Looking for something older?
-          </h3>
-          <p className="mt-2 text-ink-600">
-            Browse 15+ years of teaching, organized by year.
-          </p>
-          <Link
-            href="/watch/archive"
-            className="mt-5 inline-block rounded-full bg-brand-500 px-6 py-3 font-display text-sm uppercase tracking-widest text-white transition hover:bg-brand-600"
-          >
-            Open full archive →
-          </Link>
-        </div>
-      </div>
+      <CtaBand
+        headline="Looking for something older?"
+        accent="older?"
+        body="Browse 15+ years of teaching, organized by year."
+      >
+        <Button href="/watch/archive" tone="dark">
+          Open full archive →
+        </Button>
+      </CtaBand>
     </div>
   );
 }

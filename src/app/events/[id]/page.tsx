@@ -3,6 +3,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getSignup, formatSignupSchedule } from "@/lib/pco";
 import { getPublishedIdSet } from "@/lib/published-events";
+import {
+  Button,
+  Container,
+  CtaBand,
+  Eyebrow,
+  Headline,
+  Section,
+} from "@/components/v2/ui";
 
 export const revalidate = 300;
 
@@ -38,10 +46,19 @@ export default async function EventDetailPage({ params }: Params) {
     ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(s.location)}`
     : undefined;
 
+  const closesLabel = s.closeAt
+    ? new Intl.DateTimeFormat("en-US", {
+        weekday: "short",
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      }).format(new Date(s.closeAt))
+    : null;
+
   return (
     <div>
       {/* HERO */}
-      <section className="relative isolate overflow-hidden bg-ink-900 text-white">
+      <section className="relative isolate overflow-hidden bg-river-950 text-white">
         {s.logoUrl && (
           <>
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -49,55 +66,44 @@ export default async function EventDetailPage({ params }: Params) {
               src={s.logoUrl}
               alt=""
               aria-hidden="true"
-              className="absolute inset-0 -z-10 h-full w-full scale-110 object-cover opacity-30 blur-2xl"
+              className="absolute inset-0 -z-10 h-full w-full scale-110 object-cover opacity-25 blur-2xl"
             />
             <div
-              className="absolute inset-0 -z-10 bg-gradient-to-r from-ink-900/85 via-ink-900/70 to-ink-900/85"
+              className="absolute inset-0 -z-10 bg-gradient-to-t from-river-950 via-river-950/80 to-river-950/60"
               aria-hidden="true"
             />
           </>
         )}
-        <div className="mx-auto grid max-w-6xl gap-10 px-6 py-20 md:grid-cols-[1.2fr_1fr] md:items-center md:gap-16 md:py-28">
+        <Container className="grid gap-12 pb-16 pt-16 md:grid-cols-[1.25fr_1fr] md:items-end md:gap-16 md:pb-24 md:pt-24">
           <div>
             <Link
               href="/events"
-              className="inline-flex items-center font-display text-xs uppercase tracking-[0.3em] text-brand-300 transition hover:text-white"
+              className="inline-block text-sm font-semibold text-white/70 transition hover:text-white"
             >
               ← All events
             </Link>
-            <h1 className="mt-5 font-display text-5xl uppercase leading-tight tracking-wide md:text-6xl">
-              {s.name}
-            </h1>
-            <p className="mt-4 font-display text-base uppercase tracking-[0.25em] text-brand-300 md:text-lg">
+            <p className="rise mt-10 text-xs font-semibold uppercase tracking-[0.22em] text-brand-300">
               {schedule}
             </p>
+            <h1 className="rise rise-2 mt-4 text-5xl font-bold leading-[0.95] tracking-tight md:text-7xl">
+              {s.name}
+            </h1>
             {s.location && (
-              <p className="mt-2 text-base text-cream-50/90 md:text-lg">
-                {s.location}
-              </p>
+              <p className="mt-5 text-lg text-white/75">{s.location}</p>
             )}
-            <div className="mt-8 flex flex-wrap gap-3">
-              <a
-                href={s.registrationUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-full bg-brand-500 px-7 py-3.5 font-display text-sm uppercase tracking-widest text-white transition hover:bg-brand-600"
-              >
+            <div className="mt-10 flex flex-wrap gap-3">
+              <Button href={s.registrationUrl} tone="dark">
                 Register for {s.name}
-              </a>
+              </Button>
               {mapsUrl && (
-                <a
-                  href={mapsUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="rounded-full border border-white/50 bg-white/5 px-6 py-3 font-display text-sm uppercase tracking-widest text-white backdrop-blur transition hover:bg-white/15"
-                >
+                <Button href={mapsUrl} tone="dark" variant="outline">
                   Map it
-                </a>
+                </Button>
               )}
             </div>
-            <p className="mt-5 text-sm text-cream-50/70">
-              Registration happens on Church Center — it'll open in a new tab.
+            <p className="mt-5 text-sm text-white/55">
+              Registration happens on Church Center — it&apos;ll open in a new
+              tab.
             </p>
           </div>
           {s.logoUrl && (
@@ -110,122 +116,97 @@ export default async function EventDetailPage({ params }: Params) {
               />
             </figure>
           )}
-        </div>
+        </Container>
       </section>
 
       {/* DESCRIPTION + AT-A-GLANCE */}
-      <section className="bg-white py-20 md:py-28">
-        <div className="mx-auto grid max-w-6xl gap-12 px-6 md:grid-cols-[1fr_320px] md:gap-16">
-          <div>
-            <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-600">
-              About this event
-            </p>
-            <h2 className="mt-3 font-display text-4xl uppercase leading-tight tracking-wide text-ink-800 md:text-5xl">
-              What to expect.
-            </h2>
-            <div className="mt-6 space-y-5 text-base leading-7 text-ink-700 md:text-lg md:leading-8">
-              {s.descriptionParagraphs && s.descriptionParagraphs.length > 0 ? (
-                s.descriptionParagraphs.map((p, i) => <p key={i}>{p}</p>)
-              ) : s.description ? (
-                <p>{s.description}</p>
-              ) : (
-                <p className="text-ink-500">
-                  No description provided. Tap the register button to see full
-                  details on Church Center.
+      <Section>
+        <Container>
+          <div className="grid gap-14 lg:grid-cols-[1fr_360px] lg:gap-24">
+            <div>
+              <Eyebrow>About this event</Eyebrow>
+              <Headline text="What to expect." accent="expect." className="mt-4" />
+              <div className="mt-8 max-w-2xl space-y-5 text-lg leading-8 text-ink-600">
+                {s.descriptionParagraphs && s.descriptionParagraphs.length > 0 ? (
+                  s.descriptionParagraphs.map((p, i) => <p key={i}>{p}</p>)
+                ) : s.description ? (
+                  <p>{s.description}</p>
+                ) : (
+                  <p className="text-ink-500">
+                    No description provided. Tap the register button to see
+                    full details on Church Center.
+                  </p>
+                )}
+              </div>
+            </div>
+            <aside>
+              <div className="sticky top-28 rounded-2xl border border-ink-900/15 p-7">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-600">
+                  At a glance
                 </p>
-              )}
-            </div>
-          </div>
-          <aside>
-            <div className="sticky top-24 rounded-2xl border border-cream-200 bg-cream-50 p-6 md:p-7">
-              <p className="font-display text-xs uppercase tracking-[0.3em] text-brand-600">
-                At a glance
-              </p>
-              <dl className="mt-5 space-y-5 text-sm">
-                <div>
-                  <dt className="font-display uppercase tracking-widest text-ink-500">
-                    When
-                  </dt>
-                  <dd className="mt-1 text-base text-ink-800">{schedule}</dd>
-                  {isOngoing && (
-                    <dd className="mt-1 text-xs text-ink-500">
-                      Sign up anytime — we'll get back to you.
-                    </dd>
+                <dl className="mt-6 divide-y divide-ink-900/10">
+                  <GlanceRow label="When">
+                    {schedule}
+                    {isOngoing && (
+                      <span className="mt-1 block text-sm text-ink-500">
+                        Sign up anytime — we&apos;ll get back to you.
+                      </span>
+                    )}
+                  </GlanceRow>
+                  {s.location && (
+                    <GlanceRow label="Where">
+                      <span className="whitespace-pre-line">{s.location}</span>
+                    </GlanceRow>
                   )}
-                </div>
-                {s.location && (
-                  <div>
-                    <dt className="font-display uppercase tracking-widest text-ink-500">
-                      Where
-                    </dt>
-                    <dd className="mt-1 whitespace-pre-line text-base text-ink-800">
-                      {s.location}
-                    </dd>
-                  </div>
-                )}
-                {s.closeAt && (
-                  <div>
-                    <dt className="font-display uppercase tracking-widest text-ink-500">
-                      Registration closes
-                    </dt>
-                    <dd className="mt-1 text-base text-ink-800">
-                      {new Intl.DateTimeFormat("en-US", {
-                        weekday: "short",
-                        month: "long",
-                        day: "numeric",
-                        year: "numeric",
-                      }).format(new Date(s.closeAt))}
-                    </dd>
-                  </div>
-                )}
-                <div>
-                  <dt className="font-display uppercase tracking-widest text-ink-500">
-                    Host
-                  </dt>
-                  <dd className="mt-1 text-base text-ink-800">
-                    River City Church
-                  </dd>
-                </div>
-              </dl>
-              <a
-                href={s.registrationUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-7 inline-flex w-full items-center justify-center rounded-full bg-brand-500 px-6 py-3 font-display text-sm uppercase tracking-widest text-white transition hover:bg-brand-600"
-              >
-                Register →
-              </a>
-            </div>
-          </aside>
-        </div>
-      </section>
+                  {closesLabel && (
+                    <GlanceRow label="Registration closes">
+                      {closesLabel}
+                    </GlanceRow>
+                  )}
+                  <GlanceRow label="Host">River City Church</GlanceRow>
+                </dl>
+                <Button href={s.registrationUrl} className="mt-7 w-full">
+                  Register →
+                </Button>
+              </div>
+            </aside>
+          </div>
+        </Container>
+      </Section>
 
       {/* CTA */}
-      <section className="bg-cream-50 py-16 md:py-20">
-        <div className="mx-auto max-w-3xl px-6 text-center">
-          <h2 className="font-display text-3xl uppercase tracking-wide text-ink-800 md:text-4xl">
-            Questions about {s.name}?
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-base leading-7 text-ink-700 md:text-lg md:leading-8">
-            Reach out and we'll get back to you. Or browse other events that
-            might fit.
-          </p>
-          <div className="mt-7 flex flex-wrap justify-center gap-3">
-            <a
-              href={`mailto:info@rivercitymemphis.org?subject=${encodeURIComponent(`Question about ${s.name}`)}`}
-              className="rounded-full bg-brand-500 px-6 py-3 font-display text-sm uppercase tracking-widest text-white transition hover:bg-brand-600"
-            >
-              Email us
-            </a>
-            <Link
-              href="/events"
-              className="rounded-full border border-cream-300 bg-white px-6 py-3 font-display text-sm uppercase tracking-widest text-ink-700 transition hover:border-brand-500 hover:text-brand-600"
-            >
-              All events
-            </Link>
-          </div>
-        </div>
-      </section>
+      <CtaBand
+        headline={`Questions about ${s.name}?`}
+        accent={`${s.name}?`}
+        body="Reach out and we'll get back to you. Or browse other events that might fit."
+      >
+        <Button
+          tone="dark"
+          href={`mailto:info@rivercitymemphis.org?subject=${encodeURIComponent(`Question about ${s.name}`)}`}
+        >
+          Email us
+        </Button>
+        <Button tone="dark" variant="outline" href="/events">
+          All events
+        </Button>
+      </CtaBand>
+    </div>
+  );
+}
+
+function GlanceRow({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="py-4 first:pt-0">
+      <dt className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-500">
+        {label}
+      </dt>
+      <dd className="mt-1.5 text-base text-ink-900">{children}</dd>
     </div>
   );
 }

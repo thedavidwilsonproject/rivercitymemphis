@@ -19,17 +19,17 @@ export function FaqItem({ question, answer }: Props) {
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         aria-controls={id}
-        className="flex w-full cursor-pointer items-center justify-between gap-6 py-5 text-left transition hover:text-brand-700"
+        className="flex w-full cursor-pointer items-center justify-between gap-6 py-7 text-left transition hover:text-brand-600"
       >
         <span
-          className={`font-display text-xl uppercase tracking-wide transition-colors ${
-            open ? "text-brand-700" : "text-ink-800"
+          className={`text-xl font-bold tracking-tight transition-colors md:text-2xl ${
+            open ? "text-brand-600" : "text-ink-900"
           }`}
         >
           {question}
         </span>
         <svg
-          className={`h-5 w-5 flex-none text-brand-500 transition-transform duration-500 ${
+          className={`h-6 w-6 flex-none text-brand-600 transition-transform duration-500 ${
             open ? "rotate-45" : ""
           }`}
           fill="none"
@@ -52,7 +52,7 @@ export function FaqItem({ question, answer }: Props) {
       >
         <div className="min-h-0 overflow-hidden">
           <div
-            className={`prose prose-slab max-w-none pb-6 pr-10 text-ink-700 transition-opacity duration-300 ${
+            className={`prose max-w-2xl space-y-4 pb-8 pr-10 text-lg leading-8 text-ink-600 transition-opacity duration-300 ${
               open ? "opacity-100 delay-200" : "opacity-0"
             }`}
           >

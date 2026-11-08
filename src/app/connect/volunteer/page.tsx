@@ -1,6 +1,14 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
+import {
+  Button,
+  Container,
+  CtaBand,
+  Eyebrow,
+  Headline,
+  PhotoHero,
+  Section,
+} from "@/components/v2/ui";
 
 export const metadata: Metadata = {
   title: "Volunteer",
@@ -94,175 +102,110 @@ const FAQS = [
 export default function VolunteerPage() {
   return (
     <div>
-      {/* HERO */}
-      <section className="relative isolate overflow-hidden text-white">
-        <Image
-          src={HERO.image}
-          alt={HERO.alt}
-          fill
-          priority
-          sizes="100vw"
-          className="-z-10 object-cover object-[center_40%]"
-        />
-        <div
-          className="absolute inset-0 -z-10 bg-gradient-to-r from-ink-900/85 via-ink-900/55 to-ink-900/30"
-          aria-hidden="true"
-        />
-        <div className="mx-auto max-w-6xl px-6 py-32 md:py-44">
-          <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-300">
-            {HERO.eyebrow}
-          </p>
-          <h1 className="mt-3 font-display text-5xl uppercase leading-tight tracking-wide md:text-7xl">
-            {HERO.headline}
-          </h1>
-          <p className="mt-5 max-w-2xl text-lg leading-8 text-cream-50/95 md:text-xl md:leading-9">
-            {HERO.intro}
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <a
-              href={VOLUNTEER_FORM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-full bg-brand-500 px-6 py-3 font-display text-sm uppercase tracking-widest text-white transition hover:bg-brand-600"
-            >
-              Sign up to serve
-            </a>
-            <a
-              href="#areas"
-              className="rounded-full border border-white/50 bg-white/5 px-6 py-3 font-display text-sm uppercase tracking-widest text-white backdrop-blur transition hover:bg-white/15"
-            >
-              See the teams
-            </a>
-          </div>
-        </div>
-      </section>
+      <PhotoHero
+        image={HERO.image}
+        alt={HERO.alt}
+        eyebrow={HERO.eyebrow}
+        headline={HERO.headline}
+        accent="at RCC"
+        intro={HERO.intro}
+      >
+        <Button tone="dark" href={VOLUNTEER_FORM_URL}>
+          Sign up to serve
+        </Button>
+        <Button tone="dark" variant="outline" href="#areas">
+          See the teams
+        </Button>
+      </PhotoHero>
 
       {/* INTRO */}
-      <section className="bg-white py-20 md:py-28">
-        <div className="mx-auto max-w-3xl px-6 text-center">
-          <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-600">
-            {INTRO.eyebrow}
-          </p>
-          <h2 className="mt-3 font-display text-4xl uppercase leading-tight tracking-wide text-ink-800 md:text-5xl">
-            {INTRO.headline}
-          </h2>
-          <div className="mt-6 space-y-5 text-lg leading-8 text-ink-700">
-            {INTRO.paragraphs.map((p, i) => (
-              <p key={i}>{p}</p>
-            ))}
+      <Section tone="white">
+        <Container>
+          <div className="grid gap-10 lg:grid-cols-[1fr_1.2fr] lg:gap-24">
+            <div>
+              <Eyebrow>{INTRO.eyebrow}</Eyebrow>
+              <Headline text={INTRO.headline} accent="Real impact." className="mt-4" />
+            </div>
+            <div className="space-y-5 text-lg leading-8 text-ink-600 md:text-xl md:leading-9">
+              {INTRO.paragraphs.map((p, i) => (
+                <p key={i}>{p}</p>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
-      {/* AREAS */}
-      <section id="areas" className="bg-cream-50">
-        {AREAS.map((area, i) => {
-          const flip = i % 2 === 1;
-          return (
-            <div
-              key={area.name}
-              className={[
-                "py-20 md:py-28",
-                i % 2 === 0 ? "bg-cream-50" : "bg-white",
-              ].join(" ")}
-            >
-              <div
-                className={[
-                  "mx-auto grid max-w-6xl gap-10 px-6 md:grid-cols-2 md:items-center md:gap-16",
-                  flip ? "md:[&>figure]:order-2" : "",
-                ].join(" ")}
-              >
-                <figure className="relative">
+      {/* TEAMS — 2×2 photo cards */}
+      <Section tone="light" id="areas">
+        <Container>
+          <div className="grid gap-x-8 gap-y-20 md:grid-cols-2">
+            {AREAS.map((area) => (
+              <article key={area.name}>
+                <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-cream-200">
                   <Image
                     src={area.image}
                     alt={area.alt}
-                    width={1400}
-                    height={1050}
-                    className="aspect-[4/3] w-full rounded-2xl object-cover shadow-md"
+                    fill
+                    sizes="(min-width: 768px) 50vw, 100vw"
+                    className="object-cover"
                   />
-                </figure>
-                <div>
-                  <p className="font-display text-xs uppercase tracking-[0.3em] text-brand-600">
-                    Team
-                  </p>
-                  <h2 className="mt-2 font-display text-4xl uppercase leading-tight tracking-wide text-ink-800 md:text-5xl">
-                    {area.name}
-                  </h2>
-                  <p className="mt-5 text-base leading-7 text-ink-700 md:text-lg md:leading-8">
-                    {area.blurb}
-                  </p>
-                  <ul className="mt-6 flex flex-wrap gap-2">
-                    {area.bullets.map((b) => (
-                      <li
-                        key={b}
-                        className="rounded-full bg-white px-4 py-1.5 font-display text-xs uppercase tracking-[0.25em] text-ink-700 shadow-sm"
-                      >
-                        {b}
-                      </li>
-                    ))}
-                  </ul>
                 </div>
-              </div>
-            </div>
-          );
-        })}
-      </section>
+                <Eyebrow className="mt-7">Team</Eyebrow>
+                <h2 className="mt-2 text-4xl font-bold tracking-tight text-ink-900 md:text-5xl">
+                  {area.name}
+                </h2>
+                <p className="mt-4 text-lg leading-8 text-ink-600">{area.blurb}</p>
+                <ul className="mt-6 flex flex-wrap gap-2">
+                  {area.bullets.map((b) => (
+                    <li
+                      key={b}
+                      className="rounded-full border border-ink-900/15 px-4 py-1.5 text-sm text-ink-700"
+                    >
+                      {b}
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            ))}
+          </div>
+        </Container>
+      </Section>
 
       {/* FAQ */}
-      <section className="bg-white py-20 md:py-28">
-        <div className="mx-auto max-w-3xl px-6">
-          <p className="text-center font-display text-sm uppercase tracking-[0.3em] text-brand-600">
-            Common questions
-          </p>
-          <h2 className="mt-3 text-center font-display text-4xl uppercase leading-tight tracking-wide text-ink-800 md:text-5xl">
-            Good to know.
-          </h2>
-          <dl className="mt-10 space-y-6">
-            {FAQS.map((f, i) => (
-              <div
-                key={i}
-                className="rounded-2xl border border-cream-200 bg-cream-50 p-6 md:p-7"
-              >
-                <dt className="font-display text-lg uppercase tracking-wide text-ink-800">
-                  {f.q}
-                </dt>
-                <dd className="mt-2 text-base leading-7 text-ink-700 md:text-lg md:leading-8">
-                  {f.a}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="bg-brand-600 py-20 text-white md:py-24">
-        <div className="mx-auto max-w-3xl px-6 text-center">
-          <h2 className="font-display text-4xl uppercase tracking-wide md:text-5xl">
-            Ready to jump in?
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-lg leading-8 text-brand-50/95">
-            Two minutes to fill out the form. A real person on our team will
-            reach out within a few days to walk you through the next step.
-          </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <a
-              href={VOLUNTEER_FORM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-full bg-white px-7 py-3.5 font-display text-sm uppercase tracking-widest text-brand-700 transition hover:bg-cream-50"
-            >
-              Sign up to serve
-            </a>
-            <Link
-              href="/contact"
-              className="rounded-full border border-white/40 bg-white/5 px-6 py-3 font-display text-sm uppercase tracking-widest text-white backdrop-blur transition hover:bg-white/15"
-            >
-              Questions? Contact us
-            </Link>
+      <Section tone="white">
+        <Container>
+          <div className="grid gap-12 lg:grid-cols-[1fr_1.4fr] lg:gap-24">
+            <div>
+              <Eyebrow>Common questions</Eyebrow>
+              <Headline text="Good to know." accent="to know." className="mt-4" />
+            </div>
+            <dl className="divide-y divide-ink-900/10 border-y border-ink-900/10">
+              {FAQS.map((f, i) => (
+                <div key={i} className="py-7">
+                  <dt className="text-xl font-bold tracking-tight text-ink-900 md:text-2xl">
+                    {f.q}
+                  </dt>
+                  <dd className="mt-3 text-lg leading-8 text-ink-600">{f.a}</dd>
+                </div>
+              ))}
+            </dl>
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
+
+      <CtaBand
+        headline="Ready to jump in?"
+        accent="jump in?"
+        body="Two minutes to fill out the form. A real person on our team will reach out within a few days to walk you through the next step."
+        image={HERO.image}
+      >
+        <Button tone="dark" href={VOLUNTEER_FORM_URL}>
+          Sign up to serve
+        </Button>
+        <Button tone="dark" variant="outline" href="/contact">
+          Questions? Contact us
+        </Button>
+      </CtaBand>
     </div>
   );
 }

@@ -2,6 +2,18 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import {
+  Button,
+  Container,
+  CtaBand,
+  Eyebrow,
+  FactCard,
+  Headline,
+  PhotoHero,
+  PullQuote,
+  Section,
+  SectionHeader,
+} from "@/components/v2/ui";
+import {
   ChurchCenterScript,
   ChurchCenterModalLink,
 } from "@/components/church-center";
@@ -177,205 +189,160 @@ export default async function GivePage() {
       <ChurchCenterScript />
 
       {/* HERO */}
-      <section className="relative isolate overflow-hidden text-white">
-        <Image
-          src={heroImageSrc}
-          alt={heroImageAlt}
-          fill
-          priority
-          sizes="100vw"
-          className="-z-10 object-cover object-[center_40%]"
-        />
-        <div
-          className="absolute inset-0 -z-10 bg-gradient-to-r from-ink-900/85 via-ink-900/55 to-ink-900/30"
-          aria-hidden="true"
-        />
-        <div className="mx-auto max-w-6xl px-6 py-32 md:py-44">
-          <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-300">
-            {heroEyebrow}
-          </p>
-          <h1 className="mt-3 font-display text-5xl uppercase leading-tight tracking-wide md:text-7xl">
-            {heroHeadline}
-          </h1>
-          {heroIntro && (
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-cream-50/95 md:text-xl md:leading-9">
-              {heroIntro}
-            </p>
-          )}
-          <div className="mt-8 flex flex-wrap gap-3">
-            <a
-              href="https://pushpay.com/pay/rivercitymemphis"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-full bg-brand-500 px-6 py-3 font-display text-sm uppercase tracking-widest text-white transition hover:bg-brand-600"
-            >
-              Give now
-            </a>
-          </div>
-        </div>
-      </section>
+      <PhotoHero
+        image={heroImageSrc}
+        alt={heroImageAlt}
+        eyebrow={heroEyebrow}
+        headline={heroHeadline}
+        intro={heroIntro}
+      >
+        <Button
+          href="https://pushpay.com/pay/rivercitymemphis"
+          tone="dark"
+        >
+          Give now
+        </Button>
+      </PhotoHero>
 
       {/* VERSE */}
-      <section className="bg-cream-50 py-16 md:py-20">
-        <figure className="mx-auto max-w-3xl px-6 text-center">
-          <svg
-            aria-hidden="true"
-            viewBox="0 0 24 24"
-            className="mx-auto h-8 w-8 fill-brand-400"
-          >
-            <path d="M6 17h3l2-4V7H5v6h3l-2 4Zm9 0h3l2-4V7h-6v6h3l-2 4Z" />
-          </svg>
-          <blockquote className="mt-4 font-display text-2xl uppercase leading-snug tracking-wide text-ink-800 md:text-3xl">
-            &ldquo;{verseText}&rdquo;
-          </blockquote>
-          <figcaption className="mt-5 font-display text-sm uppercase tracking-[0.3em] text-brand-600">
-            {verseRef}
-          </figcaption>
-        </figure>
-      </section>
+      <Section tone="white">
+        <Container>
+          <PullQuote cite={verseRef}>&ldquo;{verseText}&rdquo;</PullQuote>
+        </Container>
+      </Section>
 
       {/* INTRO */}
-      <section className="bg-white py-20 md:py-28">
-        <div className="mx-auto max-w-3xl px-6 text-center">
-          <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-600">
-            {intro?.eyebrow ?? F.intro.eyebrow}
-          </p>
-          <h2 className="mt-3 font-display text-4xl uppercase leading-tight tracking-wide text-ink-800 md:text-5xl">
-            {intro?.headline ?? F.intro.headline}
-          </h2>
-          <div className="mt-6 space-y-5 text-lg leading-8 text-ink-700">
-            {intro?.body ? (
-              <PortableBody value={intro.body} />
-            ) : (
-              F.intro.paragraphs.map((p, i) => <p key={i}>{p}</p>)
-            )}
+      <Section>
+        <Container>
+          <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-24">
+            <div>
+              <Eyebrow>{intro?.eyebrow ?? F.intro.eyebrow}</Eyebrow>
+              <Headline
+                text={intro?.headline ?? F.intro.headline}
+                className="mt-4"
+              />
+            </div>
+            <div className="space-y-5 text-lg leading-8 text-ink-600 lg:pt-10">
+              {intro?.body ? (
+                <PortableBody value={intro.body} />
+              ) : (
+                F.intro.paragraphs.map((p, i) => <p key={i}>{p}</p>)
+              )}
+            </div>
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
       {/* WAYS TO GIVE */}
-      <section className="bg-cream-50 py-20 md:py-28">
-        <div className="mx-auto max-w-6xl px-6">
-          <header className="mx-auto mb-12 max-w-2xl text-center">
-            <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-600">
-              {waysSection?.eyebrow ?? F.waysSection.eyebrow}
-            </p>
-            <h2 className="mt-3 font-display text-4xl uppercase leading-tight tracking-wide text-ink-800 md:text-5xl">
-              {waysSection?.headline ?? F.waysSection.headline}
-            </h2>
-            {(waysSection?.intro ?? F.waysSection.intro) && (
-              <p className="mt-5 text-lg leading-8 text-ink-700">
-                {waysSection?.intro ?? F.waysSection.intro}
-              </p>
-            )}
-          </header>
-          <ul className="grid gap-6 md:grid-cols-2">
+      <Section tone="dark">
+        <Container>
+          <SectionHeader
+            tone="dark"
+            eyebrow={waysSection?.eyebrow ?? F.waysSection.eyebrow}
+            headline={waysSection?.headline ?? F.waysSection.headline}
+            intro={waysSection?.intro ?? F.waysSection.intro}
+          />
+          <ul className="grid gap-5 md:grid-cols-2">
             {ways.map((w, i) => (
-              <li
-                key={`${w.name}-${i}`}
-                className="relative flex flex-col rounded-2xl border border-cream-200 bg-white p-7 shadow-sm transition hover:shadow-md md:p-8"
-              >
-                <span className="font-display text-5xl text-brand-400">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <h3 className="mt-3 font-display text-3xl uppercase leading-tight tracking-wide text-ink-800 md:text-4xl">
-                  {w.name}
-                </h3>
-                {w.blurb && (
-                  <p className="mt-3 flex-1 text-base leading-7 text-ink-700 md:text-lg md:leading-8">
-                    {w.blurb}
-                  </p>
-                )}
-                {w.ctaLabel && w.ctaHref && (
-                  <div className="mt-6">
-                    <SmartCta
-                      href={w.ctaHref}
-                      label={w.ctaLabel}
-                      openInChurchCenter={w.openInChurchCenter}
-                      className="inline-flex items-center rounded-full bg-brand-500 px-6 py-3 font-display text-sm uppercase tracking-widest text-white transition hover:bg-brand-600"
-                    />
-                  </div>
-                )}
+              <li key={`${w.name}-${i}`} className="flex">
+                <FactCard
+                  tone="dark"
+                  label={String(i + 1).padStart(2, "0")}
+                  value={w.name}
+                  note={w.blurb}
+                >
+                  {w.ctaLabel && w.ctaHref && (
+                    <div className="mt-6">
+                      <SmartCta
+                        href={w.ctaHref}
+                        label={w.ctaLabel}
+                        openInChurchCenter={w.openInChurchCenter}
+                        className={BTN_DARK_SOLID}
+                      />
+                    </div>
+                  )}
+                </FactCard>
               </li>
             ))}
           </ul>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
       {/* TRUST / DIME */}
-      <section className="bg-white py-20 md:py-28">
-        <div className="mx-auto grid max-w-6xl gap-10 px-6 md:grid-cols-[1fr_320px] md:items-center md:gap-16">
-          <div>
-            <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-600">
-              {trust?.eyebrow ?? F.trustSection.eyebrow}
-            </p>
-            <h2 className="mt-3 font-display text-4xl uppercase leading-tight tracking-wide text-ink-800 md:text-5xl">
-              {trust?.headline ?? F.trustSection.headline}
-            </h2>
-            <div className="mt-6 space-y-5 text-base leading-7 text-ink-700 md:text-lg md:leading-8">
-              {trust?.body ? (
-                <PortableBody value={trust.body} />
-              ) : (
-                F.trustSection.paragraphs.map((p, i) => <p key={i}>{p}</p>)
-              )}
+      <Section>
+        <Container>
+          <div className="grid gap-12 md:grid-cols-[1fr_320px] md:items-center md:gap-20">
+            <div>
+              <Eyebrow>{trust?.eyebrow ?? F.trustSection.eyebrow}</Eyebrow>
+              <Headline
+                text={trust?.headline ?? F.trustSection.headline}
+                className="mt-4"
+              />
+              <div className="mt-8 max-w-2xl space-y-5 text-lg leading-8 text-ink-600">
+                {trust?.body ? (
+                  <PortableBody value={trust.body} />
+                ) : (
+                  F.trustSection.paragraphs.map((p, i) => <p key={i}>{p}</p>)
+                )}
+              </div>
+              <ul className="mt-8 flex flex-wrap gap-2">
+                {["501(c)(3)", "Tax-deductible", "Dime Silver accredited"].map(
+                  (t) => (
+                    <li
+                      key={t}
+                      className="rounded-full border border-ink-900/15 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-ink-700"
+                    >
+                      {t}
+                    </li>
+                  ),
+                )}
+              </ul>
             </div>
-            <ul className="mt-7 flex flex-wrap gap-2">
-              <li className="rounded-full bg-cream-100 px-4 py-1.5 font-display text-xs uppercase tracking-[0.25em] text-ink-700">
-                501(c)(3)
-              </li>
-              <li className="rounded-full bg-cream-100 px-4 py-1.5 font-display text-xs uppercase tracking-[0.25em] text-ink-700">
-                Tax-deductible
-              </li>
-              <li className="rounded-full bg-cream-100 px-4 py-1.5 font-display text-xs uppercase tracking-[0.25em] text-ink-700">
-                Dime Silver accredited
-              </li>
-            </ul>
+            <figure className="mx-auto md:mx-0">
+              <Image
+                src={dimeSrc}
+                alt={dimeAlt ?? ""}
+                width={400}
+                height={400}
+                className="h-auto w-64 md:w-80"
+              />
+              <figcaption className="sr-only">
+                Dime Silver financial best-practices accreditation
+              </figcaption>
+            </figure>
           </div>
-          <figure className="mx-auto md:mx-0">
-            <Image
-              src={dimeSrc}
-              alt={dimeAlt ?? ""}
-              width={400}
-              height={400}
-              className="h-auto w-64 md:w-80"
-            />
-            <figcaption className="sr-only">
-              Dime Silver financial best-practices accreditation
-            </figcaption>
-          </figure>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
       {/* CTA */}
-      <section className="bg-brand-600 py-20 text-white md:py-24">
-        <div className="mx-auto max-w-3xl px-6 text-center">
-          <h2 className="font-display text-4xl uppercase tracking-wide md:text-5xl">
-            {cta?.headline ?? F.cta.headline}
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-lg leading-8 text-brand-50/95">
-            {cta?.body ?? F.cta.body}
-          </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <SmartCta
-              href={cta?.primaryCta?.href ?? F.cta.primaryHref}
-              label={cta?.primaryCta?.label ?? F.cta.primaryLabel}
-              openInChurchCenter={
-                cta?.primaryCta?.openInChurchCenter ?? F.cta.primaryChurchCenter
-              }
-              className="rounded-full bg-white px-6 py-3 font-display text-sm uppercase tracking-widest text-brand-700 transition hover:bg-cream-50"
-            />
-            <SmartCta
-              href={cta?.secondaryCta?.href ?? F.cta.secondaryHref}
-              label={cta?.secondaryCta?.label ?? F.cta.secondaryLabel}
-              openInChurchCenter={
-                cta?.secondaryCta?.openInChurchCenter ??
-                F.cta.secondaryChurchCenter
-              }
-              className="rounded-full border border-white/40 bg-white/5 px-6 py-3 font-display text-sm uppercase tracking-widest text-white backdrop-blur transition hover:bg-white/15"
-            />
-          </div>
-        </div>
-      </section>
+      <CtaBand
+        headline={cta?.headline ?? F.cta.headline}
+        body={cta?.body ?? F.cta.body}
+        image={heroImageSrc}
+      >
+        <SmartCta
+          href={cta?.primaryCta?.href ?? F.cta.primaryHref}
+          label={cta?.primaryCta?.label ?? F.cta.primaryLabel}
+          openInChurchCenter={
+            cta?.primaryCta?.openInChurchCenter ?? F.cta.primaryChurchCenter
+          }
+          className={BTN_DARK_SOLID}
+        />
+        <SmartCta
+          href={cta?.secondaryCta?.href ?? F.cta.secondaryHref}
+          label={cta?.secondaryCta?.label ?? F.cta.secondaryLabel}
+          openInChurchCenter={
+            cta?.secondaryCta?.openInChurchCenter ??
+            F.cta.secondaryChurchCenter
+          }
+          className={BTN_DARK_OUTLINE}
+        />
+      </CtaBand>
     </div>
   );
 }
+
+const BTN_DARK_SOLID =
+  "inline-flex items-center justify-center rounded-full bg-white px-7 py-3.5 text-sm font-semibold text-ink-900 transition hover:bg-brand-100";
+const BTN_DARK_OUTLINE =
+  "inline-flex items-center justify-center rounded-full border border-white/35 px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10";

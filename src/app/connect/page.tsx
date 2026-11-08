@@ -4,6 +4,15 @@ import Link from "next/link";
 import { client } from "@/sanity/client";
 import { connectPageQuery } from "@/sanity/queries";
 import { urlFor } from "@/sanity/image";
+import {
+  Button,
+  Container,
+  CtaBand,
+  Eyebrow,
+  PhotoCard,
+  PhotoHero,
+  Section,
+} from "@/components/v2/ui";
 import type { ConnectPageDoc, SanityImage } from "@/types/sanity";
 
 export const metadata: Metadata = {
@@ -109,139 +118,103 @@ export default async function ConnectHubPage() {
 
   return (
     <div>
-      {/* HERO */}
-      <section className="relative isolate overflow-hidden text-white">
-        <Image
-          src={imgSrc(hero.image as SanityImage, F.hero.image, 2200)}
-          alt={(hero.image as SanityImage)?.alt ?? F.hero.alt}
-          fill
-          priority
-          sizes="100vw"
-          className="-z-10 object-cover"
-        />
-        <div
-          className="absolute inset-0 -z-10 bg-gradient-to-r from-ink-900/85 via-ink-900/55 to-ink-900/35"
-          aria-hidden="true"
-        />
-        <div className="mx-auto max-w-6xl px-6 py-32 md:py-44">
-          {hero.eyebrow && (
-            <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-300">
-              {hero.eyebrow}
-            </p>
-          )}
-          <h1 className="mt-3 font-display text-5xl uppercase leading-tight tracking-wide md:text-7xl">
-            {hero.headline}
-          </h1>
-          {hero.intro && (
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-cream-50/95 md:text-xl md:leading-9">
-              {hero.intro}
-            </p>
-          )}
-        </div>
-      </section>
+      <PhotoHero
+        image={imgSrc(hero.image as SanityImage, F.hero.image, 2200)}
+        alt={(hero.image as SanityImage)?.alt ?? F.hero.alt}
+        eyebrow={hero.eyebrow}
+        headline={hero.headline ?? F.hero.headline}
+        accent={
+          (hero.headline ?? F.hero.headline).endsWith("next step.")
+            ? "next step."
+            : undefined
+        }
+        intro={hero.intro}
+      />
 
-      {/* HUB CARDS */}
-      <section className="bg-cream-50 py-20 md:py-28">
-        <div className="mx-auto grid max-w-6xl auto-rows-fr gap-6 px-6 md:grid-cols-2 md:gap-8">
-          {(() => {
-            let featuredSeen = 0;
-            return cards.map((c, i) => {
-              const src = imgSrc(c.image as SanityImage, c.fallbackImage ?? "", 1600);
-              const featured = c.featured;
-              const flipImage = featured && featuredSeen++ % 2 === 1;
-              return (
-              <Link
-                key={`${c.title}-${i}`}
-                href={c.href}
-                className={[
-                  "group relative isolate flex flex-col overflow-hidden rounded-3xl bg-white shadow-md transition hover:-translate-y-0.5 hover:shadow-xl",
-                  featured ? "md:col-span-2 md:items-stretch" : "",
-                  featured && !flipImage ? "md:flex-row" : "",
-                  featured && flipImage ? "md:flex-row-reverse" : "",
-                ].join(" ")}
-              >
-                <div
-                  className={[
-                    "relative overflow-hidden bg-ink-100",
-                    featured
-                      ? "aspect-[16/9] md:aspect-auto md:w-[55%]"
-                      : "aspect-[4/3]",
-                  ].join(" ")}
-                >
-                  {src && (
-                    <Image
-                      src={src}
+      {/* HUB CARDS — featured cards span wide, others sit in pairs */}
+      <Section tone="light">
+        <Container>
+          <div className="grid gap-x-6 gap-y-20 md:grid-cols-2">
+            {(() => {
+              let featuredSeen = 0;
+              return cards.map((c, i) => {
+                const src = imgSrc(c.image as SanityImage, c.fallbackImage ?? "", 1600);
+                if (!c.featured) {
+                  return (
+                    <PhotoCard
+                      key={`${c.title}-${i}`}
+                      href={c.href}
+                      image={src || undefined}
                       alt={c.alt}
-                      fill
-                      sizes={
-                        featured
-                          ? "(min-width: 768px) 720px, 100vw"
-                          : "(min-width: 768px) 560px, 100vw"
-                      }
-                      className="object-cover transition duration-500 group-hover:scale-[1.03]"
+                      eyebrow={c.eyebrow}
+                      title={c.title}
+                      blurb={c.blurb}
+                      cta={c.ctaLabel}
+                      aspect="aspect-[4/3]"
                     />
-                  )}
-                </div>
-                <div
-                  className={[
-                    "flex flex-col gap-3 p-6 md:p-8",
-                    featured ? "md:flex-1 md:justify-center md:p-10" : "",
-                  ].join(" ")}
-                >
-                  {c.eyebrow && (
-                    <p className="font-display text-xs uppercase tracking-[0.3em] text-brand-600">
-                      {c.eyebrow}
-                    </p>
-                  )}
-                  <h2
-                    className={[
-                      "font-display uppercase leading-tight tracking-wide text-ink-800",
-                      featured ? "text-4xl md:text-5xl" : "text-3xl md:text-4xl",
-                    ].join(" ")}
+                  );
+                }
+                const flip = featuredSeen++ % 2 === 1;
+                return (
+                  <Link
+                    key={`${c.title}-${i}`}
+                    href={c.href}
+                    className="group grid items-center gap-10 md:col-span-2 lg:grid-cols-[1.2fr_1fr] lg:gap-20"
                   >
-                    {c.title}
-                  </h2>
-                  {c.blurb && (
-                    <p className="text-base leading-7 text-ink-700 md:text-lg md:leading-8">
-                      {c.blurb}
-                    </p>
-                  )}
-                  <span className="mt-2 inline-flex items-center font-display text-sm uppercase tracking-widest text-brand-600 transition group-hover:text-brand-700">
-                    {c.ctaLabel}
-                  </span>
-                </div>
-              </Link>
-              );
-            });
-          })()}
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="bg-brand-600 py-20 text-white md:py-24">
-        <div className="mx-auto max-w-3xl px-6 text-center">
-          <h2 className="font-display text-4xl uppercase tracking-wide md:text-5xl">
-            {cta?.headline ?? F.cta.headline}
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-lg leading-8 text-brand-50/95">
-            {cta?.body ?? F.cta.body}
-          </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Link
-              href={cta?.primaryCta?.href ?? F.cta.primaryHref}
-              className="rounded-full bg-white px-6 py-3 font-display text-sm uppercase tracking-widest text-brand-700 transition hover:bg-cream-50"
-            >
-              {cta?.primaryCta?.label ?? F.cta.primaryLabel}
-            </Link>
-            <Link
-              href={cta?.secondaryCta?.href ?? F.cta.secondaryHref}
-              className="rounded-full border border-white/40 bg-white/5 px-6 py-3 font-display text-sm uppercase tracking-widest text-white backdrop-blur transition hover:bg-white/15"
-            >
-              {cta?.secondaryCta?.label ?? F.cta.secondaryLabel}
-            </Link>
+                    <div
+                      className={`relative aspect-[16/10] overflow-hidden rounded-2xl bg-cream-200 ${
+                        flip ? "lg:order-2" : ""
+                      }`}
+                    >
+                      {src && (
+                        <Image
+                          src={src}
+                          alt={c.alt}
+                          fill
+                          sizes="(min-width: 1024px) 55vw, 100vw"
+                          className="object-cover transition duration-700 group-hover:scale-[1.03]"
+                        />
+                      )}
+                    </div>
+                    <div>
+                      {c.eyebrow && <Eyebrow>{c.eyebrow}</Eyebrow>}
+                      <h2 className="mt-4 text-5xl font-bold leading-[0.95] tracking-tight text-ink-900 md:text-7xl">
+                        {c.title}
+                      </h2>
+                      {c.blurb && (
+                        <p className="mt-6 max-w-lg text-lg leading-8 text-ink-600">
+                          {c.blurb}
+                        </p>
+                      )}
+                      <span className="mt-8 inline-block text-sm font-semibold text-ink-900 underline decoration-brand-500 decoration-2 underline-offset-[6px] transition group-hover:text-brand-600">
+                        {c.ctaLabel}
+                      </span>
+                    </div>
+                  </Link>
+                );
+              });
+            })()}
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
+
+      <CtaBand
+        headline={cta?.headline ?? F.cta.headline}
+        accent={(cta?.headline ?? F.cta.headline).endsWith("start?") ? "start?" : undefined}
+        body={cta?.body ?? F.cta.body}
+        image="/brand/pages/connect/hero.jpg"
+      >
+        <Button tone="dark" href={cta?.primaryCta?.href ?? F.cta.primaryHref}>
+          {cta?.primaryCta?.label ?? F.cta.primaryLabel}
+        </Button>
+        <Button
+          tone="dark"
+          variant="outline"
+          href={cta?.secondaryCta?.href ?? F.cta.secondaryHref}
+        >
+          {cta?.secondaryCta?.label ?? F.cta.secondaryLabel}
+        </Button>
+      </CtaBand>
     </div>
   );
 }

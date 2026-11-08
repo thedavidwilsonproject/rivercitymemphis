@@ -1,10 +1,18 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { client } from "@/sanity/client";
 import { beRichPageQuery } from "@/sanity/queries";
 import { urlFor } from "@/sanity/image";
 import { PortableBody } from "@/components/portable-body";
+import {
+  Button,
+  ButtonRow,
+  Container,
+  Eyebrow,
+  Headline,
+  Section,
+  SectionHeader,
+} from "@/components/v2/ui";
 import type {
   BeRichPageDoc,
   BeRichPartner,
@@ -117,10 +125,12 @@ export default async function BeRichPage() {
     : F.partnersSection.partners;
   const cta = doc?.cta;
 
+  const heroWord = heroHeadline.replace(/^Be\s+/i, "");
+
   return (
     <div>
-      {/* HERO */}
-      <section className="relative isolate overflow-hidden text-white">
+      {/* HERO — kit-styled, keeps the Be ♥ Rich lockup */}
+      <section className="relative isolate flex min-h-[78svh] flex-col overflow-hidden bg-river-950 text-white">
         <Image
           src={heroImageSrc}
           alt={heroImageAlt}
@@ -130,137 +140,148 @@ export default async function BeRichPage() {
           className="-z-10 object-cover object-[center_60%]"
         />
         <div
-          className="absolute inset-0 -z-10 bg-gradient-to-r from-ink-900/85 via-ink-900/55 to-ink-900/30"
+          className="absolute inset-0 -z-10 bg-gradient-to-t from-river-950 via-river-950/55 to-river-950/25"
           aria-hidden="true"
         />
-        <div className="mx-auto max-w-6xl px-6 py-32 md:py-44">
-          <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-300">
+        <Container className="flex w-full flex-1 flex-col justify-end pb-12 pt-28 md:pb-16">
+          <Eyebrow tone="dark" className="rise">
             {heroEyebrow}
-          </p>
-          <h1 className="mt-3 flex flex-wrap items-center gap-x-4 font-display text-5xl uppercase leading-tight tracking-wide md:text-7xl">
+          </Eyebrow>
+          <h1 className="rise rise-2 mt-5 flex flex-wrap items-center gap-x-5 text-6xl font-bold leading-[0.95] tracking-tight md:text-8xl lg:text-[8.5rem]">
             <span>Be</span>
             <svg
               aria-hidden="true"
               viewBox="0 0 32 28"
-              className="inline-block h-7 w-8 fill-[#e2333e] md:h-9 md:w-10"
+              className="inline-block h-12 w-14 fill-[#e2333e] md:h-20 md:w-24"
             >
               <path d="M16 26 C2 18 0 9 6 4 C10 0 14 2 16 6 C18 2 22 0 26 4 C32 9 30 18 16 26 Z" />
             </svg>
-            <span>{heroHeadline.replace(/^Be\s+/i, "")}</span>
+            <em className="text-brand-300">{heroWord}</em>
           </h1>
-          {heroTagline && (
-            <p className="mt-4 font-display text-xl uppercase tracking-[0.25em] text-brand-300 md:text-2xl">
-              {heroTagline}
-            </p>
+          {(heroTagline || heroIntro) && (
+            <div className="rise rise-3 mt-10 grid gap-6 border-t border-white/20 pt-8 md:grid-cols-[auto_1fr] md:gap-16">
+              {heroTagline && (
+                <p className="font-serif text-3xl italic text-white md:text-4xl">
+                  {heroTagline}
+                </p>
+              )}
+              {heroIntro && (
+                <p className="max-w-2xl text-lg leading-8 text-white/80">{heroIntro}</p>
+              )}
+            </div>
           )}
-          {heroIntro && (
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-cream-50/95 md:text-xl md:leading-9">
-              {heroIntro}
-            </p>
-          )}
-        </div>
+        </Container>
       </section>
 
       {/* INTRO */}
-      <section className="bg-white py-20 md:py-28">
-        <div className="mx-auto max-w-3xl px-6 text-center">
-          <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-600">
-            {intro?.eyebrow ?? F.intro.eyebrow}
-          </p>
-          <h2 className="mt-3 font-display text-4xl uppercase leading-tight tracking-wide text-ink-800 md:text-5xl">
-            {intro?.headline ?? F.intro.headline}
-          </h2>
-          <div className="mt-6 space-y-5 text-lg leading-8 text-ink-700">
-            {intro?.body ? (
-              <PortableBody value={intro.body} />
-            ) : (
-              F.intro.paragraphs.map((p, i) => <p key={i}>{p}</p>)
-            )}
+      <Section tone="white">
+        <Container>
+          <div className="grid gap-10 lg:grid-cols-[1fr_1.2fr] lg:gap-24">
+            <div>
+              <Eyebrow>{intro?.eyebrow ?? F.intro.eyebrow}</Eyebrow>
+              <Headline
+                text={intro?.headline ?? F.intro.headline}
+                accent={
+                  (intro?.headline ?? F.intro.headline).endsWith("the mission.")
+                    ? "the mission."
+                    : undefined
+                }
+                className="mt-4"
+              />
+            </div>
+            <div className="space-y-5 text-lg leading-8 text-ink-600 md:text-xl md:leading-9">
+              {intro?.body ? (
+                <PortableBody value={intro.body} />
+              ) : (
+                F.intro.paragraphs.map((p, i) => <p key={i}>{p}</p>)
+              )}
+            </div>
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
       {/* PARTNERS */}
-      <section className="bg-cream-50 py-20 md:py-28">
-        <div className="mx-auto max-w-6xl px-6">
-          <header className="mx-auto mb-12 max-w-2xl text-center">
-            <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-600">
-              {partnersSection?.eyebrow ?? F.partnersSection.eyebrow}
-            </p>
-            <h2 className="mt-3 font-display text-4xl uppercase leading-tight tracking-wide text-ink-800 md:text-5xl">
-              {partnersSection?.headline ?? F.partnersSection.headline}
-            </h2>
-            {(partnersSection?.intro ?? F.partnersSection.intro) && (
-              <p className="mt-5 text-lg leading-8 text-ink-700">
-                {partnersSection?.intro ?? F.partnersSection.intro}
-              </p>
-            )}
-          </header>
-          <ul className="grid gap-6 md:grid-cols-2">
+      <Section tone="light">
+        <Container>
+          <SectionHeader
+            eyebrow={partnersSection?.eyebrow ?? F.partnersSection.eyebrow}
+            headline={partnersSection?.headline ?? F.partnersSection.headline}
+            intro={partnersSection?.intro ?? F.partnersSection.intro}
+          />
+          <ul className="grid gap-x-12 md:grid-cols-2">
             {partners.map((p, i) => (
               <li
                 key={`${p.name}-${i}`}
-                className="group relative overflow-hidden rounded-2xl border border-cream-200 bg-white p-7 shadow-sm transition hover:shadow-md md:p-8"
+                className="border-t border-ink-900/15 py-10"
               >
-                <span
-                  className="inline-block rounded-full bg-[#e2333e]/10 px-3 py-1 font-display text-xs uppercase tracking-[0.25em] text-[#e2333e]"
+                <p
+                  className="text-xs font-semibold uppercase tracking-[0.22em] text-[#e2333e]"
                   aria-label={`Scope: ${p.scope ? SCOPE_LABEL[p.scope] : ""}`}
                 >
                   {p.scope ? SCOPE_LABEL[p.scope] : ""}
-                </span>
-                <h3 className="mt-4 font-display text-2xl uppercase leading-tight tracking-wide text-ink-800 md:text-3xl">
+                </p>
+                <h3 className="mt-4 text-3xl font-bold tracking-tight text-ink-900 md:text-4xl">
                   {p.name}
                 </h3>
                 {p.blurb && (
-                  <p className="mt-3 text-base leading-7 text-ink-700 md:text-lg md:leading-8">
-                    {p.blurb}
-                  </p>
+                  <p className="mt-4 text-lg leading-8 text-ink-600">{p.blurb}</p>
                 )}
                 {p.url && (
-                  <a
-                    href={p.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-5 inline-flex items-center font-display text-sm uppercase tracking-widest text-brand-600 transition hover:text-brand-700"
-                  >
+                  <Button variant="link" href={p.url} className="mt-6">
                     Visit {p.name} →
-                  </a>
+                  </Button>
                 )}
               </li>
             ))}
           </ul>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
-      {/* CTA */}
-      <section className="bg-brand-600 py-20 text-white md:py-24">
-        <div className="mx-auto max-w-3xl px-6 text-center">
+      {/* CTA — dark band with eyebrow */}
+      <section className="relative isolate overflow-hidden bg-river-900 text-white">
+        <Image
+          src={heroImageSrc}
+          alt=""
+          aria-hidden="true"
+          fill
+          sizes="100vw"
+          className="-z-10 object-cover"
+        />
+        <div
+          className="absolute inset-0 -z-10 bg-gradient-to-r from-river-950/95 via-river-950/75 to-river-950/40"
+          aria-hidden="true"
+        />
+        <Container className="py-24 md:py-36">
           {(cta?.eyebrow ?? F.cta.eyebrow) && (
-            <p className="font-display text-sm uppercase tracking-[0.3em] text-brand-100/90">
-              {cta?.eyebrow ?? F.cta.eyebrow}
-            </p>
+            <Eyebrow tone="dark">{cta?.eyebrow ?? F.cta.eyebrow}</Eyebrow>
           )}
-          <h2 className="mt-3 font-display text-4xl uppercase tracking-wide md:text-5xl">
-            {cta?.headline ?? F.cta.headline}
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-lg leading-8 text-brand-50/95">
+          <Headline
+            text={cta?.headline ?? F.cta.headline}
+            accent={
+              (cta?.headline ?? F.cta.headline).endsWith("Give more.")
+                ? "Give more."
+                : undefined
+            }
+            tone="dark"
+            size="xl"
+            className="mt-5 max-w-5xl"
+          />
+          <p className="mt-8 max-w-xl text-lg leading-8 text-white/80">
             {cta?.body ?? F.cta.body}
           </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Link
-              href={cta?.primaryCta?.href ?? F.cta.primaryHref}
-              className="rounded-full bg-white px-6 py-3 font-display text-sm uppercase tracking-widest text-brand-700 transition hover:bg-cream-50"
-            >
+          <ButtonRow className="mt-10">
+            <Button tone="dark" href={cta?.primaryCta?.href ?? F.cta.primaryHref}>
               {cta?.primaryCta?.label ?? F.cta.primaryLabel}
-            </Link>
-            <Link
+            </Button>
+            <Button
+              tone="dark"
+              variant="outline"
               href={cta?.secondaryCta?.href ?? F.cta.secondaryHref}
-              className="rounded-full border border-white/40 bg-white/5 px-6 py-3 font-display text-sm uppercase tracking-widest text-white backdrop-blur transition hover:bg-white/15"
             >
               {cta?.secondaryCta?.label ?? F.cta.secondaryLabel}
-            </Link>
-          </div>
-        </div>
+            </Button>
+          </ButtonRow>
+        </Container>
       </section>
     </div>
   );

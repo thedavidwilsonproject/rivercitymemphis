@@ -4,6 +4,7 @@ import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { JsonLd } from "@/components/json-ld";
+import { PrototypeBadge } from "@/components/prototype-badge";
 import { client } from "@/sanity/client";
 import { siteSettingsQuery } from "@/sanity/queries";
 import type { SiteSettings } from "@/types/sanity";
@@ -146,6 +147,7 @@ export default async function RootLayout({
         <SiteHeader settings={settings} />
         <main className="flex-1">{children}</main>
         <SiteFooter settings={settings} />
+        <PrototypeBadge />
       </body>
     </html>
   );
