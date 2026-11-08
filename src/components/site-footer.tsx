@@ -21,124 +21,154 @@ function httpsOnly(url?: string): string | undefined {
   return url.replace(/^http:\/\//i, "https://");
 }
 
+const COLUMNS = [
+  {
+    title: "Visit",
+    links: [
+      { label: "What to Expect", href: "/visit/what-to-expect" },
+      { label: "Who We Are", href: "/visit/who-we-are" },
+      { label: "Location & Time", href: "/visit/location" },
+      { label: "Leadership", href: "/visit/leadership" },
+      { label: "FAQs", href: "/visit/faqs" },
+    ],
+  },
+  {
+    title: "Connect",
+    links: [
+      { label: "Next Step", href: "/connect/next" },
+      { label: "Families", href: "/connect/families" },
+      { label: "Groups", href: "/groups" },
+      { label: "Volunteer", href: "/connect/volunteer" },
+      { label: "Events", href: "/events" },
+    ],
+  },
+  {
+    title: "Resources",
+    links: [
+      { label: "Watch", href: "/watch" },
+      { label: "Sermon Archive", href: "/watch/archive" },
+      { label: "Give", href: "/give" },
+      { label: "Be Rich", href: "/connect/be-rich" },
+      { label: "Contact", href: "/contact" },
+    ],
+  },
+];
+
 export function SiteFooter({ settings }: { settings: SiteSettings | null }) {
   const address = settings?.address ?? FALLBACK_ADDRESS;
   const rawSocials = settings?.socials ?? FALLBACK_SOCIALS;
-  const socials = {
-    facebook: httpsOnly(rawSocials.facebook),
-    instagram: httpsOnly(rawSocials.instagram),
-    twitter: httpsOnly(rawSocials.twitter),
-    vimeo: httpsOnly(rawSocials.vimeo),
-    youtube: httpsOnly((rawSocials as { youtube?: string }).youtube),
-  };
+  const socials = [
+    { label: "Facebook", href: httpsOnly(rawSocials.facebook) },
+    { label: "Instagram", href: httpsOnly(rawSocials.instagram) },
+    { label: "Vimeo", href: httpsOnly(rawSocials.vimeo) },
+    { label: "X / Twitter", href: httpsOnly(rawSocials.twitter) },
+    {
+      label: "YouTube",
+      href: httpsOnly((rawSocials as { youtube?: string }).youtube),
+    },
+  ].filter((s) => s.href);
   const serviceTime = settings?.serviceTime ?? "Sundays at 10:15 AM";
   const phone = settings?.phone ?? "(901) 386-4171";
   const email = settings?.email ?? "info@rivercitymemphis.org";
 
   return (
-    <footer className="mt-24 border-t border-cream-200/60 bg-ink-900 text-cream-50">
-      <div className="mx-auto grid max-w-6xl gap-10 px-6 py-14 md:grid-cols-4">
-        <div>
-          <Image
-            src="/brand/logo-icon.svg"
-            alt="River City Church"
-            width={56}
-            height={56}
-            className="h-12 w-12"
-          />
-          <p className="mt-4 text-sm leading-6 text-cream-200/80">
-            {address.line1}
-            <br />
-            {address.city}, {address.state} {address.zip}
-          </p>
-          <p className="mt-3 text-sm text-cream-200/80">{serviceTime}</p>
-        </div>
-        <div>
-          <h4 className="font-display text-sm uppercase tracking-widest text-brand-400">
-            Visit
-          </h4>
-          <ul className="mt-3 space-y-2 text-sm">
-            <li>
-              <Link href="/visit/what-to-expect" className="hover:text-brand-400">
-                First Visit
+    <footer className="bg-river-950 text-white">
+      {/* Sign-off */}
+      <div className="mx-auto max-w-[90rem] px-5 pb-16 pt-24 md:px-10 md:pt-32">
+        <div className="flex flex-col gap-10 border-b border-white/10 pb-16 lg:flex-row lg:items-end lg:justify-between">
+          <h2 className="text-6xl font-bold leading-[0.95] tracking-tight md:text-8xl">
+            See you <em className="text-brand-300">Sunday.</em>
+          </h2>
+          <div className="max-w-sm">
+            <p className="text-lg text-white/80">
+              {serviceTime}. Coffee starts 15 minutes prior.
+            </p>
+            <p className="mt-1 text-white/55">
+              {address.line1}, {address.city}, {address.state} {address.zip}
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link
+                href="/visit/what-to-expect"
+                className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-ink-900 transition hover:bg-brand-100"
+              >
+                Plan a Visit
               </Link>
-            </li>
-            <li>
-              <Link href="/visit/leadership" className="hover:text-brand-400">
-                Leadership
-              </Link>
-            </li>
-            <li>
-              <Link href="/visit/faqs" className="hover:text-brand-400">
-                FAQs
-              </Link>
-            </li>
-          </ul>
-        </div>
-        <div>
-          <h4 className="font-display text-sm uppercase tracking-widest text-brand-400">
-            Connect
-          </h4>
-          <ul className="mt-3 space-y-2 text-sm">
-            <li>
-              <Link href="/connect/families" className="hover:text-brand-400">
-                Families
-              </Link>
-            </li>
-            <li>
-              <Link href="/connect/rcc-groups" className="hover:text-brand-400">
-                RCC Groups
-              </Link>
-            </li>
-            <li>
-              <Link href="/give" className="hover:text-brand-400">
-                Give
-              </Link>
-            </li>
-          </ul>
-        </div>
-        <div>
-          <h4 className="font-display text-sm uppercase tracking-widest text-brand-400">
-            Reach Us
-          </h4>
-          <ul className="mt-3 space-y-2 text-sm">
-            <li>
-              <a href={`tel:${phone}`} className="hover:text-brand-400">
-                {phone}
+              <a
+                href={`https://maps.google.com/?q=${encodeURIComponent(
+                  `${address.line1}, ${address.city}, ${address.state} ${address.zip}`,
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full border border-white/25 px-6 py-3 text-sm font-semibold transition hover:bg-white/10"
+              >
+                Get Directions
               </a>
-            </li>
-            <li>
-              <a href={`mailto:${email}`} className="hover:text-brand-400">
-                {email}
-              </a>
-            </li>
-          </ul>
-          <div className="mt-5 flex gap-4 text-cream-200/80">
-            {socials.facebook && (
-              <a href={socials.facebook} aria-label="Facebook" className="hover:text-brand-400">
-                FB
-              </a>
-            )}
-            {socials.instagram && (
-              <a href={socials.instagram} aria-label="Instagram" className="hover:text-brand-400">
-                IG
-              </a>
-            )}
-            {socials.twitter && (
-              <a href={socials.twitter} aria-label="Twitter" className="hover:text-brand-400">
-                TW
-              </a>
-            )}
-            {socials.vimeo && (
-              <a href={socials.vimeo} aria-label="Vimeo" className="hover:text-brand-400">
-                VM
-              </a>
-            )}
+            </div>
           </div>
         </div>
+
+        <div className="grid gap-12 pt-14 sm:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1fr]">
+          <div>
+            <Image
+              src="/brand/logo-white.svg"
+              alt="River City Church"
+              width={183}
+              height={57}
+              className="h-11 w-auto"
+            />
+            <ul className="mt-6 space-y-1.5 text-white/65">
+              <li>
+                <a href={`tel:${phone}`} className="hover:text-white">
+                  {phone}
+                </a>
+              </li>
+              <li>
+                <a href={`mailto:${email}`} className="hover:text-white">
+                  {email}
+                </a>
+              </li>
+            </ul>
+          </div>
+          {COLUMNS.map((col) => (
+            <div key={col.title}>
+              <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-300">
+                {col.title}
+              </h3>
+              <ul className="mt-5 space-y-2.5">
+                {col.links.map((l) => (
+                  <li key={l.href + l.label}>
+                    <Link
+                      href={l.href}
+                      className="text-white/75 transition hover:text-white"
+                    >
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
       </div>
-      <div className="border-t border-white/5 py-5 text-center text-xs text-cream-200/50">
-        © {new Date().getFullYear()} River City Church. All rights reserved.
+
+      <div className="border-t border-white/10">
+        <div className="mx-auto flex max-w-[90rem] flex-col gap-4 px-5 py-6 text-sm text-white/45 md:flex-row md:items-center md:justify-between md:px-10">
+          <p>© {new Date().getFullYear()} River City Church · Bartlett, TN</p>
+          <ul className="flex flex-wrap gap-x-6 gap-y-2">
+            {socials.map((s) => (
+              <li key={s.label}>
+                <a
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition hover:text-white"
+                >
+                  {s.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </footer>
   );

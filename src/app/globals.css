@@ -29,10 +29,18 @@
   --color-ink-300: #bfbfbf;
   --color-ink-100: #f2f2f2;
 
-  --font-display: var(--font-display), "Bebas Neue", "Helvetica Neue",
+  --font-display: var(--font-display), "Inter Tight", "Helvetica Neue",
     Arial, sans-serif;
-  --font-body: var(--font-body), "Roboto Slab", Georgia, "Times New Roman",
-    serif;
+  --font-body: var(--font-body), "Inter", "Helvetica Neue", Arial,
+    sans-serif;
+  --font-serif: var(--font-serif), "Instrument Serif", Georgia,
+    "Times New Roman", serif;
+
+  /* v2 additions — deep river navy for dark sections, warm paper. */
+  --color-river-950: #0b1d24;
+  --color-river-900: #0f2a33;
+  --color-river-800: #163a46;
+  --color-paper: #f4efe6;
 }
 
 /* River City Church brand: warm white background, dark text, turquoise
@@ -40,7 +48,7 @@
    is light-mode only. */
 :root {
   color-scheme: light only;
-  --background: #fdfbf6;
+  --background: #f4efe6;
   --foreground: var(--color-ink-700);
 }
 
@@ -75,4 +83,82 @@ body {
   color: var(--color-brand-700);
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+
+/* ------------------------------------------------------------------
+   Design v2 — editorial overrides.
+   Inner pages were written for the condensed Bebas display face with
+   uppercase headings. These unlayered rules beat Tailwind utilities so
+   every existing page adopts the new tight-grotesk, sentence-case
+   headline style without rewriting each template.
+   ------------------------------------------------------------------ */
+h1.font-display,
+h2.font-display,
+h3.font-display {
+  text-transform: none;
+  letter-spacing: -0.03em;
+  font-weight: 700;
+  line-height: 1.02;
+}
+h1,
+h2,
+h3 {
+  letter-spacing: -0.03em;
+  font-weight: 700;
+}
+p.font-display,
+span.font-display,
+a.font-display,
+li.font-display,
+button.font-display,
+h4.font-display {
+  font-weight: 600;
+  letter-spacing: 0.12em;
+}
+
+/* Italic serif accent used inside headlines: <em class="accent">. */
+.accent,
+h1 em,
+h2 em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+/* Gentle reveal on load for hero copy. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.rise {
+  animation: rise 900ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.rise-2 {
+  animation-delay: 150ms;
+}
+.rise-3 {
+  animation-delay: 300ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rise {
+    animation: none;
+  }
+}
+
+/* Large display numerals/words (e.g. "01", "10:15 AM") — tight, not tracked. */
+.font-display[class*="text-3xl"],
+.font-display[class*="text-4xl"],
+.font-display[class*="text-5xl"],
+.font-display[class*="text-6xl"],
+.font-display[class*="text-7xl"] {
+  letter-spacing: -0.03em;
+  font-weight: 700;
+  text-transform: none;
 }

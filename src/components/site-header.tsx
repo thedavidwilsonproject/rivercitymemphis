@@ -1,12 +1,7 @@
-import Link from "next/link";
-import Image from "next/image";
 import type { NavItem, SiteSettings } from "@/types/sanity";
-import { NavDropdown } from "@/components/nav-dropdown";
-import { MobileNav } from "@/components/mobile-nav";
+import { HeaderBar, type HeaderNavItem } from "@/components/header-bar";
 
-type FallbackNavItem = NavItem & { external?: boolean };
-
-const FALLBACK_NAV: FallbackNavItem[] = [
+const FALLBACK_NAV: HeaderNavItem[] = [
   {
     label: "Visit",
     href: "/visit/who-we-are",
@@ -54,80 +49,21 @@ const FALLBACK_NAV: FallbackNavItem[] = [
   { label: "Contact", href: "/contact" },
 ];
 
-function NavLink({
-  item,
-}: {
-  item: FallbackNavItem;
-}) {
-  const isExternal = item.external || item.href.startsWith("http");
-  const linkClass =
-    "font-display text-lg uppercase tracking-widest text-ink-700 hover:text-brand-600 transition-colors";
-
-  if (isExternal) {
-    return (
-      <a
-        href={item.href}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={linkClass}
-      >
-        {item.label}
-      </a>
-    );
-  }
-
-  if (!item.children?.length) {
-    return (
-      <Link href={item.href} className={linkClass}>
-        {item.label}
-      </Link>
-    );
-  }
-
-  return (
-    <NavDropdown label={item.label} href={item.href} children={item.children} />
-  );
-}
-
 export function SiteHeader({ settings }: { settings: SiteSettings | null }) {
-  const nav = (settings?.mainNav?.length
-    ? settings.mainNav
-    : FALLBACK_NAV) as FallbackNavItem[];
-  const siteTitle = settings?.siteTitle ?? "River City Church";
+  const nav = (
+    settings?.mainNav?.length ? settings.mainNav : FALLBACK_NAV
+  ) as (NavItem & { external?: boolean })[];
 
   return (
-    <header className="relative sticky top-0 z-40 border-b border-cream-200/60 bg-[#fdfbf6]/95 backdrop-blur">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-4">
-        <Link
-          href="/"
-          className="flex items-center text-ink-800 hover:opacity-80 transition"
-          aria-label={siteTitle}
-        >
-          <Image
-            src="/brand/logo.svg"
-            alt={siteTitle}
-            width={183}
-            height={57}
-            priority
-            className="h-10 w-auto md:h-12"
-          />
-        </Link>
-        <nav
-          aria-label="Primary"
-          className="hidden items-center gap-7 md:flex"
-        >
-          {nav.map((item) => (
-            <NavLink key={item.href} item={item} />
-          ))}
-        </nav>
-        <Link
-          href="/visit/who-we-are"
-          className="hidden rounded-full bg-brand-500 px-5 py-2 font-display text-sm uppercase tracking-widest text-white transition hover:bg-brand-600 md:inline-flex"
-        >
-          New Here?
-        </Link>
-        <MobileNav items={nav} ctaHref="/visit/who-we-are" />
-      </div>
-    </header>
+    <HeaderBar
+      nav={nav}
+      siteTitle={settings?.siteTitle ?? "River City Church"}
+      serviceTime={settings?.serviceTime ?? "Sundays at 10:15 AM"}
+      address={
+        settings?.address
+          ? `${settings.address.line1 ?? ""}, ${settings.address.city ?? ""}, ${settings.address.state ?? ""} ${settings.address.zip ?? ""}`
+          : "3871 Kirby Whitten Pkwy, Bartlett, TN 38135"
+      }
+    />
   );
 }

@@ -11,38 +11,41 @@ type Props = {
   backlink?: { label: string; href: string };
 };
 
+// Design v2: oversized editorial headline, the last word set in the
+// italic serif accent. Variants map onto the new palette.
 const STYLES: Record<
   Variant,
-  {
-    section: string;
-    eyebrow: string;
-    headline: string;
-    intro: string;
-    backlink: string;
-  }
+  { section: string; eyebrow: string; intro: string; accent: string; rule: string }
 > = {
   brand: {
-    section: "bg-brand-600 text-white",
-    eyebrow: "text-brand-100",
-    headline: "text-white",
-    intro: "text-brand-50/95",
-    backlink: "text-brand-100 hover:text-white",
+    section: "bg-river-900 text-white",
+    eyebrow: "text-brand-300",
+    intro: "text-white/75",
+    accent: "text-brand-300",
+    rule: "border-white/15",
   },
   dark: {
-    section: "bg-ink-900 text-white",
+    section: "bg-river-950 text-white",
     eyebrow: "text-brand-300",
-    headline: "text-white",
-    intro: "text-cream-50/90",
-    backlink: "text-brand-300 hover:text-brand-200",
+    intro: "text-white/75",
+    accent: "text-brand-300",
+    rule: "border-white/15",
   },
   cream: {
-    section: "bg-cream-100 text-ink-700",
+    section: "bg-paper text-ink-900",
     eyebrow: "text-brand-600",
-    headline: "text-ink-800",
     intro: "text-ink-600",
-    backlink: "text-brand-600 hover:text-brand-700",
+    accent: "text-brand-600",
+    rule: "border-ink-900/10",
   },
 };
+
+function splitLast(headline: string): [string, string] {
+  const words = headline.trim().split(/\s+/);
+  if (words.length < 2) return ["", headline];
+  const last = words.pop()!;
+  return [words.join(" ") + " ", last];
+}
 
 export function PageHero({
   eyebrow,
@@ -52,33 +55,35 @@ export function PageHero({
   backlink,
 }: Props) {
   const s = STYLES[variant];
+  const [lead, last] = splitLast(headline);
   return (
-    <section className={`${s.section} relative`}>
-      <div className="mx-auto max-w-5xl px-6 py-16 md:py-24">
+    <section className={`${s.section} relative overflow-hidden`}>
+      <div className="mx-auto max-w-[90rem] px-5 pb-16 pt-20 md:px-10 md:pb-24 md:pt-32">
         {backlink && (
           <Link
             href={backlink.href}
-            className={`mb-4 inline-block font-display text-sm uppercase tracking-widest ${s.backlink}`}
+            className={`mb-6 inline-block text-sm font-semibold ${s.eyebrow} hover:opacity-80`}
           >
             ← {backlink.label}
           </Link>
         )}
         {eyebrow && (
           <p
-            className={`font-display text-sm uppercase tracking-[0.3em] ${s.eyebrow}`}
+            className={`text-xs font-semibold uppercase tracking-[0.22em] ${s.eyebrow}`}
           >
             {eyebrow}
           </p>
         )}
-        <h1
-          className={`mt-2 font-display text-5xl uppercase leading-tight tracking-wide md:text-6xl ${s.headline}`}
-        >
-          {headline}
+        <h1 className="rise mt-4 max-w-5xl text-6xl font-bold leading-[0.95] tracking-tight md:text-8xl lg:text-[8.5rem]">
+          {lead}
+          <em className={s.accent}>{last}</em>
         </h1>
         {intro && (
-          <p className={`mt-4 max-w-2xl text-lg leading-7 ${s.intro}`}>
-            {intro}
-          </p>
+          <div className={`rise rise-2 mt-10 border-t pt-8 ${s.rule}`}>
+            <p className={`max-w-2xl text-lg leading-8 md:text-xl ${s.intro}`}>
+              {intro}
+            </p>
+          </div>
         )}
       </div>
     </section>

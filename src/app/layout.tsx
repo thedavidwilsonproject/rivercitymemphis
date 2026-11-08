@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Bebas_Neue, Roboto_Slab } from "next/font/google";
+import { Inter, Inter_Tight, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
@@ -9,15 +9,23 @@ import { siteSettingsQuery } from "@/sanity/queries";
 import type { SiteSettings } from "@/types/sanity";
 import { ORG, SITE_URL } from "@/lib/site";
 
-const display = Bebas_Neue({
-  weight: "400",
+// Design v2 — editorial pairing: tight grotesk display + italic serif accent.
+const display = Inter_Tight({
   variable: "--font-display",
   subsets: ["latin"],
   display: "swap",
 });
 
-const body = Roboto_Slab({
+const body = Inter({
   variable: "--font-body",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const serif = Instrument_Serif({
+  weight: "400",
+  style: ["normal", "italic"],
+  variable: "--font-serif",
   subsets: ["latin"],
   display: "swap",
 });
@@ -131,7 +139,7 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className={`${display.variable} ${body.variable} h-full antialiased`}
+      className={`${display.variable} ${body.variable} ${serif.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <JsonLd data={churchJsonLd} />
