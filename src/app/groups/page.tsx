@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Metadata } from "next";
 import Image from "next/image";
 import {
@@ -108,10 +109,12 @@ const F = {
   cta: {
     headline: "Real growth happens in circles.",
     body: "Take the first step this week — pick a group, request to join, or start one of your own.",
-    primaryLabel: "Browse all groups",
-    primaryHref: "/groups",
-    secondaryLabel: "Start a new group",
-    secondaryHref: "/forms",
+    // Church Center's public groups directory is empty (all groups are
+    // private) and /forms 404s, so point at the groups & serving interest form.
+    primaryLabel: "I'm interested",
+    primaryHref: "/people/forms/1318485",
+    secondaryLabel: "Ask a question",
+    secondaryHref: "/contact",
   },
 };
 
@@ -158,16 +161,16 @@ export default async function GroupsPage() {
         headline={heroHeadline}
         intro={heroIntro}
       >
-        <ChurchCenterModalLink href="/groups" className={CC_SOLID_DARK}>
-          Browse all groups
+        <ChurchCenterModalLink href="/people/forms/1318485" className={CC_SOLID_DARK}>
+          Find a group
         </ChurchCenterModalLink>
-        <ChurchCenterModalLink href="/forms" className={CC_OUTLINE_DARK}>
-          Start a new group
-        </ChurchCenterModalLink>
+        <a href="#how-it-works" className={CC_OUTLINE_DARK}>
+          How groups work
+        </a>
       </PhotoHero>
 
       {/* INTRO */}
-      <Section tone="white">
+      <Section tone="white" id="how-it-works">
         <Container>
           <div className="grid gap-10 lg:grid-cols-[1fr_1.2fr] lg:gap-24">
             <div>
@@ -313,12 +316,12 @@ export default async function GroupsPage() {
         >
           {cta?.primaryCta?.label ?? F.cta.primaryLabel}
         </ChurchCenterModalLink>
-        <ChurchCenterModalLink
+        <Link
           href={cta?.secondaryCta?.href ?? F.cta.secondaryHref}
           className={CC_OUTLINE_DARK}
         >
           {cta?.secondaryCta?.label ?? F.cta.secondaryLabel}
-        </ChurchCenterModalLink>
+        </Link>
       </CtaBand>
     </div>
   );

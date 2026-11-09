@@ -6,7 +6,7 @@ import {
   formatSignupDate,
   type PcoSignup,
 } from "@/lib/pco";
-import { getPublishedOrderMap, isVisibleSignup } from "@/lib/published-events";
+import { getPublishedOrderMap, getSignupVisibility } from "@/lib/published-events";
 import {
   Button,
   Container,
@@ -105,15 +105,16 @@ export default async function EventsPage() {
   let events: PcoSignup[] = [];
   let loadError = false;
   try {
-    const [allEvents, orderMap] = await Promise.all([
+    const [allEvents, orderMap, isVisible] = await Promise.all([
       listOpenSignups(50),
       getPublishedOrderMap(),
+      getSignupVisibility(),
     ]);
     // Keep only events the editor has flipped to "Show on website",
     // then sort: manual displayOrder first (ascending), then the
     // PCO library's date-based default order.
     events = allEvents
-      .filter((e) => isVisibleSignup(orderMap, e.id))
+      .filter((e) => isVisible(e.id))
       .sort((a, b) => {
         const oa = orderMap.get(a.id);
         const ob = orderMap.get(b.id);

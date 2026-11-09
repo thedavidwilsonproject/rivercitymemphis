@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getSignup, formatSignupSchedule } from "@/lib/pco";
-import { getPublishedIdSet, isVisibleSignup } from "@/lib/published-events";
+import { getSignupVisibility } from "@/lib/published-events";
 import { ChurchCenterModalLink, ChurchCenterScript } from "@/components/church-center";
 import {
   Button,
@@ -19,11 +19,8 @@ type Params = { params: Promise<{ id: string }> };
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { id } = await params;
-  const [s, published] = await Promise.all([
-    getSignup(id),
-    getPublishedIdSet(),
-  ]);
-  if (!s || !isVisibleSignup(published, id)) return { title: "Event" };
+  const [s, isVisible] = await Promise.all([getSignup(id), getSignupVisibility()]);
+  if (!s || !isVisible(id)) return { title: "Event" };
   return {
     title: s.name,
     description:
@@ -34,12 +31,9 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 
 export default async function EventDetailPage({ params }: Params) {
   const { id } = await params;
-  const [s, published] = await Promise.all([
-    getSignup(id),
-    getPublishedIdSet(),
-  ]);
+  const [s, isVisible] = await Promise.all([getSignup(id), getSignupVisibility()]);
   // Hide events that aren't open OR haven't been flipped on by an editor
-  if (!s || !s.open || !isVisibleSignup(published, id)) notFound();
+  if (!s || !s.open || !isVisible(id)) notFound();
 
   const schedule = formatSignupSchedule(s);
   const isOngoing = !s.startsAt;

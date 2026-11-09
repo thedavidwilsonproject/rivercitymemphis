@@ -4,6 +4,7 @@
  */
 import { client } from "@/sanity/client";
 import { publishedEventsQuery } from "@/sanity/queries";
+import { getChurchCenterListedSignupIds } from "@/lib/church-center";
 
 export type PublishedEvent = {
   pcoId: string;
@@ -36,11 +37,16 @@ export async function getPublishedOrderMap(): Promise<Map<string, number | undef
 }
 
 /**
- * Design v2 prototype: is a PCO signup visible on the site?
- * When editors have curated an allowlist in Sanity, honour it. When the
- * allowlist is empty (nothing curated yet), show every open, public
- * Church Center signup instead of an empty page.
+ * Design v2: which PCO signups appear on the site. A signup is visible when
+ * an editor switched it on in Sanity OR it is publicly listed on Church
+ * Center (rivercitymemphis.churchcenter.com/registrations) — so the site
+ * mirrors Church Center. If neither source has anything, show all open.
  */
-export function isVisibleSignup(published: Set<string> | Map<string, unknown>, id: string): boolean {
-  return published.size === 0 || published.has(id);
+export async function getSignupVisibility(): Promise<(id: string) => boolean> {
+  const [published, listed] = await Promise.all([
+    getPublishedIdSet(),
+    getChurchCenterListedSignupIds(),
+  ]);
+  if (published.size === 0 && (!listed || listed.size === 0)) return () => true;
+  return (id) => published.has(id) || Boolean(listed?.has(id));
 }

@@ -14,6 +14,7 @@ import {
   Section,
 } from "@/components/v2/ui";
 import type { ConnectPageDoc, SanityImage } from "@/types/sanity";
+import { ChurchCenterForms } from "@/components/v2/pco-blocks";
 
 export const metadata: Metadata = {
   title: "Connect",
@@ -197,6 +198,8 @@ export default async function ConnectHubPage() {
           </div>
         </Container>
       </Section>
+
+      <ChurchCenterForms />
 
       <CtaBand
         headline={cta?.headline ?? F.cta.headline}

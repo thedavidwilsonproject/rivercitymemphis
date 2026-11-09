@@ -5,14 +5,15 @@
  */
 import Link from "next/link";
 import { listOpenSignups, formatSignupDate, type PcoSignup } from "@/lib/pco";
-import { getPublishedIdSet, isVisibleSignup } from "@/lib/published-events";
+import { getSignupVisibility } from "@/lib/published-events";
 import { ChurchCenterModalLink, ChurchCenterScript } from "@/components/church-center";
 import { Container, SectionHeader } from "@/components/v2/ui";
+import { CC_FORMS } from "@/lib/church-center";
 
 async function visibleSignups(): Promise<PcoSignup[]> {
   try {
-    const [all, published] = await Promise.all([listOpenSignups(50), getPublishedIdSet()]);
-    return all.filter((s) => isVisibleSignup(published, s.id));
+    const [all, isVisible] = await Promise.all([listOpenSignups(50), getSignupVisibility()]);
+    return all.filter((s) => isVisible(s.id));
   } catch (e) {
     console.error("PCO signups unavailable:", e);
     return [];
@@ -153,6 +154,53 @@ export async function SignupCallout({
             </div>
           </div>
         </div>
+      </Container>
+    </section>
+  );
+}
+
+/**
+ * The public Church Center forms as a card row. Each opens in the
+ * Church Center modal so visitors stay on the site.
+ */
+export function ChurchCenterForms({
+  eyebrow = "Take a next step",
+  headline = "We'd love to hear from you.",
+  accent = "from you.",
+  forms = ["connection", "groupsServing", "volunteer"],
+}: {
+  eyebrow?: string;
+  headline?: string;
+  accent?: string;
+  forms?: (keyof typeof CC_FORMS)[];
+}) {
+  return (
+    <section className="bg-paper text-ink-900">
+      <ChurchCenterScript />
+      <Container className="py-20 md:py-28">
+        <SectionHeader eyebrow={eyebrow} headline={headline} accent={accent} />
+        <ul className={`grid gap-6 ${forms.length >= 3 ? "md:grid-cols-3" : "md:grid-cols-2"}`}>
+          {forms.map((k) => {
+            const f = CC_FORMS[k];
+            return (
+              <li key={k}>
+                <ChurchCenterModalLink
+                  href={f.href}
+                  className="group flex h-full flex-col rounded-3xl border border-ink-900/10 bg-white/70 p-8 transition hover:border-ink-900/30 hover:bg-white"
+                >
+                  <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-600">
+                    {f.label}
+                  </span>
+                  <span className="mt-3 text-2xl font-bold leading-tight tracking-tight">{f.title}</span>
+                  <span className="mt-3 flex-1 leading-7 text-ink-600">{f.body}</span>
+                  <span className="mt-6 text-sm font-semibold transition group-hover:translate-x-1 group-hover:text-brand-600">
+                    Open the form →
+                  </span>
+                </ChurchCenterModalLink>
+              </li>
+            );
+          })}
+        </ul>
       </Container>
     </section>
   );
