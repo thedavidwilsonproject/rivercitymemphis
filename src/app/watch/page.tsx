@@ -5,7 +5,7 @@ import { recentSermonSeriesQuery } from "@/sanity/queries";
 import { urlFor } from "@/sanity/image";
 import type { SermonSeriesSummary } from "@/types/sanity";
 import { PageHero } from "@/components/page-hero";
-import { Button, Container, CtaBand, Eyebrow, Headline, Section, SectionHeader } from "@/components/v2/ui";
+import { Button, Container, CtaBand, Headline, Section, SectionHeader } from "@/components/v2/ui";
 import { LiteYouTube } from "@/components/v2/lite-youtube";
 import { VideoCard, YouTubeLink, videoMeta } from "@/components/v2/video";
 import {
@@ -107,7 +107,6 @@ export default async function WatchPage() {
     <div>
       <PageHero
         variant="dark"
-        eyebrow="Teaching"
         headline="Watch"
         intro="A new message every Sunday — watch the latest here, join the full service live at 10:15 AM, or catch up on a series."
       />
@@ -120,7 +119,6 @@ export default async function WatchPage() {
               <div className="grid items-center gap-10 lg:grid-cols-[1.55fr_1fr] lg:gap-14">
                 <LiteYouTube id={latest.id} title={latest.rawTitle} thumbnail={latest.thumbnail} />
                 <div>
-                  <Eyebrow tone="dark">Latest message</Eyebrow>
                   {latest.series && (
                     <p className="mt-5 font-serif text-2xl italic text-white/60">
                       {latest.series}
@@ -150,19 +148,11 @@ export default async function WatchPage() {
             <Container>
               <div className="grid gap-10 overflow-hidden rounded-3xl bg-river-900 p-8 md:p-12 lg:grid-cols-[1fr_1.1fr] lg:items-center lg:gap-14">
                 <div>
-                  <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.22em] text-brand-300">
-                    <span className="relative flex h-2.5 w-2.5" aria-hidden="true">
-                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-60 motion-reduce:animate-none" />
-                      <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-red-500" />
-                    </span>
-                    Live on YouTube
-                  </p>
                   <Headline
                     tone="dark"
                     size="md"
                     text="Every Sunday at 10:15."
                     accent="10:15."
-                    className="mt-4"
                   />
                   <p className="mt-5 max-w-md text-white/70">
                     Can&rsquo;t make it to Bartlett? Worship with us from wherever you are —
@@ -177,9 +167,6 @@ export default async function WatchPage() {
                 </div>
                 {latestStream && (
                   <div>
-                    <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-white/40">
-                      Last Sunday&rsquo;s full service
-                    </p>
                     <VideoCard v={latestStream} size="sm" />
                   </div>
                 )}
@@ -193,7 +180,6 @@ export default async function WatchPage() {
               <Container>
                 <SectionHeader
                   tone="dark"
-                  eyebrow="Current series"
                   headline={latest.series}
                   intro={`${current.length} messages so far. Start from the beginning or jump in anywhere.`}
                 />
@@ -212,7 +198,6 @@ export default async function WatchPage() {
               <Container>
                 <SectionHeader
                   tone="dark"
-                  eyebrow="Recent messages"
                   headline="Catch up."
                   action={<YouTubeLink href={`${YT_CHANNEL_URL}/videos`}>All videos on YouTube</YouTubeLink>}
                 />
@@ -234,7 +219,7 @@ export default async function WatchPage() {
             <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
               Series <em className="text-brand-300">library</em>
             </h2>
-            <span className="text-xs font-semibold uppercase tracking-[0.22em] text-white/50">
+            <span className="text-sm text-white/50">
               Last 12 months
             </span>
           </header>

@@ -21,7 +21,6 @@ export const metadata: Metadata = {
 
 const F = {
   hero: {
-    eyebrow: "Visit",
     headline: "What to Expect",
     intro:
       "From the parking lot to your seat — here's exactly what your first Sunday at RCC looks like.",
@@ -147,7 +146,6 @@ export default async function WhatToExpectPage() {
       <PhotoHero
         image={img(hero.image as { asset?: unknown }, F.hero.image)}
         alt={heroAlt}
-        eyebrow={hero.eyebrow}
         headline={hero.headline ?? F.hero.headline}
         accent="Expect"
         intro={hero.intro}

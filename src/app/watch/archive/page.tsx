@@ -36,7 +36,6 @@ export default async function ArchiveIndexPage() {
     <div>
       <PageHero
         variant="dark"
-        eyebrow="Watch"
         headline="Sermon Archive"
         backlink={{ label: "Recent series", href: "/watch" }}
         intro={

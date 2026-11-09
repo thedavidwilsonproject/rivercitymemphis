@@ -12,7 +12,6 @@ import { PortableBody } from "@/components/portable-body";
 import {
   Container,
   CtaBand,
-  Eyebrow,
   Headline,
   PhotoHero,
   Section,
@@ -28,7 +27,6 @@ export const metadata: Metadata = {
 
 const F = {
   hero: {
-    eyebrow: "Connect / Do life with people",
     headline: "RCC Groups",
     intro:
       "Real growth happens in circles, not rows. Groups at RCC are how we get to know each other, learn alongside each other, and experience the kind of community we were made for.",
@@ -36,7 +34,6 @@ const F = {
     alt: "A crowd of RCC adults fellowshipping in the lobby after a Sunday service",
   },
   intro: {
-    eyebrow: "Why groups",
     headline: "A huge deal at RCC.",
     paragraphs: [
       "Groups are a huge deal at River City Church. We believe that getting to know others better, learning alongside them, and experiencing true community are vital to spiritual growth.",
@@ -45,7 +42,6 @@ const F = {
   },
   kinds: [
     {
-      eyebrow: "For adults in similar seasons",
       name: "Community Groups",
       format: "10–12 adults · meets twice a month in homes",
       schedule: "Ongoing · twice a month · in homes around Memphis",
@@ -60,7 +56,6 @@ const F = {
       alt: "A mixed group of RCC adults standing and talking outside the church entrance",
     },
     {
-      eyebrow: "For deeper, shorter-term study",
       name: "Focus Groups",
       format: "Men with men, women with women · 90 days",
       schedule: "90-day sessions · book + discussion",
@@ -76,7 +71,6 @@ const F = {
     },
   ],
   join: {
-    eyebrow: "How to join",
     headline: "Two easy on-ramps.",
     intro:
       "You don't need to know anyone to get started. Pick the on-ramp that fits, and we'll walk you through the next step.",
@@ -101,7 +95,6 @@ const F = {
       "Still not sure where to start? Email info@rivercitymemphis.org and we'll help you find a fit.",
   },
   embed: {
-    eyebrow: "Available now",
     headline: "Find your group.",
     intro:
       "Browse groups currently open for new members. Click one to request to join — the group leader will reach out to you.",
@@ -134,7 +127,6 @@ export default async function GroupsPage() {
   const doc = await safeFetch<GroupsPageDoc | null>(groupsPageQuery);
 
   const hero = doc?.hero ?? {};
-  const heroEyebrow = hero.eyebrow ?? F.hero.eyebrow;
   const heroHeadline = hero.headline ?? F.hero.headline;
   const heroIntro = hero.intro ?? F.hero.intro;
   const heroImageSrc = imgSrc(hero.image, F.hero.image, 2200);
@@ -157,7 +149,6 @@ export default async function GroupsPage() {
       <PhotoHero
         image={heroImageSrc}
         alt={heroImageAlt}
-        eyebrow={heroEyebrow}
         headline={heroHeadline}
         intro={heroIntro}
       >
@@ -174,7 +165,6 @@ export default async function GroupsPage() {
         <Container>
           <div className="grid gap-10 lg:grid-cols-[1fr_1.2fr] lg:gap-24">
             <div>
-              <Eyebrow>{intro?.eyebrow ?? F.intro.eyebrow}</Eyebrow>
               <Headline
                 text={intro?.headline ?? F.intro.headline}
                 accent={
@@ -223,8 +213,7 @@ export default async function GroupsPage() {
                   )}
                 </div>
                 <div>
-                  {k.eyebrow && <Eyebrow>{k.eyebrow}</Eyebrow>}
-                  <h2 className="mt-4 text-5xl font-bold leading-[0.95] tracking-tight text-ink-900 md:text-7xl">
+                  <h2 className="text-5xl font-bold leading-[0.95] tracking-tight text-ink-900 md:text-7xl">
                     {k.name}
                   </h2>
                   {(k.format || k.schedule) && (
@@ -268,7 +257,6 @@ export default async function GroupsPage() {
         <Container>
           <SectionHeader
             tone="dark"
-            eyebrow={join?.eyebrow ?? F.join.eyebrow}
             headline={join?.headline ?? F.join.headline}
             accent={
               (join?.headline ?? F.join.headline).endsWith("on-ramps.")

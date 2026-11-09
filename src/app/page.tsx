@@ -41,7 +41,6 @@ async function safeFetch<T>(query: string): Promise<T | null> {
 }
 
 const FALLBACK_HERO = {
-  eyebrow: "Bartlett, TN",
   headline: "Refocus your life, home, and church back to God.",
   subhead:
     "A relaxed, friendly community where people accept you for who you are. Join us Sundays at 10:15 AM.",
@@ -158,12 +157,7 @@ export default async function Home() {
         />
 
         <div className="mx-auto flex w-full max-w-[90rem] flex-1 flex-col justify-end px-5 pb-10 pt-40 md:px-10 md:pb-14">
-          {hero.eyebrow && (
-            <p className="rise text-xs font-semibold uppercase tracking-[0.25em] text-brand-300">
-              {hero.eyebrow}
-            </p>
-          )}
-          <h1 className="rise rise-2 mt-5 max-w-6xl text-[3.2rem] font-bold leading-[0.92] tracking-tight sm:text-6xl md:text-7xl xl:text-[8.5rem]">
+          <h1 className="rise max-w-6xl text-[3.2rem] font-bold leading-[0.92] tracking-tight sm:text-6xl md:text-7xl xl:text-[8.5rem]">
             {headLead}
             <em className="text-brand-300">{headAccent}</em>
           </h1>
@@ -220,10 +214,7 @@ export default async function Home() {
           </div>
 
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-800">
-              Every Sunday
-            </p>
-            <h2 className="mt-4 text-6xl font-bold leading-[0.95] tracking-tight text-ink-900 md:text-7xl">
+            <h2 className="text-6xl font-bold leading-[0.95] tracking-tight text-ink-900 md:text-7xl">
               Sunday <em className="text-brand-600">Gatherings</em>
             </h2>
             <p className="mt-6 max-w-lg text-lg leading-8 text-ink-600">
@@ -274,10 +265,7 @@ export default async function Home() {
       {/* ── STATEMENT ─────────────────────────────────────────────────── */}
       <section className="border-y border-ink-900/10 bg-white/50">
         <div className="mx-auto max-w-[90rem] px-5 py-24 md:px-10 md:py-32">
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-800">
-            Our culture
-          </p>
-          <p className="mt-6 max-w-6xl text-4xl font-semibold leading-[1.1] tracking-tight text-ink-900 md:text-6xl">
+          <p className="max-w-6xl text-4xl font-semibold leading-[1.1] tracking-tight text-ink-900 md:text-6xl">
             <em className="text-brand-600">Come as you are.</em> You don&apos;t
             need to know anyone, dress a certain way, or have answers ready{" "}
             <span className="text-ink-500">— just come.</span>
@@ -313,10 +301,7 @@ export default async function Home() {
                   className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]"
                 />
               </div>
-              <p className="mt-6 text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-800">
-                {c.eyebrow}
-              </p>
-              <h3 className="mt-2 text-3xl font-bold tracking-tight text-ink-900">
+              <h3 className="mt-6 text-3xl font-bold tracking-tight text-ink-900">
                 {c.title}
               </h3>
               <p className="mt-3 leading-7 text-ink-600">{c.blurb}</p>
@@ -335,10 +320,7 @@ export default async function Home() {
         <div className="mx-auto max-w-[90rem] px-5 py-24 md:px-10 md:py-32">
           <header className="mb-14 flex flex-col justify-between gap-6 md:flex-row md:items-end">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-300">
-                {latest?.series ? "Current series" : "Watch & listen"}
-              </p>
-              <h2 className="mt-4 text-6xl font-bold leading-[0.95] tracking-tight md:text-7xl">
+              <h2 className="text-6xl font-bold leading-[0.95] tracking-tight md:text-7xl">
                 {splitAccent(bandTitle)[0]}
                 <em className="text-brand-300">{splitAccent(bandTitle)[1]}</em>
               </h2>
@@ -367,11 +349,11 @@ export default async function Home() {
                   className="group mt-auto flex items-center justify-between gap-4 rounded-2xl border border-white/15 px-6 py-5 transition hover:bg-white/5"
                 >
                   <span>
-                    <span className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-brand-300">
+                    <span className="flex items-center gap-2.5 text-lg font-bold">
                       <span className="h-2 w-2 rounded-full bg-red-500" aria-hidden="true" />
-                      Live Sundays
+                      Live Sundays at 10:15 AM
                     </span>
-                    <span className="mt-1 block text-lg font-bold">Stream the 10:15 AM service</span>
+                    <span className="mt-1 block text-sm text-white/60">Stream the full service on YouTube</span>
                   </span>
                   <span className="text-white/60 transition group-hover:translate-x-1 group-hover:text-white">↗</span>
                 </a>
@@ -457,7 +439,6 @@ export default async function Home() {
 
 const NEXT_STEPS = [
   {
-    eyebrow: "New here?",
     title: "Next",
     blurb:
       "A 15-minute session with our lead pastor Jonathan Dunn — why we exist, how to get connected, and answers to your questions.",
@@ -466,7 +447,6 @@ const NEXT_STEPS = [
     alt: "Jonathan Dunn teaching at RCC on a Sunday morning",
   },
   {
-    eyebrow: "For your whole family",
     title: "Family Ministries",
     blurb:
       "Safe, fun, age-appropriate environments where your kids will love to grow.",
@@ -475,7 +455,6 @@ const NEXT_STEPS = [
     alt: "A small group leader teaching kids at RCC",
   },
   {
-    eyebrow: "Serve with us",
     title: "Volunteer",
     blurb:
       "Every Sunday at RCC happens because volunteers show up early and stay late. Host team, kids, production, parking — it all takes hands.",
@@ -484,7 +463,6 @@ const NEXT_STEPS = [
     alt: "An RCC host team volunteer giving a thumbs up at the front entrance",
   },
   {
-    eyebrow: "Love your city",
     title: "Be Rich",
     blurb:
       "Serving our neighbors, supporting non-profits, and showing the love of Jesus in tangible ways.",

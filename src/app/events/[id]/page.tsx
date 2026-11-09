@@ -8,7 +8,6 @@ import {
   Button,
   Container,
   CtaBand,
-  Eyebrow,
   Headline,
   Section,
 } from "@/components/v2/ui";
@@ -79,14 +78,12 @@ export default async function EventDetailPage({ params }: Params) {
             >
               ← All events
             </Link>
-            <p className="rise mt-10 text-xs font-semibold uppercase tracking-[0.22em] text-brand-300">
-              {schedule}
-            </p>
-            <h1 className="rise rise-2 mt-4 text-5xl font-bold leading-[0.95] tracking-tight md:text-7xl">
+            <h1 className="rise mt-10 text-5xl font-bold leading-[0.95] tracking-tight md:text-7xl">
               {s.name}
             </h1>
+            <p className="rise rise-2 mt-6 text-xl font-semibold text-brand-300">{schedule}</p>
             {s.location && (
-              <p className="mt-5 text-lg text-white/75">{s.location}</p>
+              <p className="mt-1 text-lg text-white/75">{s.location}</p>
             )}
             <div className="mt-10 flex flex-wrap gap-3">
               <ChurchCenterModalLink
@@ -124,8 +121,7 @@ export default async function EventDetailPage({ params }: Params) {
         <Container>
           <div className="grid gap-14 lg:grid-cols-[1fr_360px] lg:gap-24">
             <div>
-              <Eyebrow>About this event</Eyebrow>
-              <Headline text="What to expect." accent="expect." className="mt-4" />
+              <Headline text="What to expect." accent="expect." />
               <div className="mt-8 max-w-2xl space-y-5 text-lg leading-8 text-ink-600">
                 {s.descriptionParagraphs && s.descriptionParagraphs.length > 0 ? (
                   s.descriptionParagraphs.map((p, i) => <p key={i}>{p}</p>)
@@ -141,9 +137,7 @@ export default async function EventDetailPage({ params }: Params) {
             </div>
             <aside>
               <div className="sticky top-28 rounded-2xl border border-ink-900/15 p-7">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-800">
-                  At a glance
-                </p>
+                <h2 className="text-xl font-bold tracking-tight">At a glance</h2>
                 <dl className="mt-6 divide-y divide-ink-900/10">
                   <GlanceRow label="When">
                     {schedule}

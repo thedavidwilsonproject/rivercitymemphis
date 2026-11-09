@@ -75,7 +75,6 @@ export function KidsAndStudents({
     <Section tone="light">
       <Container>
         <SectionHeader
-          eyebrow="Family Ministry"
           headline={title}
           intro={intro}
           align="split"
@@ -133,18 +132,13 @@ export function KidsAndStudents({
 
                 {/* Text block */}
                 <div className="mt-10">
-                  {m.name && (
-                    <p
-                      className="text-[11px] font-semibold uppercase tracking-[0.2em]"
-                      style={{ color: ringColor }}
-                    >
-                      {m.name}
-                    </p>
-                  )}
-                  {m.age && (
-                    <h3 className="mt-2 text-3xl font-bold tracking-tight text-ink-900 transition-colors group-hover:text-brand-600">
-                      {m.age}
+                  {(m.name || m.age) && (
+                    <h3 className="text-3xl font-bold tracking-tight text-ink-900 transition-colors group-hover:text-brand-600">
+                      {m.name ?? m.age}
                     </h3>
+                  )}
+                  {m.name && m.age && (
+                    <p className="mt-1 font-serif text-xl italic text-ink-600">{m.age}</p>
                   )}
                   {m.description && (
                     <p className="mt-3 leading-7 text-ink-600">

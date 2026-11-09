@@ -11,7 +11,6 @@ import {
   Button,
   Container,
   CtaBand,
-  Eyebrow,
   Section,
 } from "@/components/v2/ui";
 
@@ -101,7 +100,6 @@ export default async function LeadershipPage() {
     <div>
       {peopleJsonLd && <JsonLd data={peopleJsonLd} />}
       <PageHero
-        eyebrow="Visit"
         headline="Leadership"
         intro="The people God has called to shepherd, teach, and serve our church family."
         variant="cream"
@@ -130,13 +128,13 @@ export default async function LeadershipPage() {
                   />
                 )}
                 <div>
-                  {lead.role && <Eyebrow tone="dark">{lead.role}</Eyebrow>}
-                  <h2 className="mt-4 text-6xl font-bold leading-[0.95] tracking-tight md:text-8xl">
+                  <h2 className="text-6xl font-bold leading-[0.95] tracking-tight md:text-8xl">
                     {lead.name.split(" ").slice(0, -1).join(" ")}{" "}
                     <em className="text-brand-300">
                       {lead.name.split(" ").slice(-1)[0]}
                     </em>
                   </h2>
+                  {lead.role && <p className="mt-4 text-xl text-white/70">{lead.role}</p>}
                   <Bio value={lead.bio} tone="dark" />
                 </div>
               </article>
@@ -158,14 +156,10 @@ export default async function LeadershipPage() {
                           className="aspect-square w-full max-w-md rounded-2xl object-cover"
                         />
                       )}
-                      {p.role && (
-                        <p className="mt-8 text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-800">
-                          {p.role}
-                        </p>
-                      )}
-                      <h3 className="mt-2 text-4xl font-bold tracking-tight text-ink-900">
+                      <h3 className="mt-8 text-4xl font-bold tracking-tight text-ink-900">
                         {p.name}
                       </h3>
+                      {p.role && <p className="mt-2 text-lg text-ink-500">{p.role}</p>}
                       <Bio value={p.bio} />
                     </article>
                   ))}

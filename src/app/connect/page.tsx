@@ -8,7 +8,6 @@ import {
   Button,
   Container,
   CtaBand,
-  Eyebrow,
   PhotoCard,
   PhotoHero,
   Section,
@@ -24,7 +23,6 @@ export const metadata: Metadata = {
 
 const F = {
   hero: {
-    eyebrow: "Connect",
     headline: "Take your next step.",
     intro:
       "We're always looking for ways to help people plug in to what God is doing in our city, nation, and world. Here are four good places to start.",
@@ -33,7 +31,6 @@ const F = {
   },
   cards: [
     {
-      eyebrow: "New here?",
       title: "Next",
       blurb:
         "A 15-minute session with our lead pastor Jonathan Dunn — why we exist, how to get connected, and answers to your questions.",
@@ -44,7 +41,6 @@ const F = {
       featured: true,
     },
     {
-      eyebrow: "For your whole family",
       title: "Family Ministries",
       blurb:
         "Safe, fun, age-appropriate environments where your kids will love to grow — and where we partner with you to help them see Jesus more clearly.",
@@ -54,7 +50,6 @@ const F = {
       alt: "A small group leader teaching kids at RCC",
     },
     {
-      eyebrow: "Real friendship",
       title: "Groups",
       blurb:
         "Circles are better than rows. Get plugged into a small group where life happens around a table — questions, laughter, prayer, and the kind of friendship that lasts.",
@@ -64,7 +59,6 @@ const F = {
       alt: "RCC members talking in the lobby with coffee after a service",
     },
     {
-      eyebrow: "Love your city",
       title: "Be Rich",
       blurb:
         "We believe we're on mission in our city to reach those in need — serving our neighbors, supporting non-profits, and showing the love of Jesus in tangible ways.",
@@ -101,7 +95,6 @@ export default async function ConnectHubPage() {
   const doc = await safeFetch<ConnectPageDoc | null>(connectPageQuery);
   const hero = { ...F.hero, ...(doc?.hero ?? {}) };
   const cards = (doc?.cards?.length ? doc.cards : F.cards).map((c, i) => ({
-    eyebrow: c.eyebrow ?? F.cards[i]?.eyebrow,
     title: c.title ?? F.cards[i]?.title ?? "",
     blurb: c.blurb ?? F.cards[i]?.blurb,
     href: c.href ?? F.cards[i]?.href ?? "#",
@@ -122,7 +115,6 @@ export default async function ConnectHubPage() {
       <PhotoHero
         image={imgSrc(hero.image as SanityImage, F.hero.image, 2200)}
         alt={(hero.image as SanityImage)?.alt ?? F.hero.alt}
-        eyebrow={hero.eyebrow}
         headline={hero.headline ?? F.hero.headline}
         accent={
           (hero.headline ?? F.hero.headline).endsWith("next step.")
@@ -147,7 +139,6 @@ export default async function ConnectHubPage() {
                       href={c.href}
                       image={src || undefined}
                       alt={c.alt}
-                      eyebrow={c.eyebrow}
                       title={c.title}
                       blurb={c.blurb}
                       cta={c.ctaLabel}
@@ -178,8 +169,7 @@ export default async function ConnectHubPage() {
                       )}
                     </div>
                     <div>
-                      {c.eyebrow && <Eyebrow>{c.eyebrow}</Eyebrow>}
-                      <h2 className="mt-4 text-5xl font-bold leading-[0.95] tracking-tight text-ink-900 md:text-7xl">
+                      <h2 className="text-5xl font-bold leading-[0.95] tracking-tight text-ink-900 md:text-7xl">
                         {c.title}
                       </h2>
                       {c.blurb && (

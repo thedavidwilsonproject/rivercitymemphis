@@ -4,7 +4,6 @@ import {
   Button,
   Container,
   CtaBand,
-  Eyebrow,
   Headline,
   PhotoHero,
   Section,
@@ -20,7 +19,6 @@ const VOLUNTEER_FORM_URL =
   "https://rivercitymemphis.churchcenter.com/pages/volunteer-form";
 
 const HERO = {
-  eyebrow: "Connect / Get plugged in",
   headline: "Volunteer at RCC",
   intro:
     "RCC runs on people who show up to serve. Whether you've got 30 minutes or a Sunday, there's a spot that fits your gifts and your schedule. Tell us a little about yourself and we'll connect you with a team lead.",
@@ -29,7 +27,6 @@ const HERO = {
 };
 
 const INTRO = {
-  eyebrow: "Why we serve",
   headline: "Real people. Real impact.",
   paragraphs: [
     "Every Sunday at RCC happens because volunteers show up early and stay late. Host team, kids and students, production, parking, coffee, prayer — it all takes hands.",
@@ -105,7 +102,6 @@ export default function VolunteerPage() {
       <PhotoHero
         image={HERO.image}
         alt={HERO.alt}
-        eyebrow={HERO.eyebrow}
         headline={HERO.headline}
         accent="at RCC"
         intro={HERO.intro}
@@ -123,8 +119,7 @@ export default function VolunteerPage() {
         <Container>
           <div className="grid gap-10 lg:grid-cols-[1fr_1.2fr] lg:gap-24">
             <div>
-              <Eyebrow>{INTRO.eyebrow}</Eyebrow>
-              <Headline text={INTRO.headline} accent="Real impact." className="mt-4" />
+              <Headline text={INTRO.headline} accent="Real impact." />
             </div>
             <div className="space-y-5 text-lg leading-8 text-ink-600 md:text-xl md:leading-9">
               {INTRO.paragraphs.map((p, i) => (
@@ -150,8 +145,7 @@ export default function VolunteerPage() {
                     className="object-cover"
                   />
                 </div>
-                <Eyebrow className="mt-7">Team</Eyebrow>
-                <h2 className="mt-2 text-4xl font-bold tracking-tight text-ink-900 md:text-5xl">
+                <h2 className="text-4xl font-bold tracking-tight text-ink-900 md:text-5xl">
                   {area.name}
                 </h2>
                 <p className="mt-4 text-lg leading-8 text-ink-600">{area.blurb}</p>
@@ -176,8 +170,7 @@ export default function VolunteerPage() {
         <Container>
           <div className="grid gap-12 lg:grid-cols-[1fr_1.4fr] lg:gap-24">
             <div>
-              <Eyebrow>Common questions</Eyebrow>
-              <Headline text="Good to know." accent="to know." className="mt-4" />
+              <Headline text="Good to know." accent="to know." />
             </div>
             <dl className="divide-y divide-ink-900/10 border-y border-ink-900/10">
               {FAQS.map((f, i) => (

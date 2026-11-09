@@ -8,7 +8,6 @@ import {
   Button,
   ButtonRow,
   Container,
-  Eyebrow,
   Headline,
   Section,
   SectionHeader,
@@ -27,7 +26,6 @@ export const metadata: Metadata = {
 
 const F = {
   hero: {
-    eyebrow: "Connect / Do more. Give more.",
     headline: "Be Rich",
     tagline: "Do more. Give more.",
     intro:
@@ -36,7 +34,6 @@ const F = {
     alt: "A row of children's winter coats hung on hooks at River City Church — from a Be Rich coat drive",
   },
   intro: {
-    eyebrow: "Why we do this",
     headline: "Generosity is part of the mission.",
     paragraphs: [
       "Our mission at River City Church is to lead people into a growing relationship with Jesus Christ. One key way we do that is by serving people in need. Be Rich is the simplest way to plug in: when we give and serve together, we accomplish more than any of us could on our own.",
@@ -44,7 +41,6 @@ const F = {
     ],
   },
   partnersSection: {
-    eyebrow: "Where it goes",
     headline: "Our partners.",
     intro:
       "Every dollar we raise goes to organizations already doing the work. Here's who we partner with — locally, nationally, and globally.",
@@ -79,7 +75,6 @@ const F = {
     ] satisfies BeRichPartner[],
   },
   cta: {
-    eyebrow: "Get involved",
     headline: "Do more. Give more.",
     body: "Whether it's a one-time gift, ongoing giving, or showing up to serve — every bit of generosity multiplies when we do it together. Pick the next step that fits.",
     primaryLabel: "Give now",
@@ -111,7 +106,6 @@ export default async function BeRichPage() {
   const doc = await safeFetch<BeRichPageDoc | null>(beRichPageQuery);
 
   const hero = doc?.hero ?? {};
-  const heroEyebrow = hero.eyebrow ?? F.hero.eyebrow;
   const heroHeadline = hero.headline ?? F.hero.headline;
   const heroTagline = hero.tagline ?? F.hero.tagline;
   const heroIntro = hero.intro ?? F.hero.intro;
@@ -144,9 +138,7 @@ export default async function BeRichPage() {
           aria-hidden="true"
         />
         <Container className="flex w-full flex-1 flex-col justify-end pb-12 pt-28 md:pb-16">
-          <Eyebrow tone="dark" className="rise">
-            {heroEyebrow}
-          </Eyebrow>
+
           <h1 className="rise rise-2 mt-5 flex flex-wrap items-center gap-x-5 text-6xl font-bold leading-[0.95] tracking-tight md:text-8xl lg:text-[8.5rem]">
             <span>Be</span>
             <svg
@@ -178,7 +170,6 @@ export default async function BeRichPage() {
         <Container>
           <div className="grid gap-10 lg:grid-cols-[1fr_1.2fr] lg:gap-24">
             <div>
-              <Eyebrow>{intro?.eyebrow ?? F.intro.eyebrow}</Eyebrow>
               <Headline
                 text={intro?.headline ?? F.intro.headline}
                 accent={
@@ -204,7 +195,6 @@ export default async function BeRichPage() {
       <Section tone="light">
         <Container>
           <SectionHeader
-            eyebrow={partnersSection?.eyebrow ?? F.partnersSection.eyebrow}
             headline={partnersSection?.headline ?? F.partnersSection.headline}
             intro={partnersSection?.intro ?? F.partnersSection.intro}
           />
@@ -214,15 +204,12 @@ export default async function BeRichPage() {
                 key={`${p.name}-${i}`}
                 className="border-t border-ink-900/15 py-10"
               >
-                <p
-                  className="text-xs font-semibold uppercase tracking-[0.22em] text-[#e2333e]"
-                  aria-label={`Scope: ${p.scope ? SCOPE_LABEL[p.scope] : ""}`}
-                >
-                  {p.scope ? SCOPE_LABEL[p.scope] : ""}
-                </p>
-                <h3 className="mt-4 text-3xl font-bold tracking-tight text-ink-900 md:text-4xl">
+                <h3 className="text-3xl font-bold tracking-tight text-ink-900 md:text-4xl">
                   {p.name}
                 </h3>
+                {p.scope && (
+                  <p className="mt-2 text-sm font-semibold text-accent-600">{SCOPE_LABEL[p.scope]}</p>
+                )}
                 {p.blurb && (
                   <p className="mt-4 text-lg leading-8 text-ink-600">{p.blurb}</p>
                 )}
@@ -237,7 +224,7 @@ export default async function BeRichPage() {
         </Container>
       </Section>
 
-      {/* CTA — dark band with eyebrow */}
+      {/* CTA — dark band */}
       <section className="relative isolate overflow-hidden bg-river-900 text-white">
         <Image
           src={heroImageSrc}
@@ -252,9 +239,7 @@ export default async function BeRichPage() {
           aria-hidden="true"
         />
         <Container className="py-24 md:py-36">
-          {(cta?.eyebrow ?? F.cta.eyebrow) && (
-            <Eyebrow tone="dark">{cta?.eyebrow ?? F.cta.eyebrow}</Eyebrow>
-          )}
+
           <Headline
             text={cta?.headline ?? F.cta.headline}
             accent={

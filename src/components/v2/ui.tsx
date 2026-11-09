@@ -64,7 +64,14 @@ export function Section({
 
 /* ── Type ───────────────────────────────────────────────────────────── */
 
-export function Eyebrow({
+/**
+ * Split a headline so its last word (or an explicit `accent` phrase)
+ * renders in the italic serif. "Take your next step." → "Take your next" +
+ * *step.*
+ */
+/** Small label naming a value or field ("Address", "Mission"). Never a
+ *  kicker above a heading — headings carry themselves in v2. */
+export function FieldLabel({
   children,
   tone = "light",
   className = "",
@@ -75,8 +82,8 @@ export function Eyebrow({
 }) {
   return (
     <p
-      className={`text-xs font-semibold uppercase tracking-[0.22em] ${
-        tone === "dark" ? "text-brand-300" : "text-brand-800"
+      className={`text-[11px] font-semibold uppercase tracking-[0.2em] ${
+        tone === "dark" ? "text-white/55" : "text-ink-500"
       } ${className}`}
     >
       {children}
@@ -84,11 +91,6 @@ export function Eyebrow({
   );
 }
 
-/**
- * Split a headline so its last word (or an explicit `accent` phrase)
- * renders in the italic serif. "Take your next step." → "Take your next" +
- * *step.*
- */
 export function splitAccent(text: string, accent?: string): [string, string] {
   const t = (text ?? "").trim();
   if (accent && t.toLowerCase().endsWith(accent.toLowerCase())) {
@@ -159,10 +161,9 @@ export function Lede({
   );
 }
 
-/** Eyebrow + headline + optional intro, left or centered, with an optional
+/** Headline + optional intro, left or centered, with an optional
  *  action on the right (desktop). */
 export function SectionHeader({
-  eyebrow,
   headline,
   accent,
   intro,
@@ -171,7 +172,6 @@ export function SectionHeader({
   action,
   className = "",
 }: {
-  eyebrow?: string;
   headline: string;
   accent?: string;
   intro?: React.ReactNode;
@@ -183,8 +183,7 @@ export function SectionHeader({
   if (align === "center") {
     return (
       <header className={`mx-auto mb-14 max-w-3xl text-center md:mb-20 ${className}`}>
-        {eyebrow && <Eyebrow tone={tone}>{eyebrow}</Eyebrow>}
-        <Headline text={headline} accent={accent} tone={tone} className="mt-4" />
+        <Headline text={headline} accent={accent} tone={tone} />
         {intro && (
           <Lede tone={tone} className="mx-auto mt-6 max-w-2xl">
             {intro}
@@ -201,8 +200,7 @@ export function SectionHeader({
       } ${className}`}
     >
       <div className="max-w-4xl">
-        {eyebrow && <Eyebrow tone={tone}>{eyebrow}</Eyebrow>}
-        <Headline text={headline} accent={accent} tone={tone} className="mt-4" />
+        <Headline text={headline} accent={accent} tone={tone} />
       </div>
       {(intro || action) && (
         <div className={`max-w-md ${align === "split" ? "" : "mt-2"}`}>
@@ -304,7 +302,6 @@ export function ButtonRow({
 export function PhotoHero({
   image,
   alt,
-  eyebrow,
   headline,
   accent,
   intro,
@@ -314,7 +311,6 @@ export function PhotoHero({
 }: {
   image: string;
   alt: string;
-  eyebrow?: string;
   headline: string;
   accent?: string;
   intro?: React.ReactNode;
@@ -351,7 +347,6 @@ export function PhotoHero({
             ← {backlink.label}
           </Link>
         )}
-        {eyebrow && <Eyebrow tone="dark" className="rise">{eyebrow}</Eyebrow>}
         <Headline
           as="h1"
           size="xl"
@@ -379,12 +374,11 @@ export function PhotoHero({
 
 /**
  * Two-column text + image. Image is rounded, tall; text side takes
- * eyebrow/headline/body/actions.
+ * headline/body/actions.
  */
 export function SplitSection({
   image,
   alt,
-  eyebrow,
   headline,
   accent,
   children,
@@ -395,7 +389,6 @@ export function SplitSection({
 }: {
   image: string;
   alt: string;
-  eyebrow?: string;
   headline: string;
   accent?: string;
   children?: React.ReactNode;
@@ -413,8 +406,7 @@ export function SplitSection({
             <Image src={image} alt={alt} fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
           </div>
           <div>
-            {eyebrow && <Eyebrow tone={tone}>{eyebrow}</Eyebrow>}
-            <Headline text={headline} accent={accent} tone={tone} className="mt-4" />
+            <Headline text={headline} accent={accent} tone={tone} />
             {children && (
               <div
                 className={`mt-8 space-y-5 text-lg leading-8 ${
@@ -473,12 +465,11 @@ export function ImageBanner({
   );
 }
 
-/** Rounded photo card (Whitestone-style) with eyebrow/title/blurb/link. */
+/** Rounded photo card (Whitestone-style) with title/blurb/link. */
 export function PhotoCard({
   href,
   image,
   alt,
-  eyebrow,
   title,
   blurb,
   cta = "Learn more →",
@@ -488,7 +479,6 @@ export function PhotoCard({
   href?: string;
   image?: string;
   alt?: string;
-  eyebrow?: string;
   title: string;
   blurb?: React.ReactNode;
   cta?: string;
@@ -508,12 +498,7 @@ export function PhotoCard({
           />
         )}
       </div>
-      {eyebrow && (
-        <p className={`mt-6 text-[11px] font-semibold uppercase tracking-[0.2em] ${tone === "dark" ? "text-brand-300" : "text-brand-800"}`}>
-          {eyebrow}
-        </p>
-      )}
-      <h3 className={`${eyebrow ? "mt-2" : "mt-6"} text-3xl font-bold tracking-tight`}>
+      <h3 className="mt-6 text-3xl font-bold tracking-tight">
         {title}
       </h3>
       {blurb && (

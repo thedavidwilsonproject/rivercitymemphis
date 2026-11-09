@@ -13,7 +13,6 @@ import {
   Button,
   ButtonRow,
   Container,
-  Eyebrow,
   FactCard,
   PhotoHero,
   Section,
@@ -81,14 +80,12 @@ export default async function ConnectPage({
             short
             image={urlFor(page.heroImage).width(2200).url()}
             alt={page.heroImage.alt ?? page.title}
-            eyebrow="Connect"
             headline={page.title}
             intro={page.summary}
             backlink={{ label: "Connect", href: "/connect" }}
           />
         ) : (
           <PageHero
-            eyebrow="Connect"
             headline={page.title}
             intro={page.summary}
             variant="cream"
@@ -113,14 +110,12 @@ export default async function ConnectPage({
           short
           image={urlFor(m.image).width(2200).url()}
           alt={m.image.alt ?? m.title}
-          eyebrow={m.ageRange ? `Connect · ${m.ageRange}` : "Connect"}
           headline={m.title}
           intro={m.tagline}
           backlink={{ label: "Connect", href: "/connect" }}
         />
       ) : (
         <PageHero
-          eyebrow={m.ageRange ? `Connect · ${m.ageRange}` : "Connect"}
           headline={m.title}
           intro={m.tagline}
           variant="dark"
@@ -142,7 +137,7 @@ export default async function ConnectPage({
           <div className="grid gap-14 lg:grid-cols-[1fr_1.6fr] lg:gap-24">
             {Array.isArray(m.coreValues) && m.coreValues.length > 0 ? (
               <div>
-                <Eyebrow>Core values</Eyebrow>
+                <h2 className="text-3xl font-bold tracking-tight text-ink-900">Core values</h2>
                 <ul className="mt-6 divide-y divide-ink-900/10 border-y border-ink-900/10">
                   {m.coreValues.map((v, i) => (
                     <li key={i} className="flex items-baseline gap-5 py-4">

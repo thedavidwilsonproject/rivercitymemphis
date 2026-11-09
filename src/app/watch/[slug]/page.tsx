@@ -11,7 +11,7 @@ import { urlFor } from "@/sanity/image";
 import { JsonLd } from "@/components/json-ld";
 import { SITE_URL } from "@/lib/site";
 import type { SermonSeries, Sermon, SermonSeriesSummary } from "@/types/sanity";
-import { Button, Container, CtaBand, Eyebrow, Headline, Section } from "@/components/v2/ui";
+import { Button, Container, CtaBand, Headline, Section } from "@/components/v2/ui";
 
 function sermonEmbedUrl(s: Sermon): string | undefined {
   if (!s.videoPlatform || !s.videoId) return undefined;
@@ -201,16 +201,10 @@ export default async function SeriesPage({
               />
             )}
             <div className="rise rise-2">
-              <Eyebrow tone="dark">
+              <Headline as="h1" tone="dark" size="lg" text={series.title} />
+              <p className="mt-4 text-lg text-white/60">
                 {formatRange(series.startDate, series.endDate)}
-              </Eyebrow>
-              <Headline
-                as="h1"
-                tone="dark"
-                size="lg"
-                text={series.title}
-                className="mt-5"
-              />
+              </p>
               {series.description !== undefined &&
                 series.description !== null &&
                 Array.isArray(series.description) &&
@@ -250,13 +244,13 @@ export default async function SeriesPage({
                 </p>
                 <div>
                   <header className="mb-6">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/50">
+                    <h3 className="text-3xl font-bold tracking-tight md:text-4xl">
+                      {sermon.title}
+                    </h3>
+                    <p className="mt-2 text-sm text-white/50">
                       Part {sermon.order ?? i + 1}
                       {sermon.date ? ` · ${formatSermonDate(sermon.date)}` : ""}
                     </p>
-                    <h3 className="mt-3 text-3xl font-bold tracking-tight md:text-4xl">
-                      {sermon.title}
-                    </h3>
                     {(sermon.speaker?.name || sermon.speakerName) && (
                       <p className="mt-2 text-white/70">
                         {sermon.speaker?.name ?? sermon.speakerName}

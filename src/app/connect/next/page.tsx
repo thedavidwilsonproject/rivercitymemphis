@@ -8,7 +8,6 @@ import {
   Button,
   Container,
   CtaBand,
-  Eyebrow,
   FactCard,
   Headline,
   NumberedItem,
@@ -27,7 +26,6 @@ export const metadata: Metadata = {
 
 const F = {
   hero: {
-    eyebrow: "Connect / Your next step",
     headline: "Welcome to Next.",
     intro:
       "A short, friendly 20 minutes with our lead pastor Jonathan Dunn — get to know RCC, find out how to plug in, and ask your questions.",
@@ -35,7 +33,6 @@ const F = {
     alt: "An RCC host team volunteer welcoming guests at the front door",
   },
   intro: {
-    eyebrow: "What is Next?",
     headline: "A no-pressure intro to RCC.",
     image: "/brand/pages/next/jonathan.jpg",
     imageAlt: "Jonathan Dunn, lead pastor of RCC, on stage during a service",
@@ -46,7 +43,6 @@ const F = {
     ],
   },
   expect: {
-    eyebrow: "What to expect",
     headline: "Friendly, focused, fast.",
     items: [
       {
@@ -113,7 +109,6 @@ export default async function NextSessionPage() {
   const doc = await safeFetch<NextPageDoc | null>(nextPageQuery);
 
   const hero = doc?.hero ?? {};
-  const heroEyebrow = hero.eyebrow ?? F.hero.eyebrow;
   const heroHeadline = hero.headline ?? F.hero.headline;
   const heroIntro = hero.intro ?? F.hero.intro;
   const heroImageSrc = imgSrc(hero.image, F.hero.image, 2200);
@@ -134,7 +129,6 @@ export default async function NextSessionPage() {
       <PhotoHero
         image={heroImageSrc}
         alt={heroImageAlt}
-        eyebrow={heroEyebrow}
         headline={heroHeadline}
         intro={heroIntro}
       />
@@ -144,7 +138,6 @@ export default async function NextSessionPage() {
         <Container>
           <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-24">
             <div>
-              <Eyebrow>{intro?.eyebrow ?? F.intro.eyebrow}</Eyebrow>
               <Headline
                 text={intro?.headline ?? F.intro.headline}
                 accent={
@@ -186,7 +179,6 @@ export default async function NextSessionPage() {
           <SectionHeader
             tone="dark"
             align="left"
-            eyebrow={expect?.eyebrow ?? F.expect.eyebrow}
             headline={expect?.headline ?? F.expect.headline}
           />
           <ol className="grid gap-12 lg:grid-cols-2 lg:gap-x-16">
@@ -227,7 +219,6 @@ export default async function NextSessionPage() {
 
       <SignupCallout
         match={/baptism/i}
-        eyebrow="Ready for the next step?"
         body="Baptism is a public way of saying you follow Jesus. Sign up and we'll walk you through what to expect."
       />
 

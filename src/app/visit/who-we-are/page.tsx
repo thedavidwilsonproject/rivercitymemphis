@@ -5,10 +5,10 @@ import { urlFor } from "@/sanity/image";
 import { PortableBody } from "@/components/portable-body";
 import type { WhoWeArePageDoc } from "@/types/sanity";
 import {
+  FieldLabel,
   Button,
   Container,
   CtaBand,
-  Eyebrow,
   Headline,
   ImageBanner,
   PhotoHero,
@@ -26,7 +26,6 @@ export const metadata: Metadata = {
 /** Hardcoded fallbacks — used when Sanity field is blank or doc is missing. */
 const F = {
   hero: {
-    eyebrow: "Visit",
     headline: "Who We Are",
     intro:
       "A relaxed, friendly community in Bartlett, TN — partnering with God to lead people to refocus their life, home, and the church back to Him.",
@@ -34,7 +33,6 @@ const F = {
     alt: "Family walking up to the RCC building",
   },
   culture: {
-    eyebrow: "Our culture",
     headline: "Come as you are.",
     image: "/brand/pages/who-we-are/entrance.jpg",
     alt: "Walking into the RCC auditorium on a Sunday morning",
@@ -43,11 +41,9 @@ const F = {
   },
   worshipImage: "/brand/pages/who-we-are/worship.jpg",
   story: {
-    eyebrow: "Our story",
     headline: "Refocus.",
   },
   beliefs: {
-    eyebrow: "What we believe",
     headline: "Jesus at the center.",
     image: "/brand/pages/who-we-are/teaching.jpg",
     alt: "Jonathan Dunn teaching at RCC",
@@ -109,7 +105,6 @@ export default async function WhoWeArePage() {
       <PhotoHero
         image={img(hero.image as { asset?: unknown }, F.hero.image)}
         alt={heroAlt}
-        eyebrow={hero.eyebrow}
         headline={hero.headline ?? F.hero.headline}
         intro={hero.intro}
       />
@@ -120,7 +115,6 @@ export default async function WhoWeArePage() {
           <Container>
             {mvs.headline && (
               <SectionHeader
-                eyebrow={mvs.eyebrow}
                 headline={mvs.headline}
                 intro={mvs.intro}
                 align="split"
@@ -131,7 +125,7 @@ export default async function WhoWeArePage() {
               {[mvs.mission, mvs.vision].map((m, i) =>
                 m ? (
                   <article key={i} className="bg-paper p-8 md:p-12">
-                    <Eyebrow>{m.label ?? (i === 0 ? "Mission" : "Vision")}</Eyebrow>
+                    <FieldLabel>{m.label ?? (i === 0 ? "Mission" : "Vision")}</FieldLabel>
                     {m.statement && (
                       <p className="mt-5 text-3xl font-bold leading-tight tracking-tight text-ink-900 md:text-4xl">
                         {m.statement}
@@ -149,7 +143,7 @@ export default async function WhoWeArePage() {
 
             {mvs.strategy && (
               <article className="mt-6 rounded-2xl bg-river-950 p-8 text-white md:p-12">
-                <Eyebrow tone="dark">{mvs.strategy.label ?? "Strategy"}</Eyebrow>
+                <FieldLabel tone="dark">{mvs.strategy.label ?? "Strategy"}</FieldLabel>
                 {mvs.strategy.statement && (
                   <p className="mt-5 max-w-4xl text-3xl font-bold leading-tight tracking-tight md:text-4xl">
                     {mvs.strategy.statement}
@@ -189,7 +183,6 @@ export default async function WhoWeArePage() {
       <SplitSection
         image={img(culture?.image, F.culture.image)}
         alt={culture?.image?.alt ?? F.culture.alt}
-        eyebrow={culture?.eyebrow ?? F.culture.eyebrow}
         headline={culture?.headline ?? F.culture.headline}
         accent="as you are."
         reverse
@@ -231,7 +224,6 @@ export default async function WhoWeArePage() {
         <Container>
           <div className="grid gap-12 lg:grid-cols-[1fr_1.4fr] lg:gap-24">
             <div>
-              <Eyebrow tone="dark">{story?.eyebrow ?? F.story.eyebrow}</Eyebrow>
               <Headline
                 text={story?.headline ?? F.story.headline}
                 tone="dark"
@@ -271,7 +263,6 @@ export default async function WhoWeArePage() {
       <SplitSection
         image={img(beliefs?.image, F.beliefs.image)}
         alt={beliefs?.image?.alt ?? F.beliefs.alt}
-        eyebrow={beliefs?.eyebrow ?? F.beliefs.eyebrow}
         headline={beliefs?.headline ?? F.beliefs.headline}
         accent="at the center."
         aspect="aspect-[4/3]"

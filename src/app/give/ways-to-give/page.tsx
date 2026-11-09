@@ -5,7 +5,6 @@ import {
   Button,
   Container,
   CtaBand,
-  Eyebrow,
   FactCard,
   Headline,
   PhotoHero,
@@ -31,7 +30,6 @@ export const metadata: Metadata = {
 
 const F = {
   hero: {
-    eyebrow: "Give",
     headline: "Ways to Give",
     intro:
       "River City Church relies on your prayers and financial support to lead people into a growing relationship with Jesus Christ. Thank you for your generosity — every gift fuels the mission.",
@@ -43,7 +41,6 @@ const F = {
     reference: "2 Corinthians 9:7",
   },
   intro: {
-    eyebrow: "Why we give",
     headline: "Cheerful, not compelled.",
     paragraphs: [
       "Generosity is a posture before it's a transaction. We give cheerfully because God has been generous with us first — and every dollar you give in faith is stewarded around our mission: leading people to enjoy God through a relationship with Jesus Christ.",
@@ -51,7 +48,6 @@ const F = {
     ],
   },
   waysSection: {
-    eyebrow: "Pick a way",
     headline: "Four ways to give.",
     intro:
       "Choose the option that fits. All gifts are tax-deductible — RCC is a 501(c)(3) organization.",
@@ -90,7 +86,6 @@ const F = {
     ] satisfies GiveWay[],
   },
   trustSection: {
-    eyebrow: "Stewardship",
     headline: "Every dollar, every time.",
     paragraphs: [
       "RCC is a 501(c)(3) organization, so all gifts are tax-deductible. We're also Dime Silver accredited — an independent confirmation that we follow financial best practices for a church our size.",
@@ -166,7 +161,6 @@ export default async function GivePage() {
   const doc = await safeFetch<GivePageDoc | null>(givePageQuery);
 
   const hero = doc?.hero ?? {};
-  const heroEyebrow = hero.eyebrow ?? F.hero.eyebrow;
   const heroHeadline = hero.headline ?? F.hero.headline;
   const heroIntro = hero.intro ?? F.hero.intro;
   const heroImageSrc = imgSrc(hero.image, F.hero.image, 2200);
@@ -192,7 +186,6 @@ export default async function GivePage() {
       <PhotoHero
         image={heroImageSrc}
         alt={heroImageAlt}
-        eyebrow={heroEyebrow}
         headline={heroHeadline}
         intro={heroIntro}
       >
@@ -216,10 +209,9 @@ export default async function GivePage() {
         <Container>
           <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-24">
             <div>
-              <Eyebrow>{intro?.eyebrow ?? F.intro.eyebrow}</Eyebrow>
               <Headline
                 text={intro?.headline ?? F.intro.headline}
-                className="mt-4"
+                
               />
             </div>
             <div className="space-y-5 text-lg leading-8 text-ink-600 lg:pt-10">
@@ -238,7 +230,6 @@ export default async function GivePage() {
         <Container>
           <SectionHeader
             tone="dark"
-            eyebrow={waysSection?.eyebrow ?? F.waysSection.eyebrow}
             headline={waysSection?.headline ?? F.waysSection.headline}
             intro={waysSection?.intro ?? F.waysSection.intro}
           />
@@ -273,10 +264,9 @@ export default async function GivePage() {
         <Container>
           <div className="grid gap-12 md:grid-cols-[1fr_320px] md:items-center md:gap-20">
             <div>
-              <Eyebrow>{trust?.eyebrow ?? F.trustSection.eyebrow}</Eyebrow>
               <Headline
                 text={trust?.headline ?? F.trustSection.headline}
-                className="mt-4"
+                
               />
               <div className="mt-8 max-w-2xl space-y-5 text-lg leading-8 text-ink-600">
                 {trust?.body ? (

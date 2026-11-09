@@ -48,7 +48,6 @@ export async function UpcomingEvents({ limit = 3 }: { limit?: number }) {
     <section className="border-t border-ink-900/10 bg-paper">
       <Container className="py-20 md:py-28">
         <SectionHeader
-          eyebrow="Coming up"
           headline="What's happening."
           accent="happening."
           intro="Open for sign-up now, live from Church Center."
@@ -66,12 +65,10 @@ export async function UpcomingEvents({ limit = 3 }: { limit?: number }) {
             <li key={s.id}>
               <Link href={`/events/${s.id}`} className="group block">
                 <Art s={s} className="aspect-[16/9]" />
-                <p className="mt-5 text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-800">
-                  {formatSignupDate(s)}
-                </p>
-                <h3 className="mt-2 text-2xl font-bold leading-tight tracking-tight text-ink-900 transition group-hover:text-brand-600">
+                <h3 className="mt-5 text-2xl font-bold leading-tight tracking-tight text-ink-900 transition group-hover:text-brand-600">
                   {s.name}
                 </h3>
+                <p className="mt-2 text-sm font-semibold text-brand-800">{formatSignupDate(s)}</p>
                 <span className="mt-3 inline-block text-sm font-semibold text-ink-900 transition group-hover:translate-x-1 group-hover:text-brand-800">
                   Details &amp; sign-up →
                 </span>
@@ -91,12 +88,10 @@ export async function UpcomingEvents({ limit = 3 }: { limit?: number }) {
  */
 export async function SignupCallout({
   match,
-  eyebrow,
   body,
   tone = "light",
 }: {
   match: RegExp;
-  eyebrow: string;
   /** Fallback copy when the PCO description is empty. */
   body?: string;
   tone?: "light" | "dark";
@@ -116,14 +111,7 @@ export async function SignupCallout({
         >
           <Art s={s} className="aspect-[16/9]" />
           <div>
-            <p
-              className={`text-xs font-semibold uppercase tracking-[0.22em] ${
-                dark ? "text-brand-300" : "text-brand-600"
-              }`}
-            >
-              {eyebrow}
-            </p>
-            <h2 className="mt-3 text-4xl font-bold leading-[1.02] tracking-tight md:text-5xl">
+            <h2 className="text-4xl font-bold leading-[1.02] tracking-tight md:text-5xl">
               {s.name}
             </h2>
             <p className={`mt-3 text-sm font-semibold ${dark ? "text-white/60" : "text-ink-500"}`}>
@@ -164,12 +152,10 @@ export async function SignupCallout({
  * Church Center modal so visitors stay on the site.
  */
 export function ChurchCenterForms({
-  eyebrow = "Take a next step",
   headline = "We'd love to hear from you.",
   accent = "from you.",
   forms = ["connection", "groupsServing", "volunteer"],
 }: {
-  eyebrow?: string;
   headline?: string;
   accent?: string;
   forms?: (keyof typeof CC_FORMS)[];
@@ -178,7 +164,7 @@ export function ChurchCenterForms({
     <section className="bg-paper text-ink-900">
       <ChurchCenterScript />
       <Container className="py-20 md:py-28">
-        <SectionHeader eyebrow={eyebrow} headline={headline} accent={accent} />
+        <SectionHeader headline={headline} accent={accent} />
         <ul className={`grid gap-6 ${forms.length >= 3 ? "md:grid-cols-3" : "md:grid-cols-2"}`}>
           {forms.map((k) => {
             const f = CC_FORMS[k];
@@ -188,10 +174,7 @@ export function ChurchCenterForms({
                   href={f.href}
                   className="group flex h-full flex-col rounded-3xl border border-ink-900/10 bg-white/70 p-8 transition hover:border-ink-900/30 hover:bg-white"
                 >
-                  <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-800">
-                    {f.label}
-                  </span>
-                  <span className="mt-3 text-2xl font-bold leading-tight tracking-tight">{f.title}</span>
+                  <span className="text-2xl font-bold leading-tight tracking-tight">{f.title}</span>
                   <span className="mt-3 flex-1 leading-7 text-ink-600">{f.body}</span>
                   <span className="mt-6 text-sm font-semibold transition group-hover:translate-x-1 group-hover:text-brand-800">
                     Open the form →

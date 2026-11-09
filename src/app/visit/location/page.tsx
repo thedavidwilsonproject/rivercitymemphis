@@ -5,10 +5,10 @@ import { JsonLd } from "@/components/json-ld";
 import { ORG, SITE_URL } from "@/lib/site";
 import type { LocationPageDoc, SiteSettings } from "@/types/sanity";
 import {
+  FieldLabel,
   Button,
   Container,
   CtaBand,
-  Eyebrow,
   Headline,
   PhotoHero,
   Section,
@@ -28,7 +28,6 @@ export const metadata: Metadata = {
 
 const FALLBACK: LocationPageDoc = {
   hero: {
-    eyebrow: "Visit",
     headline: "Location & Time",
     intro:
       "We meet in suburban Bartlett, at the corner of Kirby-Whitten Pkwy and St. Elmo Rd.",
@@ -39,7 +38,6 @@ const FALLBACK: LocationPageDoc = {
   directionsLabel: "Get directions",
   appleMapsLabel: "Open in Apple Maps",
   communities: {
-    eyebrow: "We serve",
     headline: "Memphis and the suburbs we call home.",
     list: ["Bartlett", "Lakeland", "Arlington", "Millington", "Cordova"],
     footer:
@@ -140,7 +138,6 @@ export default async function LocationPage() {
       <PhotoHero
         image={HERO_IMAGE.src}
         alt={HERO_IMAGE.alt}
-        eyebrow={data.hero?.eyebrow}
         headline={data.hero?.headline ?? "Location & Time"}
         accent="Time"
         intro={data.hero?.intro}
@@ -156,7 +153,7 @@ export default async function LocationPage() {
         <Container>
           <div className="grid gap-px overflow-hidden rounded-2xl border border-ink-900/15 bg-ink-900/15 lg:grid-cols-2">
             <div className="bg-paper p-8 md:p-14">
-              <Eyebrow>Service time</Eyebrow>
+              <FieldLabel>Service time</FieldLabel>
               <p className="mt-6 text-6xl font-bold leading-[0.95] tracking-tight text-ink-900 md:text-8xl">
                 {serviceDay}
               </p>
@@ -171,7 +168,7 @@ export default async function LocationPage() {
 
             <div className="flex flex-col justify-between gap-10 bg-paper p-8 md:p-14">
               <div>
-                <Eyebrow>Address</Eyebrow>
+                <FieldLabel>Address</FieldLabel>
                 <address className="mt-6 not-italic">
                   {addressLines.map((line) => (
                     <p
@@ -211,9 +208,7 @@ export default async function LocationPage() {
           <Container>
             <div className="grid gap-12 lg:grid-cols-[1fr_1.2fr] lg:gap-24">
               <div>
-                {data.communities.eyebrow && (
-                  <Eyebrow tone="dark">{data.communities.eyebrow}</Eyebrow>
-                )}
+
                 {data.communities.headline && (
                   <Headline
                     text={data.communities.headline}

@@ -5,7 +5,7 @@ import { FaqItem } from "@/components/faq-item";
 import { JsonLd } from "@/components/json-ld";
 import type { SiteSettings } from "@/types/sanity";
 import { PageHero } from "@/components/page-hero";
-import { Button, Container, CtaBand, Eyebrow, Section } from "@/components/v2/ui";
+import { Button, Container, CtaBand, Section } from "@/components/v2/ui";
 
 type PortableBlock = {
   _type?: string;
@@ -29,7 +29,6 @@ type FaqEntry = {
 };
 
 type FaqPageDoc = {
-  eyebrow?: string;
   headline?: string;
   intro?: string;
   footer?: string;
@@ -37,7 +36,6 @@ type FaqPageDoc = {
 };
 
 const FALLBACK: FaqPageDoc = {
-  eyebrow: "Visit",
   headline: "FAQs",
   intro:
     "At River City, we want to make sure that you're comfortable with who we are, even before you come visit us for the first time. Below, you'll find some questions we thought you might have, along with their answers.",
@@ -96,7 +94,6 @@ export default async function FaqsPage() {
     <div>
       {faqJsonLd && <JsonLd data={faqJsonLd} />}
       <PageHero
-        eyebrow={data.eyebrow}
         headline={data.headline ?? "FAQs"}
         intro={data.intro}
         variant="cream"
@@ -106,7 +103,6 @@ export default async function FaqsPage() {
         <Container>
           <div className="grid gap-12 lg:grid-cols-[1fr_2fr] lg:gap-24">
             <div className="lg:sticky lg:top-32 lg:self-start">
-              <Eyebrow>Good questions</Eyebrow>
               <p className="mt-4 font-serif text-5xl italic leading-tight text-ink-900">
                 {items.length > 0 ? `${items.length} answers` : "Answers"}
               </p>

@@ -3,11 +3,10 @@ import Link from "next/link";
 type Variant = "brand" | "dark" | "cream";
 
 type Props = {
-  eyebrow?: string;
   headline: string;
   intro?: string;
   variant?: Variant;
-  /** Optional small backlink shown above the eyebrow. */
+  /** Optional small backlink shown above the headline. */
   backlink?: { label: string; href: string };
 };
 
@@ -15,25 +14,25 @@ type Props = {
 // italic serif accent. Variants map onto the new palette.
 const STYLES: Record<
   Variant,
-  { section: string; eyebrow: string; intro: string; accent: string; rule: string }
+  { section: string; link: string; intro: string; accent: string; rule: string }
 > = {
   brand: {
     section: "bg-river-900 text-white",
-    eyebrow: "text-brand-300",
+    link: "text-brand-300",
     intro: "text-white/75",
     accent: "text-brand-300",
     rule: "border-white/15",
   },
   dark: {
     section: "bg-river-950 text-white",
-    eyebrow: "text-brand-300",
+    link: "text-brand-300",
     intro: "text-white/75",
     accent: "text-brand-300",
     rule: "border-white/15",
   },
   cream: {
     section: "bg-paper text-ink-900",
-    eyebrow: "text-brand-600",
+    link: "text-brand-800",
     intro: "text-ink-600",
     accent: "text-brand-600",
     rule: "border-ink-900/10",
@@ -48,7 +47,6 @@ function splitLast(headline: string): [string, string] {
 }
 
 export function PageHero({
-  eyebrow,
   headline,
   intro,
   variant = "brand",
@@ -62,19 +60,12 @@ export function PageHero({
         {backlink && (
           <Link
             href={backlink.href}
-            className={`mb-4 inline-block py-2 text-sm font-semibold ${s.eyebrow} hover:opacity-80`}
+            className={`mb-4 inline-block py-2 text-sm font-semibold ${s.link} hover:opacity-80`}
           >
             ← {backlink.label}
           </Link>
         )}
-        {eyebrow && (
-          <p
-            className={`text-xs font-semibold uppercase tracking-[0.22em] ${s.eyebrow}`}
-          >
-            {eyebrow}
-          </p>
-        )}
-        <h1 className="rise mt-4 max-w-5xl text-6xl font-bold leading-[0.95] tracking-tight md:text-8xl lg:text-[8.5rem]">
+        <h1 className="rise max-w-5xl text-6xl font-bold leading-[0.95] tracking-tight md:text-8xl lg:text-[8.5rem]">
           {lead}
           <em className={s.accent}>{last}</em>
         </h1>

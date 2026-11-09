@@ -19,7 +19,6 @@ const TZ = "America/Chicago";
 const MONTHS_AHEAD = 11;
 
 const HERO = {
-  eyebrow: "Plan ahead",
   headline: "Calendar",
   intro:
     "Sundays, events, and sign-ups at a glance — live from our Church Center. Tap anything to see details or register.",
@@ -213,7 +212,6 @@ export default async function CalendarPage({
       <PhotoHero
         image={HERO.image}
         alt={HERO.alt}
-        eyebrow={HERO.eyebrow}
         headline={HERO.headline}
         intro={HERO.intro}
         short
@@ -315,8 +313,7 @@ export default async function CalendarPage({
           {/* Agenda */}
           <div className="mt-16 grid gap-8 lg:grid-cols-[18rem_1fr] lg:gap-16">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-800">This month</p>
-              <h3 className="mt-3 text-3xl font-bold tracking-tight">
+              <h3 className="text-3xl font-bold tracking-tight">
                 {agenda.length === 0 ? "Just Sundays." : `${agenda.length} event${agenda.length === 1 ? "" : "s"}.`}
               </h3>
               <p className="mt-3 text-ink-600">

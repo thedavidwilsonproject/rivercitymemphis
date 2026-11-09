@@ -26,7 +26,6 @@ export const metadata: Metadata = {
 
 const F = {
   hero: {
-    eyebrow: "Contact",
     headline: "We'd love to hear from you.",
     intro:
       "Whether you're new, exploring faith, walking through something hard, or just want to say hi — we'd love to connect. Reach out any of the ways below and a real person will get back to you.",
@@ -34,13 +33,11 @@ const F = {
     alt: "RCC attendees walking into the building on a Sunday morning",
   },
   infoIntro: {
-    eyebrow: "How to reach us",
     headline: "Pick the way that works for you.",
     intro:
       "Stop by on a Sunday, call us during the week, or drop us an email — we're a phone call away.",
   },
   reasonsSection: {
-    eyebrow: "What can we help with?",
     headline: "Tap a reason — we'll be in touch.",
     intro:
       "Each button opens a pre-filled email to info@rivercitymemphis.org so we can route it to the right person.",
@@ -54,7 +51,6 @@ const F = {
     ] satisfies ContactReason[],
   },
   pastorsCallout: {
-    eyebrow: "Talk to a pastor",
     headline: "There's a real person on the other end.",
     body: "If you'd rather talk with someone directly, our pastors are happy to grab a coffee, hop on a call, or meet up after a service. Just send a note and we'll reach out within a couple business days.",
     image: "/brand/pages/contact/pastors.jpg",
@@ -140,7 +136,6 @@ export default async function ContactPage() {
   ]);
 
   const hero = doc?.hero ?? {};
-  const heroEyebrow = hero.eyebrow ?? F.hero.eyebrow;
   const heroHeadline = hero.headline ?? F.hero.headline;
   const heroIntro = hero.intro ?? F.hero.intro;
   const heroImageSrc = imgSrc(hero.image, F.hero.image, 2200);
@@ -183,7 +178,6 @@ export default async function ContactPage() {
       <PhotoHero
         image={heroImageSrc}
         alt={heroImageAlt}
-        eyebrow={heroEyebrow}
         headline={heroHeadline}
         accent="hear from you."
         intro={heroIntro}
@@ -193,7 +187,6 @@ export default async function ContactPage() {
       <Section>
         <Container>
           <SectionHeader
-            eyebrow={infoIntro?.eyebrow ?? F.infoIntro.eyebrow}
             headline={infoIntro?.headline ?? F.infoIntro.headline}
             intro={infoIntro?.intro ?? F.infoIntro.intro}
           />
@@ -248,7 +241,6 @@ export default async function ContactPage() {
         <Container>
           <SectionHeader
             tone="dark"
-            eyebrow={reasonsSection?.eyebrow ?? F.reasonsSection.eyebrow}
             headline={reasonsSection?.headline ?? F.reasonsSection.headline}
             accent="be in touch."
             intro={reasonsSection?.intro ?? F.reasonsSection.intro}
@@ -281,7 +273,6 @@ export default async function ContactPage() {
         image={pastorsImg}
         alt={pastorsAlt ?? ""}
         aspect="aspect-[4/3]"
-        eyebrow={pastors?.eyebrow ?? F.pastorsCallout.eyebrow}
         headline={pastors?.headline ?? F.pastorsCallout.headline}
         accent="other end."
         actions={
@@ -309,7 +300,6 @@ export default async function ContactPage() {
               tone="dark"
               align="left"
               className="!mb-0"
-              eyebrow="Follow along"
               headline="Find us online."
               accent="online."
               intro="Get the latest from RCC — sermons, stories, and what's happening this week."

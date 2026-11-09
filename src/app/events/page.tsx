@@ -11,7 +11,6 @@ import {
   Button,
   Container,
   CtaBand,
-  Eyebrow,
   Headline,
   Lede,
   PhotoHero,
@@ -32,7 +31,6 @@ const cc = (path: string) =>
   `https://${CHURCH_CENTER_HOST}${path.startsWith("/") ? "" : "/"}${path}`;
 
 const HERO = {
-  eyebrow: "What's happening",
   headline: "Events at RCC",
   intro:
     "From camps to classes to baby dedications — everything open for registration, live from our Church Center. Tap an event to sign up.",
@@ -41,7 +39,6 @@ const HERO = {
 };
 
 const EMPTY = {
-  eyebrow: "Nothing on the books",
   headline: "No events open right now.",
   body: "We don't have any registrations open at the moment. Check back soon, or browse the full church calendar for what's coming up.",
 };
@@ -78,12 +75,10 @@ function EventCard({ s }: { s: PcoSignup }) {
           </div>
         )}
         <div className="flex flex-1 flex-col pt-6">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-800">
-            {dateLabel}
-          </p>
-          <h3 className="mt-2 text-3xl font-bold leading-tight tracking-tight text-ink-900 transition group-hover:text-brand-600">
+          <h3 className="text-3xl font-bold leading-tight tracking-tight text-ink-900 transition group-hover:text-brand-600">
             {s.name}
           </h3>
+          <p className="mt-2 text-sm font-semibold text-brand-800">{dateLabel}</p>
           {s.location && (
             <p className="mt-1 text-sm text-ink-500">{s.location}</p>
           )}
@@ -134,7 +129,6 @@ export default async function EventsPage() {
       <PhotoHero
         image={HERO.image}
         alt={HERO.alt}
-        eyebrow={HERO.eyebrow}
         headline={HERO.headline}
         accent="at RCC"
         intro={HERO.intro}
@@ -150,7 +144,6 @@ export default async function EventsPage() {
           {events.length > 0 ? (
             <>
               <SectionHeader
-                eyebrow="Open for registration"
                 headline={
                   events.length === 1
                     ? "1 event open now."
@@ -167,9 +160,8 @@ export default async function EventsPage() {
             </>
           ) : (
             <div className="max-w-3xl">
-              <Eyebrow>{EMPTY.eyebrow}</Eyebrow>
               <Headline
-                className="mt-4"
+                
                 text={
                   loadError
                     ? "Couldn't load events right now."

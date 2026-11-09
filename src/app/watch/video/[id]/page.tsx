@@ -96,7 +96,6 @@ export default async function VideoPage({ params }: Params) {
           <Container>
             <SectionHeader
               tone="dark"
-              eyebrow={siblings.length > 1 ? "In this series" : "Keep watching"}
               headline={siblings.length > 1 && v.series ? v.series : "More messages."}
             />
             <div className="grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">

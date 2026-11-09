@@ -127,9 +127,11 @@ h2 em {
 }
 
 /* Gentle reveal on load for hero copy. */
+/* Starts already legible: if animations stall (background tab, preview
+   renderers) the content still reads. */
 @keyframes rise {
   from {
-    opacity: 0;
+    opacity: 0.6;
     transform: translateY(18px);
   }
   to {

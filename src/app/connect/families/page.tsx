@@ -8,7 +8,6 @@ import {
   Button,
   Container,
   CtaBand,
-  Eyebrow,
   Headline,
   PhotoHero,
   Section,
@@ -25,7 +24,6 @@ export const metadata: Metadata = {
 
 const F = {
   hero: {
-    eyebrow: "Connect / For your family",
     headline: "Family Ministry",
     intro:
       "Your kid's favorite day of the week. Skilled volunteers, fun environments, and a focused message that helps every age see Jesus more clearly — so you can worship freely while we take great care of them.",
@@ -33,7 +31,6 @@ const F = {
     alt: "Families with kids of all ages outside RCC at Easter Fest",
   },
   intro: {
-    eyebrow: "What it's about",
     headline: "Partnering with parents.",
     paragraphs: [
       "From start to finish, we work hard to make your family's time with us a great experience. We use skilled volunteers, age-appropriate spaces, and a focused weekly message so your child leaves understanding one big idea — and asking when they can come back.",
@@ -42,7 +39,6 @@ const F = {
   },
   environments: [
     {
-      eyebrow: "For your littles",
       name: "Waumba Land",
       ageRange: "Ages 6 weeks – Pre-K",
       schedule: "Sundays during the 10:15 service",
@@ -58,7 +54,6 @@ const F = {
       facebookUrl: "https://www.facebook.com/RCCKids/",
     },
     {
-      eyebrow: "For elementary kids",
       name: "UpStreet",
       ageRange: "Kindergarten – 5th grade",
       schedule: "Sundays during the 10:15 service · Kids & Students building",
@@ -74,7 +69,6 @@ const F = {
       facebookUrl: "https://www.facebook.com/RCCKids/",
     },
     {
-      eyebrow: "For middle + high school",
       name: "Students",
       ageRange: "6th – 12th grade",
       schedule: "Transit: Sundays at 10:15 · All Access: Wednesdays at 6:15 PM",
@@ -91,7 +85,6 @@ const F = {
     },
   ],
   checkin: {
-    eyebrow: "How it works",
     headline: "Check-In, made simple.",
     intro:
       "Your first time? Arrive about 15 minutes early. A host will walk you to the Waumba Land or UpStreet desk and stay with you through check-in.",
@@ -141,7 +134,6 @@ export default async function FamiliesPage() {
   const doc = await safeFetch<FamiliesPageDoc | null>(familiesPageQuery);
 
   const hero = doc?.hero ?? {};
-  const heroEyebrow = hero.eyebrow ?? F.hero.eyebrow;
   const heroHeadline = hero.headline ?? F.hero.headline;
   const heroIntro = hero.intro ?? F.hero.intro;
   const heroImageSrc = imgSrc(hero.image, F.hero.image, 2200);
@@ -164,7 +156,6 @@ export default async function FamiliesPage() {
       <PhotoHero
         image={heroImageSrc}
         alt={heroImageAlt}
-        eyebrow={heroEyebrow}
         headline={heroHeadline}
         intro={heroIntro}
       >
@@ -178,7 +169,6 @@ export default async function FamiliesPage() {
         <Container>
           <div className="grid gap-10 lg:grid-cols-[1fr_1.2fr] lg:gap-24">
             <div>
-              <Eyebrow>{intro?.eyebrow ?? F.intro.eyebrow}</Eyebrow>
               <Headline
                 text={intro?.headline ?? F.intro.headline}
                 accent={
@@ -233,15 +223,7 @@ export default async function FamiliesPage() {
                   />
                 </div>
                 <div>
-                  {env.eyebrow && (
-                    <p
-                      className="text-xs font-semibold uppercase tracking-[0.22em]"
-                      style={{ color }}
-                    >
-                      {env.eyebrow}
-                    </p>
-                  )}
-                  <h2 className="mt-4 text-5xl font-bold leading-[0.95] tracking-tight text-ink-900 md:text-7xl">
+                  <h2 className="text-5xl font-bold leading-[0.95] tracking-tight text-ink-900 md:text-7xl">
                     {env.name}
                   </h2>
                   {(env.ageRange || env.schedule) && (
@@ -293,7 +275,6 @@ export default async function FamiliesPage() {
         <Container>
           <SectionHeader
             tone="dark"
-            eyebrow={checkin?.eyebrow ?? F.checkin.eyebrow}
             headline={checkin?.headline ?? F.checkin.headline}
             accent={
               (checkin?.headline ?? F.checkin.headline).endsWith("made simple.")
@@ -332,7 +313,6 @@ export default async function FamiliesPage() {
 
       <SignupCallout
         match={/dedicat/i}
-        eyebrow="For new parents"
         body="Celebrate your child and commit to raising them in faith, with your church family beside you."
       />
 

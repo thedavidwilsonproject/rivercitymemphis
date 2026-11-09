@@ -9,13 +9,6 @@ import type { PageDoc } from "@/types/sanity";
 
 type Params = { slug: string[] };
 
-const SECTION_EYEBROW: Record<string, string> = {
-  visit: "Visit",
-  connect: "Connect",
-  give: "Give",
-  other: "RCC",
-};
-
 export async function generateStaticParams() {
   try {
     const pages = await client.fetch<{ slug: string }[]>(pagesIndexQuery);
@@ -67,15 +60,9 @@ export default async function ContentPage({
 
   if (!page) notFound();
 
-  const eyebrow =
-    page.section && SECTION_EYEBROW[page.section]
-      ? SECTION_EYEBROW[page.section]
-      : undefined;
-
   return (
     <div>
       <PageHero
-        eyebrow={eyebrow}
         headline={page.title}
         intro={page.summary}
         variant="cream"
