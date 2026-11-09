@@ -66,13 +66,13 @@ export async function UpcomingEvents({ limit = 3 }: { limit?: number }) {
             <li key={s.id}>
               <Link href={`/events/${s.id}`} className="group block">
                 <Art s={s} className="aspect-[16/9]" />
-                <p className="mt-5 text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-600">
+                <p className="mt-5 text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-800">
                   {formatSignupDate(s)}
                 </p>
                 <h3 className="mt-2 text-2xl font-bold leading-tight tracking-tight text-ink-900 transition group-hover:text-brand-600">
                   {s.name}
                 </h3>
-                <span className="mt-3 inline-block text-sm font-semibold text-ink-900 transition group-hover:translate-x-1 group-hover:text-brand-600">
+                <span className="mt-3 inline-block text-sm font-semibold text-ink-900 transition group-hover:translate-x-1 group-hover:text-brand-800">
                   Details &amp; sign-up →
                 </span>
               </Link>
@@ -138,14 +138,14 @@ export async function SignupCallout({
               <ChurchCenterModalLink
                 href={s.registrationUrl}
                 className={`inline-flex rounded-full px-7 py-3.5 text-sm font-semibold transition ${
-                  dark ? "bg-white text-ink-900 hover:bg-brand-100" : "bg-ink-900 text-white hover:bg-brand-600"
+                  dark ? "bg-white text-ink-900 hover:bg-brand-100" : "bg-ink-900 text-white hover:bg-brand-800"
                 }`}
               >
                 Sign up
               </ChurchCenterModalLink>
               <Link
                 href={`/events/${s.id}`}
-                className={`text-sm font-semibold underline decoration-2 underline-offset-[6px] ${
+                className={`inline-block py-2 text-sm font-semibold underline decoration-2 underline-offset-[6px] ${
                   dark ? "decoration-brand-300" : "decoration-brand-500"
                 }`}
               >
@@ -188,12 +188,12 @@ export function ChurchCenterForms({
                   href={f.href}
                   className="group flex h-full flex-col rounded-3xl border border-ink-900/10 bg-white/70 p-8 transition hover:border-ink-900/30 hover:bg-white"
                 >
-                  <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-600">
+                  <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-800">
                     {f.label}
                   </span>
                   <span className="mt-3 text-2xl font-bold leading-tight tracking-tight">{f.title}</span>
                   <span className="mt-3 flex-1 leading-7 text-ink-600">{f.body}</span>
-                  <span className="mt-6 text-sm font-semibold transition group-hover:translate-x-1 group-hover:text-brand-600">
+                  <span className="mt-6 text-sm font-semibold transition group-hover:translate-x-1 group-hover:text-brand-800">
                     Open the form →
                   </span>
                 </ChurchCenterModalLink>

@@ -52,7 +52,7 @@ export function VideoCard({
           </span>
         )}
         {v.kind === "stream" && (
-          <span className="absolute left-3 top-3 rounded-full bg-black/70 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-white">
+          <span className="absolute left-3 top-3 rounded-full bg-black/70 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-white">
             Full service
           </span>
         )}

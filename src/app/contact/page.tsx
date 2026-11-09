@@ -400,7 +400,7 @@ function InfoCard({
         {children}
       </div>
       {note && <p className="mt-3 text-sm text-ink-500">{note}</p>}
-      <span className="mt-6 text-sm font-semibold text-ink-900 transition group-hover:translate-x-1 group-hover:text-brand-600">
+      <span className="mt-6 text-sm font-semibold text-ink-900 transition group-hover:translate-x-1 group-hover:text-brand-800">
         {cta}
       </span>
     </a>

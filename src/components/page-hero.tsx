@@ -62,7 +62,7 @@ export function PageHero({
         {backlink && (
           <Link
             href={backlink.href}
-            className={`mb-6 inline-block text-sm font-semibold ${s.eyebrow} hover:opacity-80`}
+            className={`mb-4 inline-block py-2 text-sm font-semibold ${s.eyebrow} hover:opacity-80`}
           >
             ← {backlink.label}
           </Link>

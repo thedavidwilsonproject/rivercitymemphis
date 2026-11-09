@@ -75,7 +75,7 @@ export default async function EventDetailPage({ params }: Params) {
           <div>
             <Link
               href="/events"
-              className="inline-block text-sm font-semibold text-white/70 transition hover:text-white"
+              className="-my-2 inline-block py-2 text-sm font-semibold text-white/70 transition hover:text-white"
             >
               ← All events
             </Link>
@@ -141,7 +141,7 @@ export default async function EventDetailPage({ params }: Params) {
             </div>
             <aside>
               <div className="sticky top-28 rounded-2xl border border-ink-900/15 p-7">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-600">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-800">
                   At a glance
                 </p>
                 <dl className="mt-6 divide-y divide-ink-900/10">
@@ -167,7 +167,7 @@ export default async function EventDetailPage({ params }: Params) {
                 </dl>
                 <ChurchCenterModalLink
                   href={s.registrationUrl}
-                  className="mt-7 flex w-full justify-center rounded-full bg-ink-900 px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-brand-600"
+                  className="mt-7 flex w-full justify-center rounded-full bg-ink-900 px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-brand-800"
                 >
                   Register →
                 </ChurchCenterModalLink>

@@ -76,7 +76,7 @@ export function Eyebrow({
   return (
     <p
       className={`text-xs font-semibold uppercase tracking-[0.22em] ${
-        tone === "dark" ? "text-brand-300" : "text-brand-600"
+        tone === "dark" ? "text-brand-300" : "text-brand-800"
       } ${className}`}
     >
       {children}
@@ -224,22 +224,22 @@ type ButtonVariant = "solid" | "outline" | "link";
 
 const BTN: Record<Tone, Record<ButtonVariant, string>> = {
   light: {
-    solid: "rounded-full bg-ink-900 px-7 py-3.5 text-white hover:bg-brand-600",
+    solid: "rounded-full bg-ink-900 px-7 py-3.5 text-white hover:bg-brand-800",
     outline:
       "rounded-full border border-ink-900/25 px-7 py-3.5 text-ink-900 hover:border-ink-900 hover:bg-ink-900/5",
-    link: "text-ink-900 underline decoration-brand-500 decoration-2 underline-offset-[6px] hover:text-brand-600",
+    link: "py-2 text-ink-900 underline decoration-brand-500 decoration-2 underline-offset-[6px] hover:text-brand-800",
   },
   white: {
-    solid: "rounded-full bg-ink-900 px-7 py-3.5 text-white hover:bg-brand-600",
+    solid: "rounded-full bg-ink-900 px-7 py-3.5 text-white hover:bg-brand-800",
     outline:
       "rounded-full border border-ink-900/25 px-7 py-3.5 text-ink-900 hover:border-ink-900 hover:bg-ink-900/5",
-    link: "text-ink-900 underline decoration-brand-500 decoration-2 underline-offset-[6px] hover:text-brand-600",
+    link: "py-2 text-ink-900 underline decoration-brand-500 decoration-2 underline-offset-[6px] hover:text-brand-800",
   },
   dark: {
     solid: "rounded-full bg-white px-7 py-3.5 text-ink-900 hover:bg-brand-100",
     outline:
       "rounded-full border border-white/35 px-7 py-3.5 text-white hover:bg-white/10",
-    link: "text-white underline decoration-brand-300 decoration-2 underline-offset-[6px] hover:text-brand-200",
+    link: "py-2 text-white underline decoration-brand-300 decoration-2 underline-offset-[6px] hover:text-brand-200",
   },
 };
 
@@ -346,7 +346,7 @@ export function PhotoHero({
         {backlink && (
           <Link
             href={backlink.href}
-            className="mb-8 inline-block w-fit text-sm font-semibold text-white/70 transition hover:text-white"
+            className="mb-6 inline-block w-fit py-2 text-sm font-semibold text-white/70 transition hover:text-white"
           >
             ← {backlink.label}
           </Link>
@@ -509,7 +509,7 @@ export function PhotoCard({
         )}
       </div>
       {eyebrow && (
-        <p className={`mt-6 text-[11px] font-semibold uppercase tracking-[0.2em] ${tone === "dark" ? "text-brand-300" : "text-brand-600"}`}>
+        <p className={`mt-6 text-[11px] font-semibold uppercase tracking-[0.2em] ${tone === "dark" ? "text-brand-300" : "text-brand-800"}`}>
           {eyebrow}
         </p>
       )}
@@ -650,7 +650,7 @@ export function PullQuote({
         {children}
       </blockquote>
       {cite && (
-        <figcaption className={`mt-8 text-xs font-semibold uppercase tracking-[0.22em] ${tone === "dark" ? "text-brand-300" : "text-brand-600"}`}>
+        <figcaption className={`mt-8 text-xs font-semibold uppercase tracking-[0.22em] ${tone === "dark" ? "text-brand-300" : "text-brand-800"}`}>
           {cite}
         </figcaption>
       )}

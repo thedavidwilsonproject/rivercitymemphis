@@ -133,7 +133,7 @@ export function HeaderBar({ nav, siteTitle, serviceTime, address }: Props) {
                   className={`text-[15px] font-medium transition-colors ${
                     light
                       ? "text-white/85 hover:text-white"
-                      : "text-ink-700 hover:text-brand-600"
+                      : "text-ink-700 hover:text-brand-800"
                   }`}
                 >
                   {item.label}
@@ -146,7 +146,7 @@ export function HeaderBar({ nav, siteTitle, serviceTime, address }: Props) {
               className={`hidden rounded-full px-5 py-2.5 text-sm font-semibold transition sm:inline-flex ${
                 light
                   ? "bg-white text-ink-900 hover:bg-brand-100"
-                  : "bg-ink-900 text-white hover:bg-brand-600"
+                  : "bg-ink-900 text-white hover:bg-brand-800"
               } ${open ? "invisible" : ""}`}
             >
               Plan a Visit

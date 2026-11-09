@@ -78,7 +78,7 @@ function EventCard({ s }: { s: PcoSignup }) {
           </div>
         )}
         <div className="flex flex-1 flex-col pt-6">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-600">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-800">
             {dateLabel}
           </p>
           <h3 className="mt-2 text-3xl font-bold leading-tight tracking-tight text-ink-900 transition group-hover:text-brand-600">
@@ -92,7 +92,7 @@ function EventCard({ s }: { s: PcoSignup }) {
               {truncate(s.description, 200)}
             </p>
           )}
-          <span className="mt-5 inline-block text-sm font-semibold text-ink-900 transition group-hover:translate-x-1 group-hover:text-brand-600">
+          <span className="mt-5 inline-block text-sm font-semibold text-ink-900 transition group-hover:translate-x-1 group-hover:text-brand-800">
             View details →
           </span>
         </div>

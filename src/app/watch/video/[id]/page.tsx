@@ -58,7 +58,7 @@ export default async function VideoPage({ params }: Params) {
       <Container className="pb-16 pt-10 md:pb-24 md:pt-14">
         <Link
           href="/watch"
-          className="text-sm font-semibold text-brand-300 transition hover:opacity-80"
+          className="-my-2 inline-block py-2 text-sm font-semibold text-brand-300 transition hover:opacity-80"
         >
           ← All messages
         </Link>

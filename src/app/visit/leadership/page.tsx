@@ -159,7 +159,7 @@ export default async function LeadershipPage() {
                         />
                       )}
                       {p.role && (
-                        <p className="mt-8 text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-600">
+                        <p className="mt-8 text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-800">
                           {p.role}
                         </p>
                       )}

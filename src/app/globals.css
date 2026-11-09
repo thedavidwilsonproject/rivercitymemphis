@@ -162,3 +162,24 @@ h2 em {
   font-weight: 700;
   text-transform: none;
 }
+
+/* ── Browser surfaces (design v2) ─────────────────────────────────── */
+/* brand-700 holds ≥3:1 against paper, white and the river darks. */
+:focus-visible {
+  outline: 2px solid var(--color-brand-700);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+.bg-river-950 :focus-visible,
+.bg-river-900 :focus-visible,
+#site-menu :focus-visible {
+  outline-color: var(--color-brand-300);
+}
+::selection {
+  background: var(--color-brand-200);
+  color: var(--color-river-950);
+}
+html {
+  caret-color: var(--color-brand-700);
+  accent-color: var(--color-brand-700);
+}

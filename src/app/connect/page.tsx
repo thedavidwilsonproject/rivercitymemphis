@@ -187,7 +187,7 @@ export default async function ConnectHubPage() {
                           {c.blurb}
                         </p>
                       )}
-                      <span className="mt-8 inline-block text-sm font-semibold text-ink-900 underline decoration-brand-500 decoration-2 underline-offset-[6px] transition group-hover:text-brand-600">
+                      <span className="py-2 mt-8 inline-block text-sm font-semibold text-ink-900 underline decoration-brand-500 decoration-2 underline-offset-[6px] transition group-hover:text-brand-800">
                         {c.ctaLabel}
                       </span>
                     </div>

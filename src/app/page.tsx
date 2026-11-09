@@ -153,7 +153,7 @@ export default async function Home() {
           <source src={videoSrc} type={videoType} />
         </video>
         <div
-          className="absolute inset-0 -z-10 bg-gradient-to-t from-river-950 via-river-950/70 to-river-950/55"
+          className="absolute inset-0 -z-10 bg-gradient-to-t from-river-950 via-river-950/85 to-river-950/75 md:via-river-950/70 md:to-river-950/55"
           aria-hidden="true"
         />
 
@@ -220,7 +220,7 @@ export default async function Home() {
           </div>
 
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-600">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-800">
               Every Sunday
             </p>
             <h2 className="mt-4 text-6xl font-bold leading-[0.95] tracking-tight text-ink-900 md:text-7xl">
@@ -256,13 +256,13 @@ export default async function Home() {
             <div className="mt-10 flex flex-wrap items-center gap-6">
               <Link
                 href="/visit/what-to-expect"
-                className="rounded-full bg-ink-900 px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-brand-600"
+                className="rounded-full bg-ink-900 px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-brand-800"
               >
                 What to Expect
               </Link>
               <Link
                 href="/visit/location"
-                className="text-sm font-semibold text-ink-900 underline decoration-brand-500 decoration-2 underline-offset-[6px] hover:text-brand-600"
+                className="inline-block py-2 text-sm font-semibold text-ink-900 underline decoration-brand-500 decoration-2 underline-offset-[6px] hover:text-brand-800"
               >
                 Get directions →
               </Link>
@@ -274,7 +274,7 @@ export default async function Home() {
       {/* ── STATEMENT ─────────────────────────────────────────────────── */}
       <section className="border-y border-ink-900/10 bg-white/50">
         <div className="mx-auto max-w-[90rem] px-5 py-24 md:px-10 md:py-32">
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-600">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-800">
             Our culture
           </p>
           <p className="mt-6 max-w-6xl text-4xl font-semibold leading-[1.1] tracking-tight text-ink-900 md:text-6xl">
@@ -284,7 +284,7 @@ export default async function Home() {
           </p>
           <Link
             href="/visit/who-we-are"
-            className="mt-10 inline-block text-sm font-semibold text-ink-900 underline decoration-brand-500 decoration-2 underline-offset-[6px] hover:text-brand-600"
+            className="py-2 mt-10 inline-block text-sm font-semibold text-ink-900 underline decoration-brand-500 decoration-2 underline-offset-[6px] hover:text-brand-800"
           >
             Get to know us →
           </Link>
@@ -313,14 +313,14 @@ export default async function Home() {
                   className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]"
                 />
               </div>
-              <p className="mt-6 text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-600">
+              <p className="mt-6 text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-800">
                 {c.eyebrow}
               </p>
               <h3 className="mt-2 text-3xl font-bold tracking-tight text-ink-900">
                 {c.title}
               </h3>
               <p className="mt-3 leading-7 text-ink-600">{c.blurb}</p>
-              <span className="mt-4 inline-block text-sm font-semibold text-ink-900 transition group-hover:translate-x-1 group-hover:text-brand-600">
+              <span className="mt-4 inline-block text-sm font-semibold text-ink-900 transition group-hover:translate-x-1 group-hover:text-brand-800">
                 Learn more →
               </span>
             </Link>

@@ -51,7 +51,7 @@ const KIND: Record<Kind, { label: string; chip: string; dot: string }> = {
   },
   signup: {
     label: "Event · sign-up open",
-    chip: "bg-brand-100 text-river-950 shadow-[inset_3px_0_0_var(--color-brand-500)] hover:bg-brand-200",
+    chip: "bg-brand-100 text-river-950 hover:bg-brand-200",
     dot: "bg-brand-500",
   },
   calendar: {
@@ -228,7 +228,7 @@ export default async function CalendarPage({
             </h2>
             <nav aria-label="Change month" className="flex items-center gap-2">
               <MonthLink enabled={hasPrev} href={`/calendar?m=${monthParam(prev.y, prev.m)}`} label="Previous month">
-                ←
+                <Chevron dir="left" />
               </MonthLink>
               <Link
                 href="/calendar"
@@ -237,7 +237,7 @@ export default async function CalendarPage({
                 Today
               </Link>
               <MonthLink enabled={hasNext} href={`/calendar?m=${monthParam(next.y, next.m)}`} label="Next month">
-                →
+                <Chevron dir="right" />
               </MonthLink>
             </nav>
           </div>
@@ -315,7 +315,7 @@ export default async function CalendarPage({
           {/* Agenda */}
           <div className="mt-16 grid gap-8 lg:grid-cols-[18rem_1fr] lg:gap-16">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-600">This month</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-800">This month</p>
               <h3 className="mt-3 text-3xl font-bold tracking-tight">
                 {agenda.length === 0 ? "Just Sundays." : `${agenda.length} event${agenda.length === 1 ? "" : "s"}.`}
               </h3>
@@ -365,6 +365,14 @@ export default async function CalendarPage({
   );
 }
 
+function Chevron({ dir }: { dir: "left" | "right" }) {
+  return (
+    <svg viewBox="0 0 20 20" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d={dir === "left" ? "M12.5 4.5 7 10l5.5 5.5" : "M7.5 4.5 13 10l-5.5 5.5"} />
+    </svg>
+  );
+}
+
 function MonthLink({
   enabled,
   href,
@@ -376,7 +384,7 @@ function MonthLink({
   label: string;
   children: React.ReactNode;
 }) {
-  const cls = "grid h-11 w-11 place-items-center rounded-full border text-lg transition";
+  const cls = "grid h-11 w-11 place-items-center rounded-full border transition";
   return enabled ? (
     <Link href={href} aria-label={label} className={`${cls} border-ink-900/20 text-ink-900 hover:border-ink-900 hover:bg-ink-900/5`}>
       {children}
@@ -392,7 +400,7 @@ function Chip({ it }: { it: Item }) {
   const cls = `block rounded-md px-2 py-1 text-xs font-semibold leading-snug transition ${KIND[it.kind].chip}`;
   const text = (
     <>
-      {it.time && <span className="block text-[10px] font-normal opacity-75">{it.time}</span>}
+      {it.time && <span className="block text-[11px] font-normal opacity-80">{it.time}</span>}
       <span className="line-clamp-2 break-words">{it.continued ? `↳ ${it.title}` : it.title}</span>
     </>
   );
@@ -417,7 +425,7 @@ function AgendaRow({ it }: { it: Item }) {
         <span className="block text-3xl font-bold tabular-nums tracking-tight">{d.getUTCDate()}</span>
       </span>
       <span>
-        <span className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-600">
+        <span className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-800">
           <span className={`h-2 w-2 rounded-full ${KIND[it.kind].dot}`} aria-hidden="true" />
           {KIND[it.kind].label}
           {it.time ? ` · ${it.time}` : ""}

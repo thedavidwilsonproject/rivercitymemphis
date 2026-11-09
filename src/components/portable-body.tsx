@@ -41,7 +41,7 @@ const components = {
       </h3>
     ),
     h4: ({ children }: { children?: React.ReactNode }) => (
-      <h4 className="mt-8 mb-2 text-xs font-semibold uppercase tracking-[0.22em] text-brand-600">
+      <h4 className="mt-8 mb-2 text-xs font-semibold uppercase tracking-[0.22em] text-brand-800">
         {children}
       </h4>
     ),
