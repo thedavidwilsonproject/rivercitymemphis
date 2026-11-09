@@ -28,6 +28,7 @@ const HERO = {
 function monthKey(iso: string): string {
   const d = new Date(iso);
   return new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Chicago",
     month: "long",
     year: "numeric",
   }).format(d);
@@ -36,6 +37,7 @@ function monthKey(iso: string): string {
 function dayLabel(iso: string): string {
   const d = new Date(iso);
   return new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Chicago",
     weekday: "short",
     month: "short",
     day: "numeric",
@@ -58,6 +60,7 @@ function CalendarRow({ s }: { s: PcoSignup }) {
           </p>
           <p className="text-sm text-ink-500">
             {new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Chicago",
               hour: "numeric",
               minute: "2-digit",
             }).format(new Date(s.startsAt))}

@@ -170,6 +170,7 @@ export default async function EventDetailPage({ params }: Params) {
                     </dt>
                     <dd className="mt-1 text-base text-ink-800">
                       {new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Chicago",
                         weekday: "short",
                         month: "long",
                         day: "numeric",
