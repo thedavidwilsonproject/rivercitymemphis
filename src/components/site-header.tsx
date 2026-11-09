@@ -4,7 +4,7 @@ import { HeaderBar, type HeaderNavItem } from "@/components/header-bar";
 const FALLBACK_NAV: HeaderNavItem[] = [
   {
     label: "Visit",
-    href: "/visit/who-we-are",
+    href: "/visit",
     children: [
       { label: "Who We Are", href: "/visit/who-we-are" },
       { label: "What to Expect", href: "/visit/what-to-expect" },
@@ -50,9 +50,13 @@ const FALLBACK_NAV: HeaderNavItem[] = [
 ];
 
 export function SiteHeader({ settings }: { settings: SiteSettings | null }) {
-  const nav = (
+  const source = (
     settings?.mainNav?.length ? settings.mainNav : FALLBACK_NAV
   ) as (NavItem & { external?: boolean })[];
+  // v2: the top-level "Visit" link opens the /visit hub (not Who We Are).
+  const nav = source.map((item) =>
+    item.label === "Visit" ? { ...item, href: "/visit" } : item,
+  );
 
   return (
     <HeaderBar

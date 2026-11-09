@@ -25,6 +25,7 @@ const COLUMNS = [
   {
     title: "Visit",
     links: [
+      { label: "Plan Your Visit", href: "/visit" },
       { label: "What to Expect", href: "/visit/what-to-expect" },
       { label: "Who We Are", href: "/visit/who-we-are" },
       { label: "Location & Time", href: "/visit/location" },
@@ -88,7 +89,7 @@ export function SiteFooter({ settings }: { settings: SiteSettings | null }) {
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
-                href="/visit/what-to-expect"
+                href="/visit"
                 className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-ink-900 transition hover:bg-brand-100"
               >
                 Plan a Visit

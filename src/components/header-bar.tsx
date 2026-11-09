@@ -142,7 +142,7 @@ export function HeaderBar({ nav, siteTitle, serviceTime, address }: Props) {
             </nav>
 
             <Link
-              href="/visit/what-to-expect"
+              href="/visit"
               className={`hidden rounded-full px-5 py-2.5 text-sm font-semibold transition sm:inline-flex ${
                 light
                   ? "bg-white text-ink-900 hover:bg-brand-100"
@@ -241,7 +241,7 @@ export function HeaderBar({ nav, siteTitle, serviceTime, address }: Props) {
               <p className="mt-1 text-white/50">Coffee starts 15 minutes prior.</p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link
-                  href="/visit/what-to-expect"
+                  href="/visit"
                   onClick={() => setOpen(false)}
                   className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-ink-900 transition hover:bg-brand-100"
                 >
