@@ -183,14 +183,11 @@ export default async function WhatToExpectPage() {
               const flip = i % 2 === 1;
               return (
                 <article
-                  key={`${s.number}-${s.title}`}
+                  key={`${i}-${s.title}`}
                   className="grid items-center gap-10 lg:grid-cols-2 lg:gap-24"
                 >
                   <div className={flip ? "lg:order-2" : ""}>
-                    <p className="font-serif text-7xl italic leading-none text-brand-600 md:text-8xl">
-                      {s.number}
-                    </p>
-                    <h2 className="mt-6 text-5xl font-bold leading-[0.95] tracking-tight text-ink-900 md:text-6xl">
+                    <h2 className="text-5xl font-bold leading-[0.95] tracking-tight text-ink-900 md:text-6xl">
                       {s.title}
                     </h2>
                     {s.body && (
