@@ -43,6 +43,7 @@ export default async function EventDetailPage({ params }: Params) {
 
   const closesLabel = s.closeAt
     ? new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Chicago",
         weekday: "short",
         month: "long",
         day: "numeric",

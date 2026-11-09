@@ -233,15 +233,22 @@ export async function getSignup(id: string): Promise<PcoSignup | null> {
  * Format a signup's date for display. Returns a short human-friendly string
  * like "Sat, Jun 14 · 6 PM" or "Ongoing" if no date is attached.
  */
+/** YYYY-MM-DD in Central time (the church's time zone). */
+function centralDay(d: Date): string {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "America/Chicago" }).format(d);
+}
+
 export function formatSignupDate(s: PcoSignup): string {
   if (!s.startsAt) return "Ongoing";
   const start = new Date(s.startsAt);
   const dateFmt = new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Chicago",
     weekday: "short",
     month: "short",
     day: "numeric",
   });
   const timeFmt = new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Chicago",
     hour: "numeric",
     minute: undefined,
   });
@@ -258,20 +265,21 @@ export function formatSignupSchedule(s: PcoSignup): string {
   const end = s.endsAt ? new Date(s.endsAt) : undefined;
   const sameDay =
     end &&
-    start.getUTCFullYear() === end.getUTCFullYear() &&
-    start.getUTCMonth() === end.getUTCMonth() &&
-    start.getUTCDate() === end.getUTCDate();
+    centralDay(start) === centralDay(end);
   const longDate = new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Chicago",
     weekday: "long",
     month: "long",
     day: "numeric",
     year: "numeric",
   });
   const time = new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Chicago",
     hour: "numeric",
     minute: "2-digit",
   });
   const shortDate = new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Chicago",
     month: "long",
     day: "numeric",
   });
@@ -280,5 +288,5 @@ export function formatSignupSchedule(s: PcoSignup): string {
   if (sameDay) {
     return `${longDate.format(start)} · ${time.format(start)} – ${time.format(end)}`;
   }
-  return `${shortDate.format(start)} – ${shortDate.format(end)}, ${end.getFullYear()}`;
+  return `${shortDate.format(start)} – ${shortDate.format(end)}, ${centralDay(end).slice(0, 4)}`;
 }
