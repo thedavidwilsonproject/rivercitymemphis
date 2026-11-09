@@ -14,6 +14,7 @@ import {
   Section,
   SectionHeader,
 } from "@/components/v2/ui";
+import { SignupCallout } from "@/components/v2/pco-blocks";
 import type { FamiliesPageDoc, SanityImage } from "@/types/sanity";
 
 export const metadata: Metadata = {
@@ -328,6 +329,12 @@ export default async function FamiliesPage() {
           )}
         </Container>
       </Section>
+
+      <SignupCallout
+        match={/dedicat/i}
+        eyebrow="For new parents"
+        body="Celebrate your child and commit to raising them in faith, with your church family beside you."
+      />
 
       <CtaBand
         headline={cta?.headline ?? F.cta.headline}

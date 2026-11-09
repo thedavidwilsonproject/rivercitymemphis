@@ -5,7 +5,7 @@ import {
   formatSignupSchedule,
   type PcoSignup,
 } from "@/lib/pco";
-import { getPublishedIdSet } from "@/lib/published-events";
+import { getPublishedIdSet, isVisibleSignup } from "@/lib/published-events";
 import {
   Button,
   Container,
@@ -119,7 +119,7 @@ export default async function CalendarPage() {
     // Only show events that are: (a) toggled on in Sanity, AND
     // (b) have an actual start date (i.e. not "ongoing" sign-ups)
     events = allEvents
-      .filter((e) => published.has(e.id) && Boolean(e.startsAt))
+      .filter((e) => isVisibleSignup(published, e.id) && Boolean(e.startsAt))
       .sort((a, b) => (a.startsAt ?? "").localeCompare(b.startsAt ?? ""));
   } catch (e) {
     console.error("Failed to load calendar events:", e);

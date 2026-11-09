@@ -6,7 +6,7 @@ import {
   formatSignupDate,
   type PcoSignup,
 } from "@/lib/pco";
-import { getPublishedOrderMap } from "@/lib/published-events";
+import { getPublishedOrderMap, isVisibleSignup } from "@/lib/published-events";
 import {
   Button,
   Container,
@@ -113,7 +113,7 @@ export default async function EventsPage() {
     // then sort: manual displayOrder first (ascending), then the
     // PCO library's date-based default order.
     events = allEvents
-      .filter((e) => orderMap.has(e.id))
+      .filter((e) => isVisibleSignup(orderMap, e.id))
       .sort((a, b) => {
         const oa = orderMap.get(a.id);
         const ob = orderMap.get(b.id);

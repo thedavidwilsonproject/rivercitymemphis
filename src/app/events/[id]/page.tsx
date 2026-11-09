@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getSignup, formatSignupSchedule } from "@/lib/pco";
-import { getPublishedIdSet } from "@/lib/published-events";
+import { getPublishedIdSet, isVisibleSignup } from "@/lib/published-events";
+import { ChurchCenterModalLink, ChurchCenterScript } from "@/components/church-center";
 import {
   Button,
   Container,
@@ -22,7 +23,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     getSignup(id),
     getPublishedIdSet(),
   ]);
-  if (!s || !published.has(id)) return { title: "Event" };
+  if (!s || !isVisibleSignup(published, id)) return { title: "Event" };
   return {
     title: s.name,
     description:
@@ -38,7 +39,7 @@ export default async function EventDetailPage({ params }: Params) {
     getPublishedIdSet(),
   ]);
   // Hide events that aren't open OR haven't been flipped on by an editor
-  if (!s || !s.open || !published.has(id)) notFound();
+  if (!s || !s.open || !isVisibleSignup(published, id)) notFound();
 
   const schedule = formatSignupSchedule(s);
   const isOngoing = !s.startsAt;
@@ -57,6 +58,7 @@ export default async function EventDetailPage({ params }: Params) {
 
   return (
     <div>
+      <ChurchCenterScript />
       {/* HERO */}
       <section className="relative isolate overflow-hidden bg-river-950 text-white">
         {s.logoUrl && (
@@ -92,9 +94,12 @@ export default async function EventDetailPage({ params }: Params) {
               <p className="mt-5 text-lg text-white/75">{s.location}</p>
             )}
             <div className="mt-10 flex flex-wrap gap-3">
-              <Button href={s.registrationUrl} tone="dark">
+              <ChurchCenterModalLink
+                href={s.registrationUrl}
+                className="inline-flex rounded-full bg-white px-7 py-3.5 text-sm font-semibold text-ink-900 transition hover:bg-brand-100"
+              >
                 Register for {s.name}
-              </Button>
+              </ChurchCenterModalLink>
               {mapsUrl && (
                 <Button href={mapsUrl} tone="dark" variant="outline">
                   Map it
@@ -165,9 +170,12 @@ export default async function EventDetailPage({ params }: Params) {
                   )}
                   <GlanceRow label="Host">River City Church</GlanceRow>
                 </dl>
-                <Button href={s.registrationUrl} className="mt-7 w-full">
+                <ChurchCenterModalLink
+                  href={s.registrationUrl}
+                  className="mt-7 flex w-full justify-center rounded-full bg-ink-900 px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-brand-600"
+                >
                   Register →
-                </Button>
+                </ChurchCenterModalLink>
               </div>
             </aside>
           </div>

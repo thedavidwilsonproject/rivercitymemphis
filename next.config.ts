@@ -22,6 +22,8 @@ const IMG_SRC = [
   "https://*.googleapis.com",
   // Planning Center / Church Center event logos + avatars
   "https://registrations-production.s3.amazonaws.com",
+  "https://registrations.planningcenteronline.com",
+  "https://images.planningcenterusercontent.com",
   "https://avatars.planningcenteronline.com",
   "https://*.churchcenter.com",
 ];

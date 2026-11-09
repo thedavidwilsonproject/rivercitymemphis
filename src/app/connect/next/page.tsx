@@ -16,6 +16,7 @@ import {
   Section,
   SectionHeader,
 } from "@/components/v2/ui";
+import { SignupCallout } from "@/components/v2/pco-blocks";
 import type { NextPageDoc, SanityImage } from "@/types/sanity";
 
 export const metadata: Metadata = {
@@ -223,6 +224,12 @@ export default async function NextSessionPage() {
           </div>
         </Container>
       </Section>
+
+      <SignupCallout
+        match={/baptism/i}
+        eyebrow="Ready for the next step?"
+        body="Baptism is a public way of saying you follow Jesus. Sign up and we'll walk you through what to expect."
+      />
 
       <CtaBand
         headline={cta?.headline ?? F.cta.headline}

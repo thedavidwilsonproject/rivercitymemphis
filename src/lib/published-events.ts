@@ -34,3 +34,13 @@ export async function getPublishedOrderMap(): Promise<Map<string, number | undef
   const rows = await getPublishedEvents();
   return new Map(rows.map((r) => [r.pcoId, r.displayOrder]));
 }
+
+/**
+ * Design v2 prototype: is a PCO signup visible on the site?
+ * When editors have curated an allowlist in Sanity, honour it. When the
+ * allowlist is empty (nothing curated yet), show every open, public
+ * Church Center signup instead of an empty page.
+ */
+export function isVisibleSignup(published: Set<string> | Map<string, unknown>, id: string): boolean {
+  return published.size === 0 || published.has(id);
+}

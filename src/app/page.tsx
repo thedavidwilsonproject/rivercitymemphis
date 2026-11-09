@@ -7,6 +7,9 @@ import { KidsAndStudents } from "@/components/kids-and-students";
 import { JsonLd } from "@/components/json-ld";
 import type { HomePageDoc, SermonSeriesSummary } from "@/types/sanity";
 import { ORG, SITE_URL } from "@/lib/site";
+import { getYouTubeFeed, seriesSiblings, YT_LIVE_URL } from "@/lib/youtube";
+import { VideoCard } from "@/components/v2/video";
+import { UpcomingEvents } from "@/components/v2/pco-blocks";
 
 export const metadata: Metadata = {
   title: "River City Church — Bartlett, TN · Sundays at 10:15 AM",
@@ -54,9 +57,10 @@ const FALLBACK_SERIES_SECTION = {
 };
 
 export default async function Home() {
-  const [home, series] = await Promise.all([
+  const [home, series, feed] = await Promise.all([
     safeFetch<HomePageDoc | null>(homePageQuery),
     safeFetch<SermonSeriesSummary[]>(sermonSeriesIndexQuery),
+    getYouTubeFeed(),
   ]);
 
   const hero = { ...FALLBACK_HERO, ...(home?.hero ?? {}) };
@@ -120,6 +124,15 @@ export default async function Home() {
   const headline = hero.headline ?? FALLBACK_HERO.headline;
   const [headLead, headAccent] = splitAccent(headline);
   const featured = (series ?? []).slice(0, ss.count ?? 3);
+  // Live YouTube feed wins over the (manually curated) Sanity series.
+  const latest = feed.messages[0];
+  const latestSeries = latest ? seriesSiblings(feed, latest) : [];
+  const sideVideos = latest
+    ? (latestSeries.length > 1 ? latestSeries.slice().reverse() : feed.messages)
+        .filter((v) => v.id !== latest.id)
+        .slice(0, 2)
+    : [];
+  const bandTitle = latest?.series ?? (latest ? "Latest message" : ss.title ?? "Current Series");
 
   return (
     <>
@@ -315,19 +328,19 @@ export default async function Home() {
         </div>
       </section>
 
+      <UpcomingEvents />
+
       {/* ── CURRENT SERIES — dark editorial band ──────────────────────── */}
       <section className="bg-river-950 text-white">
         <div className="mx-auto max-w-[90rem] px-5 py-24 md:px-10 md:py-32">
           <header className="mb-14 flex flex-col justify-between gap-6 md:flex-row md:items-end">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-300">
-                Watch &amp; listen
+                {latest?.series ? "Current series" : "Watch & listen"}
               </p>
               <h2 className="mt-4 text-6xl font-bold leading-[0.95] tracking-tight md:text-7xl">
-                {splitAccent(ss.title ?? "Current Series")[0]}
-                <em className="text-brand-300">
-                  {splitAccent(ss.title ?? "Current Series")[1]}
-                </em>
+                {splitAccent(bandTitle)[0]}
+                <em className="text-brand-300">{splitAccent(bandTitle)[1]}</em>
               </h2>
             </div>
             {ss.viewAllHref && (
@@ -340,7 +353,31 @@ export default async function Home() {
             )}
           </header>
 
-          {featured.length > 0 ? (
+          {latest ? (
+            <div className="grid gap-10 lg:grid-cols-[1.6fr_1fr] lg:gap-8">
+              <VideoCard v={latest} size="lg" withSeries={false} />
+              <div className="flex flex-col gap-10">
+                {sideVideos.map((v) => (
+                  <VideoCard key={v.id} v={v} size="sm" withSeries={!latest.series} />
+                ))}
+                <a
+                  href={YT_LIVE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group mt-auto flex items-center justify-between gap-4 rounded-2xl border border-white/15 px-6 py-5 transition hover:bg-white/5"
+                >
+                  <span>
+                    <span className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-brand-300">
+                      <span className="h-2 w-2 rounded-full bg-red-500" aria-hidden="true" />
+                      Live Sundays
+                    </span>
+                    <span className="mt-1 block text-lg font-bold">Stream the 10:15 AM service</span>
+                  </span>
+                  <span className="text-white/60 transition group-hover:translate-x-1 group-hover:text-white">↗</span>
+                </a>
+              </div>
+            </div>
+          ) : featured.length > 0 ? (
             <div className="grid gap-6 lg:grid-cols-[1.6fr_1fr]">
               {featured.map((s, i) => (
                 <Link
